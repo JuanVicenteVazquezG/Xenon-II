@@ -68,4 +68,4 @@ URls for the project repo and deploy
 
 ### Slides
 URls for the project presentation (slides)
-[Link Slides.com](https://slides.com/juanvicentevazquezgarcia/deck/live?context=editing#/)
+[Link Slides.com](https://slides.com/juanvicentevazquezgarcia/deck)
