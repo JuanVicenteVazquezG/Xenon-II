@@ -62,7 +62,7 @@ Task definition in order of priority
 
 ### Git
 URls for the project repo and deploy
-[Link Repo](http://github.com)
+[Link Repo](https://github.com/JuanVicenteVazquezG/Xenon-II)
 [Link Deploy](https://juanvicentevazquezg.github.io/Xenon-II/)
 
 
