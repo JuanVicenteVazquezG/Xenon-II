@@ -22,7 +22,7 @@ The spacecraft must reach the end of the screen, with the least amount of damage
 
 Objects.
 Game Class, Collider Class, Player Class, Enemy Class, Input Class.
-Display Class, Scenario Class, Trigger Class, Marker Class, Enemy Generator Class
+Display Class, Scenario Class, Marker Class, Enemy Generator Class
 
 The Game class must have methods of keyboard readings, read the status and position of the player class that will later be transferred to the screen class, it must have a method to control the stage and its movements. You must have a method to control what is shown on the screen.
 
