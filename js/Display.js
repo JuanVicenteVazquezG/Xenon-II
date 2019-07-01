@@ -18,18 +18,13 @@ class Display {
   clearScreen() {
     
     this.ctx.fillStyle = "black";
-    this.ctx.fillRect(0, 0, this.width, this.height);
+    this.ctx.clearRect(0, 0, this.width, this.height);
    
   }
 
   paintObject(ObjectToPaint) {
     this.clearScreen();
-    this.ctx.fillStyle = "purple";
-    this.ctx.fillRect(
-      ObjectToPaint.x,
-      ObjectToPaint.y,
-     30
-      ,30);
-    
+    let sprite=ObjectToPaint.sprite;
+    this.ctx.drawImage(sprite ,ObjectToPaint.x, ObjectToPaint.y);
   }
 }

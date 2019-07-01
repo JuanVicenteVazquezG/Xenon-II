@@ -2,6 +2,8 @@ class Player {
   constructor() {
     this.x = 0;
     this.y = 0;
+    let sprite= new Image();
+    sprite.src="Images/ship4.png";
   }
 
   changePosition(keyPressed) {
