@@ -1,30 +1,33 @@
 class Display {
   constructor() {
     this.ctx = undefined;
-    this.width=undefined;
-    this.height=undefined;
-  }
-  initialize(width, height, canvasObject) {
-    this.width=parseInt(width.split("px")[0]);
-    this.height=parseInt(height.split("px")[0]);
-    canvasObject.style.width = width;
-    canvasObject.style.height = height;
-    this.ctx = canvasObject.getContext("2d");
-    this.clearScreen();
-    console.log(this.width);
-    console.log(this.height);
+    this.width = undefined;
+    this.height = undefined;
   }
 
-  clearScreen() {
-    
+  initialize(options) {
+    this.width = options.width;
+    this.height = options.height;
+    options.canvas.width = options.width;
+    options.canvas.height = options.height;
+    this.ctx = options.canvas.getContext("2d");
+    game.display.clearDisplay();
+  }
+
+  clearDisplay() {
     this.ctx.fillStyle = "black";
     this.ctx.clearRect(0, 0, this.width, this.height);
-   
   }
 
-  paintObject(ObjectToPaint) {
-    this.clearScreen();
-    let sprite=ObjectToPaint.sprite;
-    this.ctx.drawImage(sprite ,ObjectToPaint.x, ObjectToPaint.y);
+  paintObject(objectToPaint) {
+    game.display.clearDisplay();
+    console.log(objectToPaint);
+    game.display.ctx.drawImage(
+      objectToPaint.sprite,
+      objectToPaint.x,
+      objectToPaint.y,
+      objectToPaint.sizeX,
+      objectToPaint.sizeY
+    );
   }
 }

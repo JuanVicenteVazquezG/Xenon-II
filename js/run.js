@@ -4,8 +4,8 @@
 //input = new Input();  //here need to put de type of device to read keyboard or joystick
 //display.paintObject();
 const options = {
-  width: "640px",
-  height: "480px",
+  width: "640",
+  height: "480",
   canvas: document.getElementById("myCanvas")
 };
 

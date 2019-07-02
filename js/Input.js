@@ -1,53 +1,61 @@
 class Input {
   constructor() {
-    {
-      this.key = {
-        down: false,
-        up: false,
-        right: false,
-        left: false,
-        pause: false,
-        shooting: false,
-        abort: false
-      };
-    }
+    this.pauseImage = {
+      x: 0,
+      y: 0,
+      sprite: new Image(),
+      sizeX: 640,
+      sizeY: 480
+    };
+    this.pauseImage.sprite.src = "Images/pause.png";
   }
-
   _assignControlsToKeys() {
     document.addEventListener("keydown", whatIs => {
       switch (whatIs.keyCode) {
         case 38: {
-          this.key.up = true;
+          if (this._canIReadOtherKeys()) game.player.y -= game.player.speed;
           break;
         }
         case 40: {
-          this.key.down = true;
+          if (this._canIReadOtherKeys()) game.player.y += game.player.speed;
           break;
         }
         case 37: {
-          this.key.left = true;
+          if (this._canIReadOtherKeys()) game.player.x -= game.player.speed;
           break;
         }
         case 39: {
-          this.key.right = true;
+          if (this._canIReadOtherKeys()) game.player.x += game.player.speed;
           break;
         }
         case 80: {
-          this.key.pause = true;
+          if (game.intervalGameId === undefined) {
+            game.SetAnimationLoop();
+          } else {
+            //TODO Debe guardar el estado de la pantalla
+            game.unSetAnimationloop();
+            console.log(this.pauseImage);
+            game.display.paintObject(this.pauseImage);
+          }
           break;
         }
         case 32: {
-          this.key.shooting = true;
+          if (this._canIReadOtherKeys()) {
+            //TODO KEY SHOOT
+          }
           break;
         }
         case 27: {
-          this.key.abord = true;
+          //TODO KEY ESCAPE
           break;
         }
       }
     });
   }
-
+  _canIReadOtherKeys() {
+    if (game.intervalGameId === undefined) return false;
+    else return true;
+  }
   initializeKeyRead() {
     this._assignControlsToKeys();
   }

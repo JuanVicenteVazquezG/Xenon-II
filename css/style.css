@@ -1,8 +1,8 @@
-@font-face{
+@font-face {
   font-family: "Xenon-2";
-  src: url"../font-family/xenon2.ttf" format("truetype");
-  font-style:normal;
-  font-weight:normal;
+  src: url "../font-family/xenon2.ttf" format("truetype");
+  font-style: normal;
+  font-weight: normal;
 }
 
 html {
@@ -12,11 +12,11 @@ html {
 .container {
   width: 100%;
   background-color: #000000;
+  height: auto;
 }
 #myCanvas {
   display: block;
   border: 5px solid black;
   margin: 2% auto;
   padding: 0 auto;
- 
 }

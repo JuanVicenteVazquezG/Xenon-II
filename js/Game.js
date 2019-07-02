@@ -12,41 +12,28 @@ class Game {
   pause() {}
 
   _update() {
-   
-
-    if (this.input.key.down === true) {
-  
-      this.player.changePosition(this.input.key);
-      this.input.key.down = false;
-    }
-    if (this.input.key.up === true) {
-     
-      this.player.changePosition(this.input.key);
-      this.input.key.up = false;
-    }
-    if (this.input.key.right === true) {
-     
-      this.player.changePosition(this.input.key);
-      this.input.key.right = false;
-    }
-
-    if (this.input.key.left === true) {
- 
-      this.player.changePosition(this.input.key);
-      this.input.key.left = false;
-    }
-
-    this.display.paintObject(this.player);
-    this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
+    this.display.paintObject.bind(this)(this.player);
+    this.SetAnimationLoop();
   }
 
-  start() {
+  start(options) {
+
+    console.log(options)
     //Assign control keys or decide device control
     this.input.initializeKeyRead();
 
     //Inicalize canvas with de class Display
-    this.display.initialize(options.width, options.height, options.canvas);
+    this.display.initialize(options);
+
     // starts infiniteLoop Game
-    this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
+    this.SetAnimationLoop();
+  }
+  
+  SetAnimationLoop(){
+    this.intervalGameId= window.requestAnimationFrame(this._update.bind(this));
+  }
+  unSetAnimationloop(){
+    window.cancelAnimationFrame(this.intervalGameId);
+    game.intervalGameId = undefined;
   }
 }
