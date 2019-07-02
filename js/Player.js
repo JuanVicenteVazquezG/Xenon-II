@@ -1,12 +1,7 @@
 class Player {
   constructor() {
-    this.x = 0;
-    this.y = 0;
-    this.sprite= new Image();
-    this.sprite.src="Images/ship4.png";
+    this.sprite=new Sprite(0,0,"Images/ship4.png",62,64)
     this.speed=2.2;
-    this.sizeX=62;
-    this.sizeY=64;
   }
 
  
