@@ -1,7 +1,5 @@
 class Input {
   constructor() {
-    this.pauseImage = new Sprite(0, 0, "Images/pause.png", 640, 480);
-    this.gameOverImage = new Sprite(0, 0, "Images/gameover.png", 640, 480);
     this.keyArrowPressed = undefined;
   }
   _assignControlsToKeys() {
@@ -37,18 +35,28 @@ class Input {
           break;
 
         case 80: {
-          if (game.intervalGameId === undefined) {
-            game.SetAnimationLoop();
-          } else {
-            game.unSetAnimationloop();
-            game.display.paintObject(this.pauseImage);
+          if (game.gameState === "pause") {
+            game.gameState = "playing";
+          } else if (game.gameState === "playing") {
+            game.gameState = "pause";
           }
 
           break;
         }
         case 32: {
           if (this._canIReadOtherKeys()) {
-            // game.unSetAnimationloop();
+            //Here we need a function to creates differents ammos
+            game.player.shooting.push(
+              new Shooting(
+                game.player.sprite.x + 28,
+                game.player.sprite.y - 5,
+                "Images/s1a.png",
+                4,
+                11,
+                3000,
+                7
+              )
+            );
           }
           break;
         }
@@ -56,13 +64,10 @@ class Input {
           {
             if (this._canIReadOtherKeys()) {
               //TODO KEY ESCAPE
-              game.unSetAnimationloop();
-              game.display.paintObject(this.gameOverImage);
-              // setTimeout(() => {
-              //   game.display.clearDisplay();
-              // }, 3000);
-              // game.display.clearDisplay()
-              // game.start();
+              game.gameState = "gameOver";
+              setTimeout(() => {
+                game.gameState = "splash";
+              }, 3000);
             }
           }
           break;
@@ -72,7 +77,7 @@ class Input {
     // });
   }
   _canIReadOtherKeys() {
-    if (game.intervalGameId === undefined) return false;
+    if (game.gameState === "pause") return false;
     else return true;
   }
   initializeKeyRead() {

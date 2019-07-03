@@ -3,6 +3,7 @@ class Display {
     this.ctx = undefined;
     this.width = undefined;
     this.height = undefined;
+    this.objectsToPaint = [];
   }
 
   initialize(options) {
@@ -19,14 +20,27 @@ class Display {
     this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
-  paintObject(objectToPaint) {
+  paintObject() {
     game.display.clearDisplay();
-    game.display.ctx.drawImage(
-      objectToPaint.sprite,
-      objectToPaint.x,
-      objectToPaint.y,
-      objectToPaint.sizeX,
-      objectToPaint.sizeY
-    );
+    console.log (`tengo ${game.display.objectsToPaint.length} en mente`)
+    game.display.objectsToPaint.forEach(objecToShow => {
+      
+      game.display.ctx.drawImage(
+        objecToShow.sprite,
+        objecToShow.x,
+        objecToShow.y,
+        objecToShow.sizeX,
+        objecToShow.sizeY
+      );
+    });
+  }
+
+  addObjectsToPaint(aSprite) {
+    this.objectsToPaint.push(aSprite);
+  }
+  deletesAllObjectsPainted() {
+    while (this.objectsToPaint.length > 0) {
+      this.objectsToPaint.pop();
+    }
   }
 }
