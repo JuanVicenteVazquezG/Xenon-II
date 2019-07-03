@@ -9,6 +9,7 @@ class Game {
     this.intervalGameId = undefined;
     this.initImage= new Sprite (0,0,"Images/splash.png",640,480);
     this.name=this.initImage;
+    this.loopUntilKeypressed;
   }
 
   pause() {}
@@ -21,13 +22,13 @@ class Game {
   start(options) {
 
     //Inicalize canvas with de class Display
-    this.display.initialize(options);
+   if (game.display.ctx===undefined) this.display.initialize(options);
 
-    let loopUntilKeypressed=document.addEventListener('keyup',()=>{
+    this.loopUntilKeypressed=document.addEventListener('keyup',()=>{
         //Assign control keys or decide device control
          this.name=this.player.sprite;
           this.input.initializeKeyRead();
-          loopUntilKeypressed.
+          document.removeEventListener('keyup',this.loopUntilKeypressed);
     })
 
     // starts infiniteLoop Game

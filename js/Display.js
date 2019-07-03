@@ -21,7 +21,6 @@ class Display {
 
   paintObject(objectToPaint) {
     game.display.clearDisplay();
-    console.log(objectToPaint);
     game.display.ctx.drawImage(
       objectToPaint.sprite,
       objectToPaint.x,

@@ -2,30 +2,40 @@ class Input {
   constructor() {
     this.pauseImage = new Sprite(0, 0, "Images/pause.png", 640, 480);
     this.gameOverImage = new Sprite(0, 0, "Images/gameover.png", 640, 480);
+    this.keyArrowPressed = undefined;
   }
   _assignControlsToKeys() {
-    document.addEventListener("keydown", whatIs => {
+    this.keyArrowPressed = document.onkeydown = whatIs => {
+      // addEventListener("keydown", whatIs => {
       switch (whatIs.keyCode) {
-        case 38: {
-          if (this._canIReadOtherKeys())
-            game.player.sprite.y -= game.player.speed;
+        case 38:
+          {
+            if (this._canIReadOtherKeys())
+              game.player.sprite.y -= game.player.speed;
+          }
           break;
-        }
-        case 40: {
-          if (this._canIReadOtherKeys())
-            game.player.sprite.y += game.player.speed;
+
+        case 40:
+          {
+            if (this._canIReadOtherKeys())
+              game.player.sprite.y += game.player.speed;
+          }
           break;
-        }
-        case 37: {
-          if (this._canIReadOtherKeys())
-            game.player.sprite.x -= game.player.speed;
+
+        case 37:
+          {
+            if (this._canIReadOtherKeys())
+              game.player.sprite.x -= game.player.speed;
+          }
           break;
-        }
-        case 39: {
-          if (this._canIReadOtherKeys())
-            game.player.sprite.x += game.player.speed;
+
+        case 39:
+          {
+            if (this._canIReadOtherKeys())
+              game.player.sprite.x += game.player.speed;
+          }
           break;
-        }
+
         case 80: {
           if (game.intervalGameId === undefined) {
             game.SetAnimationLoop();
@@ -44,16 +54,22 @@ class Input {
         }
         case 27: {
           {
-            //TODO KEY ESCAPE
-            game.unSetAnimationloop();
-            console.log(this.gameOverImage);
-            game.display.paintObject(game.input.gameOverImage);
-            setTimeout(game.display.clearDisplay, 3000);
+            if (this._canIReadOtherKeys()) {
+              //TODO KEY ESCAPE
+              game.unSetAnimationloop();
+              game.display.paintObject(this.gameOverImage);
+              // setTimeout(() => {
+              //   game.display.clearDisplay();
+              // }, 3000);
+              // game.display.clearDisplay()
+              // game.start();
+            }
           }
           break;
         }
       }
-    });
+    };
+    // });
   }
   _canIReadOtherKeys() {
     if (game.intervalGameId === undefined) return false;
@@ -61,5 +77,9 @@ class Input {
   }
   initializeKeyRead() {
     this._assignControlsToKeys();
+  }
+
+  finishKeyRead() {
+    document.removeEventListener("onkeydown", this.keyArrowPressed);
   }
 }
