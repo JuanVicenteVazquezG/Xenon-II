@@ -9,28 +9,40 @@ class Input {
         case 38:
           {
             if (this._canIReadOtherKeys())
-              game.player.sprite.y -= game.player.speed;
+              game.player.updatePosition(
+                game.player.sprite.x,
+                game.player.sprite.y - game.player.speed
+              );
           }
           break;
 
         case 40:
           {
             if (this._canIReadOtherKeys())
-              game.player.sprite.y += game.player.speed;
+              game.player.updatePosition(
+                game.player.sprite.x,
+                game.player.sprite.y + game.player.speed
+              );
           }
           break;
 
         case 37:
           {
             if (this._canIReadOtherKeys())
-              game.player.sprite.x -= game.player.speed;
+              game.player.updatePosition(
+                game.player.sprite.x - game.player.speed,
+                game.player.sprite.y
+              );
           }
           break;
 
         case 39:
           {
             if (this._canIReadOtherKeys())
-              game.player.sprite.x += game.player.speed;
+              game.player.updatePosition(
+                game.player.sprite.x + game.player.speed,
+                game.player.sprite.y
+              );
           }
           break;
 

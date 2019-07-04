@@ -22,9 +22,8 @@ class Display {
 
   paintObject() {
     game.display.clearDisplay();
-    console.log (`tengo ${game.display.objectsToPaint.length} en mente`)
+
     game.display.objectsToPaint.forEach(objecToShow => {
-      
       game.display.ctx.drawImage(
         objecToShow.sprite,
         objecToShow.x,
