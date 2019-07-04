@@ -16,7 +16,7 @@ html {
 }
 #myCanvas {
   display: block;
-  border: 5px solid black;
+  border: 5px solid #ffffff;
   margin: 2% auto;
   padding: 0 auto;
 }

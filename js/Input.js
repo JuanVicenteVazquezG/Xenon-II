@@ -8,41 +8,27 @@ class Input {
       switch (whatIs.keyCode) {
         case 38:
           {
-            if (this._canIReadOtherKeys())
-              game.player.updatePosition(
-                game.player.sprite.x,
-                game.player.sprite.y - game.player.speed
-              );
+            if (this._canIReadOtherKeys()) game.player.updatePosition('y', -1);
           }
           break;
 
         case 40:
           {
-            if (this._canIReadOtherKeys())
-              game.player.updatePosition(
-                game.player.sprite.x,
-                game.player.sprite.y + game.player.speed
-              );
+            if (this._canIReadOtherKeys()) game.player.updatePosition('y', +1);
           }
           break;
 
         case 37:
           {
             if (this._canIReadOtherKeys())
-              game.player.updatePosition(
-                game.player.sprite.x - game.player.speed,
-                game.player.sprite.y
-              );
+            game.player.updatePosition('x',-1);
           }
           break;
 
         case 39:
           {
             if (this._canIReadOtherKeys())
-              game.player.updatePosition(
-                game.player.sprite.x + game.player.speed,
-                game.player.sprite.y
-              );
+            game.player.updatePosition('x',+1);
           }
           break;
 

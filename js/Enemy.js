@@ -4,7 +4,7 @@ class Enemy {
     this.speed = 1;
     this.boundingBox = {};
     this.movementId = setInterval(() => {
- 
+ console.log(this)
       this.sprite.y += this.speed;
 
       this.boundingBox.x = this.sprite.x;
@@ -13,4 +13,5 @@ class Enemy {
       this.boundingBox.y1 = this.sprite.y + this.sprite.sizeY;
     }, 10);
   }
+
 }

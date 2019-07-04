@@ -28,32 +28,6 @@ class Shooting {
       return true;
     }
 
-    // //Left
-    if (
-      this.boundingBox.x < ObjectToCollide.boundingBox.x1 &&
-      this.boundingBox.y > ObjectToCollide.boundingBox.Y &&
-      this.boundingBox.y1 < ObjectToCollide.boundingBox.y1
-    ) {
-      alert("collides");
-    }
-
-    //right
-    if (
-      this.boundingBox.x1 > ObjectToCollide.boundingBox.x &&
-      this.boundingBox.y > ObjectToCollide.boundingBox.Y &&
-      this.boundingBox.y1 < ObjectToCollide.boundingBox.y1
-    ) {
-      return true;
-    }
-    //top
-    if (
-      this.boundingBox.y < ObjectToCollide.boundingBox.y1 &&
-      this.boundingBox.x > ObjectToCollide.boundingBox.x &&
-      this.boundingBox.x1 < ObjectToCollide.boundingBox.x1
-    ) {
-      return true;
-    }
-
     return false;
   }
 }

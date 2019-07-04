@@ -23,6 +23,7 @@ class Game {
     this.enemyGenerator();
     this.collides(game.enemyArray);
     game.display.deletesAllObjectsPainted();
+    this.outOfScreen();
     this.SetAnimationLoop();
   }
 
@@ -71,20 +72,24 @@ class Game {
   }
 
   collides(enemy) {
-    for (let i=0;i<game.player.shooting.length;i++){
-      for (let j=0;j<enemy.length;j++){
-        if (game.player.shooting[i].itHasCollided(enemy[j])){
-          enemy.splice(j-1,1);
+    game.player.shooting.forEach(shoot => {
+      enemy.forEach((theEnemy, index) => {
+        if (shoot.itHasCollided(theEnemy)) {
+          enemy.splice(index, 1);
         }
-      }
-    }
-   
+      });
+    });
   }
 
   enemyGenerator() {
     if (this.enemyArray.length < 10) {
-      let aNumber = Math.floor(Math.random() * 620);
+      let aNumber = Math.floor(Math.random() * 620) + 20;
       this.enemyArray.push(new Enemy(aNumber, 0, "Images/Enemy1.png", 27, 26));
     }
+  }
+  outOfScreen(){
+    this.enemyArray.forEach((theEnemy,index)=>{
+      if (theEnemy.sprite.y>480) { this.enemyArray.splice(index)}
+    })
   }
 }
