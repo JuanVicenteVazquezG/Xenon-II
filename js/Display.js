@@ -4,9 +4,13 @@ class Display {
     this.width = undefined;
     this.height = undefined;
     this.objectsToPaint = [];
+    this.fontXenon2=new FontFace('Xenon2', 'url(../../font-family/xenon2.ttf)');
+
   }
 
   initialize(options) {
+   
+    
     this.width = options.width;
     this.height = options.height;
     options.canvas.width = options.width;

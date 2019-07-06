@@ -27,6 +27,9 @@ class Game {
       this.enemyGenerator();
       this.collidesShooting(game.enemyArray);
 
+      this.display.ctx.font = "100px font-family/xenon2.ttf";
+      this.display.ctx.fillText("Hello world", 10, 50);
+
       this.outOfScreen();
     }
     game.display.deletesAllObjectsPainted();

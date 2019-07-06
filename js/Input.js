@@ -25,7 +25,7 @@ class Input {
         game.player.shooting.push(
           new Shooting(
             game.player.sprite.x + 28,
-            game.player.sprite.y -5,
+            game.player.sprite.y - 5,
             "Images/s1a.png",
             4,
             11,
@@ -36,6 +36,7 @@ class Input {
       }
     }
     if (this.keys[80]) {
+     console.log ("holaaaaaaaaaaaaa")
       if (game.gameState === "pause") {
         console.log("jugamos");
         game.setAnimationLoop();
@@ -63,6 +64,8 @@ class Input {
     this.eventKeyUpId = window.addEventListener("keyup", e => {
       this.keys[e.keyCode] = false;
     });
+
+    
   }
 }
 //   finishKeyRead() {
