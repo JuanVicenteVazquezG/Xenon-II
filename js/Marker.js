@@ -8,7 +8,7 @@ class Marker{
         game.display.ctx.fillRect(19,439,102,17);
         game.display.ctx.fillStyle="#3FFF33";
         game.display.ctx.fillRect(20,440,game.player.energy,15)
-        game.display.ctx.fon
+        game.display.ctx.
     }
     deleteMarker (){}
 }
