@@ -18,12 +18,11 @@ class Shooting {
   }
 
   itHasCollided(ObjectToCollide) {
-    // // //bottom
-
+    //top
     if (
-      this.boundingBox.y1 >= ObjectToCollide.boundingBox.y &&
-      this.boundingBox.x >= ObjectToCollide.boundingBox.x &&
-      this.boundingBox.x1 <= ObjectToCollide.boundingBox.x1
+      this.boundingBox.y < ObjectToCollide.boundingBox.y1 &&
+      this.boundingBox.x > ObjectToCollide.boundingBox.x &&
+      this.boundingBox.x1 < ObjectToCollide.boundingBox.x1
     ) {
       return true;
     }

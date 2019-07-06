@@ -1,88 +1,71 @@
 class Input {
   constructor() {
-    this.keyArrowPressed = undefined;
+    this.keys = [];
+    this.eventKeyUpId = undefined;
+    this.eventKeyDown = undefined;
+    this.readkeyIntervalId = undefined;
   }
-  _assignControlsToKeys() {
-    this.keyArrowPressed = document.onkeydown = whatIs => {
-      // addEventListener("keydown", whatIs => {
-      switch (whatIs.keyCode) {
-        case 38:
-          {
-            if (this._canIReadOtherKeys()) game.player.updatePosition('y', -1);
-          }
-          break;
 
-        case 40:
-          {
-            if (this._canIReadOtherKeys()) game.player.updatePosition('y', +1);
-          }
-          break;
-
-        case 37:
-          {
-            if (this._canIReadOtherKeys())
-            game.player.updatePosition('x',-1);
-          }
-          break;
-
-        case 39:
-          {
-            if (this._canIReadOtherKeys())
-            game.player.updatePosition('x',+1);
-          }
-          break;
-
-        case 80: {
-          if (game.gameState === "pause") {
-            game.gameState = "playing";
-          } else if (game.gameState === "playing") {
-            game.gameState = "pause";
-          }
-
-          break;
-        }
-        case 32: {
-          if (this._canIReadOtherKeys()) {
-            //Here we need a function to creates differents ammos
-            game.player.shooting.push(
-              new Shooting(
-                game.player.sprite.x + 28,
-                game.player.sprite.y - 5,
-                "Images/s1a.png",
-                4,
-                11,
-                3000,
-                7
-              )
-            );
-          }
-          break;
-        }
-        case 27: {
-          {
-            if (this._canIReadOtherKeys()) {
-              //TODO KEY ESCAPE
-              game.gameState = "gameOver";
-              setTimeout(() => {
-                game.gameState = "splash";
-              }, 3000);
-            }
-          }
-          break;
+  readControlsToKeys() {
+    if (this.keys[38]) {
+      if (this._canIReadOtherKeys()) game.player.updatePosition("y", -1);
+    }
+    if (this.keys[40]) {
+      if (this._canIReadOtherKeys()) game.player.updatePosition("y", +1);
+    }
+    if (this.keys[37]) {
+      if (this._canIReadOtherKeys()) game.player.updatePosition("x", -1);
+    }
+    if (this.keys[39]) {
+      if (this._canIReadOtherKeys()) game.player.updatePosition("x", +1);
+    }
+    if (this.keys[32]) {
+      if (this._canIReadOtherKeys()) {
+        //Here we need a function to creates differents ammos
+        game.player.shooting.push(
+          new Shooting(
+            game.player.sprite.x + 28,
+            game.player.sprite.y -5,
+            "Images/s1a.png",
+            4,
+            11,
+            3000,
+            7
+          )
+        );
+      }
+    }
+    if (this.keys[80]) {
+      if (game.gameState === "pause") {
+        console.log("jugamos");
+        game.setAnimationLoop();
+        game.gameState = "playing";
+      } else if (game.gameState === "playing") {
+        if (game.finished === true) {
+          game.gameState = "pause";
+          game.unSetAnimationloop();
+          console.log("Entro en modo pausa");
         }
       }
-    };
-    // });
+    }
   }
+
   _canIReadOtherKeys() {
     if (game.gameState === "pause") return false;
     else return true;
   }
-  initializeKeyRead() {
-    this._assignControlsToKeys();
-  }
 
-  finishKeyRead() {
-    document.removeEventListener("onkeydown", this.keyArrowPressed);
+  initializeKeyRead() {
+    this.eventKeyDownId = window.addEventListener("keydown", e => {
+      this.keys[e.keyCode] = true;
+    });
+
+    this.eventKeyUpId = window.addEventListener("keyup", e => {
+      this.keys[e.keyCode] = false;
+    });
   }
 }
+//   finishKeyRead() {
+//     document.removeEventListener("onkeydown", this.keyArrowPressed);
+//   }
+// }

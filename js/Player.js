@@ -2,65 +2,58 @@ class Player {
   constructor(x, y, url, sizeX, sizeY) {
     this.sprite = new Sprite(x, y, url, sizeX, sizeY);
     this.boundingBox = {};
-    this.speed = 0.5;
+    this.speed = 3;
     this.speedPrima = this.speed;
     this.energy = 100;
     this.points = 0;
     this.kindOfShoot = 1; //Could be 1 to other numbers
     this.shooting = [];
   }
-  itHasCollided(ObjectToCollide) {
-    // // //bottom
-
+  itHasCollided(objectToCollide) {
+    let shipTop = this.sprite.y;
+    let shipRight = this.sprite.x + this.sprite.sizeX;
+    let shipBottom = this.sprite.y + this.sprite.sizeY;
+    let shipLeft = this.sprite.x;
+    let oCollideTop = objectToCollide.sprite.y;
+    let oCollideRight = objectToCollide.sprite.x + objectToCollide.sprite.sizeX;
+    let oCollideBottom =
+      objectToCollide.sprite.y + objectToCollide.sprite.sizeY;
+    let oCollideLeft = objectToCollide.x;
     if (
-      this.boundingBox.y1 >= ObjectToCollide.boundingBox.y &&
-      this.boundingBox.x >= ObjectToCollide.boundingBox.x &&
-      this.boundingBox.x1 <= ObjectToCollide.boundingBox.x1
+      shipTop < oCollideBottom ||
+      shipRight > oCollideLeft ||
+      shipBottom > oCollideTop ||
+      shipLeft < oCollideRight
     ) {
       return true;
+    } else {
+      return false;
     }
-
-    // // //Left
-    // if (
-    //   this.boundingBox.x < ObjectToCollide.boundingBox.x1 &&
-    //   this.boundingBox.y > ObjectToCollide.boundingBox.Y &&
-    //   this.boundingBox.y1 < ObjectToCollide.boundingBox.y1
-    // ) {
-    //   alert("collides");
-    // }
-
-    // //right
-    // if (
-    //   this.boundingBox.x1 > ObjectToCollide.boundingBox.x &&
-    //   this.boundingBox.y > ObjectToCollide.boundingBox.Y &&
-    //   this.boundingBox.y1 < ObjectToCollide.boundingBox.y1
-    // ) {
-    //   return true;
-    // }
-    // //top
-    // if (
-    //   this.boundingBox.y < ObjectToCollide.boundingBox.y1 &&
-    //   this.boundingBox.x > ObjectToCollide.boundingBox.x &&
-    //   this.boundingBox.x1 < ObjectToCollide.boundingBox.x1
-    // ) {
-    //   return true;
-    // }
-
-    return false;
   }
 
   updatePosition(position, signal) {
-    let idUpdatePosition = setInterval(() => {
-      this.sprite[position] = this.sprite[position] + signal;
-      this.speedPrima - 1;
-    }, 100);
-    if ((this.speedPrima = 0)) {
-      clearInterval(idUpdatePosition);
-      this.speedPrima = this.speed;
+    if (this.sprite.x <= 4) {
+      this.sprite.x = 4;
     }
-    this.boundingBox.x = this.sprite.x;
-    this.boundingBox.y = this.sprite.y;
-    this.boundingBox.x1 = this.sprite.x + this.sprite.sizeX;
-    this.boundingBox.y1 = this.sprite.y + this.sprite.sizeY;
+    if (this.sprite.x >= 582) {
+      this.sprite.x = 582;
+    }
+    if (this.sprite.y <= 4) {
+      this.sprite.y = 4;
+    }
+    if (this.sprite.y >= 420) {
+      this.sprite.y = 420;
+    }
+    {
+      this.sprite[position] += this.speed * signal;
+
+      this.boundingBox.x = this.sprite.x;
+      this.boundingBox.y = this.sprite.y;
+      this.boundingBox.x1 = this.sprite.x + this.sprite.sizeX;
+      this.boundingBox.y1 = this.sprite.y + this.sprite.sizeY;
+      // game.display.ctx.strokeStyle = "green";
+      // // game.display.ctx.strokeRect (this.boundingBox.x-2 ,this.boundingBox.y-2 , this.boundingBox.sizeX+2,this.boundingBox.sizeY+2)
+      // game.display.ctx.strokeRect(0, 0, 100, 100);
+    }
   }
 }
