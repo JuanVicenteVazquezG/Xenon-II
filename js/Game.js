@@ -5,6 +5,7 @@ class Game {
     this.display = new Display();
     this.player = new Player(289, 410, "Images/ship4.png", 62, 64);
     this.enemy = new Enemy(150, 0, "Images/Enemy1.png", 27, 26);
+
     this.enemyArray = [];
     this.marker = new Marker(0, 200);
     this.intervalGameId = undefined;
@@ -13,9 +14,10 @@ class Game {
     this.gameOverImage = new Sprite(0, 0, "Images/gameover.png", 640, 480);
     this.name = this.initImage;
     this.gameState = "splash"; //could be splash/playing/pause/gameOver
-    this.musicSplash=new Audio();
-    this.musicSplash.src="Musics/musicSplash.mp3"; //determinar is loaded?
-    this.musicGame=new Audio();
+    this.musicSplash = new Audio();
+    this.musicSplash.src = "Musics/musicSplash.mp3"; //determinar is loaded?
+    this.musicGame = new Audio();
+    
   }
 
   pause() {}
@@ -43,7 +45,7 @@ class Game {
   start(options) {
     if (game.display.ctx === undefined) {
       this.display.initialize(options);
-          }
+    }
     game.gameState = "splash";
     let playing = function() {
       game.gameState = "playing";
@@ -68,7 +70,7 @@ class Game {
   fillTheArrayOfObjectsToPaint() {
     if (this.gameState === "splash") {
       game.display.addObjectsToPaint(game.initImage);
-     // game.musicSplash.play();
+      // game.musicSplash.play();
     } else if (this.gameState === "playing") {
       game.display.addObjectsToPaint(game.player.sprite);
       if (game.player.shooting.length >= 0) {
@@ -90,23 +92,35 @@ class Game {
     game.player.shooting.forEach(shoot => {
       enemy.forEach((theEnemy, index) => {
         if (shoot.itHasCollided(theEnemy)) {
-          theEnemy.enemyExplosion.play();
-          enemy.splice(index, 1);
+          // theEnemy.enemyExplosion.play();
+          // enemy.splice(index, 1);
+          theEnemy.deathEnemy(index);
         }
       });
     });
     enemy.forEach(theEnemy => {
       if (game.player.itHasCollided(theEnemy)) {
-        game.player.energy-=2;
+        game.player.energy -= 2;
       }
     });
   }
 
   enemyGenerator() {
     if (this.enemyArray.length < 10) {
+      let enemyKind = game.kindOfEnemy(1);
+      console.log(enemyKind);
       let aNumber = Math.floor(Math.random() * 620) + 20;
-      this.enemyArray.push(new Enemy(aNumber, 0, "Images/Enemy1.png", 27, 26));
+      this.enemyArray.push(
+        new Enemy(
+          aNumber,
+          0,
+          enemyKind.nameSprite,
+          enemyKind.sizeX,
+          enemyKind.sizeY
+        )
+      );
     }
+    console.log("tudoBem2");
   }
   outOfScreen() {
     this.enemyArray.forEach((theEnemy, index) => {
@@ -114,5 +128,9 @@ class Game {
         this.enemyArray.splice(index);
       }
     });
+  }
+  kindOfEnemy(enemyKind) {
+    if (enemyKind === 1) console.log("tudoBem");
+    return { nameSprite: "Images/drone.png", sizeX: 512, sizeY: 32 };
   }
 }
