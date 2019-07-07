@@ -13,6 +13,9 @@ class Game {
     this.gameOverImage = new Sprite(0, 0, "Images/gameover.png", 640, 480);
     this.name = this.initImage;
     this.gameState = "splash"; //could be splash/playing/pause/gameOver
+    this.musicSplash=new Audio();
+    this.musicSplash.src="Musics/musicSplash.mp3"; //determinar is loaded?
+    this.musicGame=new Audio();
   }
 
   pause() {}
@@ -23,7 +26,7 @@ class Game {
     this.display.paintObject.bind(this)();
     game.input.readControlsToKeys();
     if (game.gameState === "playing") {
-      game.marker.createMarker();
+      game.marker.updateMarkerEnergy();
       this.enemyGenerator();
       this.collidesShooting(game.enemyArray);
 
@@ -40,7 +43,7 @@ class Game {
   start(options) {
     if (game.display.ctx === undefined) {
       this.display.initialize(options);
-    }
+          }
     game.gameState = "splash";
     let playing = function() {
       game.gameState = "playing";
@@ -65,6 +68,7 @@ class Game {
   fillTheArrayOfObjectsToPaint() {
     if (this.gameState === "splash") {
       game.display.addObjectsToPaint(game.initImage);
+     // game.musicSplash.play();
     } else if (this.gameState === "playing") {
       game.display.addObjectsToPaint(game.player.sprite);
       if (game.player.shooting.length >= 0) {
@@ -86,13 +90,14 @@ class Game {
     game.player.shooting.forEach(shoot => {
       enemy.forEach((theEnemy, index) => {
         if (shoot.itHasCollided(theEnemy)) {
+          theEnemy.enemyExplosion.play();
           enemy.splice(index, 1);
         }
       });
     });
     enemy.forEach(theEnemy => {
       if (game.player.itHasCollided(theEnemy)) {
-        console.log("Collides");
+        game.player.energy-=2;
       }
     });
   }

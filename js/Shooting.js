@@ -1,6 +1,9 @@
 class Shooting {
   constructor(x, y, url, sizeX, sizeY, timeLife, speed) {
     this.sprite = new Sprite(x, y, url, sizeX, sizeY);
+    this.sound = new Audio();
+    this.sound.src = "Sounds/fire_missile.wav";
+    this.sound.play();
     this.timeLife = timeLife;
     this.speed = speed;
     this.boundingBox = {};

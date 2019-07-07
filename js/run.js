@@ -6,7 +6,8 @@
 const options = {
   width: "640",
   height: "480",
-  canvas: document.getElementById("myCanvas")
+  canvas: document.getElementById("myCanvas"),
+  
 };
 
 game = new Game();
