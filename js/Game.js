@@ -3,15 +3,55 @@ class Game {
     this.finishedundefined;
     this.input = new Input();
     this.display = new Display();
-    this.player = new Player(289, 410, "Images/ship4.png", 62, 64);
-    this.enemy = new Enemy(150, 0, "Images/Enemy1.png", 27, 26);
+    this.player = new Player(
+      0,
+      0,
+      64,
+      64,
+      289,
+      410,
+      "Images/ship4.png",
+      62,
+      64
+    );
+    this.enemy = undefined;
 
     this.enemyArray = [];
     this.marker = new Marker(0, 200);
     this.intervalGameId = undefined;
-    this.initImage = new Sprite(0, 0, "Images/splash.png", 640, 480);
-    this.pauseImage = new Sprite(0, 0, "Images/pause.png", 640, 480);
-    this.gameOverImage = new Sprite(0, 0, "Images/gameover.png", 640, 480);
+    this.initImage = new Sprite(
+      0,
+      0,
+      640,
+      480,
+      0,
+      0,
+      "Images/splash.png",
+      640,
+      480
+    );
+    this.pauseImage = new Sprite(
+      0,
+      0,
+      640,
+      480,
+      0,
+      0,
+      "Images/pause.png",
+      640,
+      480
+    );
+    this.gameOverImage = new Sprite(
+      0,
+      0,
+      640,
+      480,
+      0,
+      0,
+      "Images/gameover.png",
+      640,
+      480
+    );
     this.name = this.initImage;
     this.gameState = "splash"; //could be splash/playing/pause/gameOver
     this.musicSplash = new Audio();
@@ -101,7 +141,7 @@ class Game {
 
   enemyGenerator() {
     if (this.enemyArray.length < 10) {
-      let numberKind=1;
+      let numberKind = 1;
       let enemyKind = game.kindOfEnemy(numberKind);
 
       let aNumber = Math.floor(Math.random() * 620) + 20;

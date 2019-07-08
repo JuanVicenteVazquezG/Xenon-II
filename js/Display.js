@@ -4,13 +4,13 @@ class Display {
     this.width = undefined;
     this.height = undefined;
     this.objectsToPaint = [];
-    this.fontXenon2=new FontFace('Xenon2', 'url(../../font-family/xenon2.ttf)');
-
+    this.fontXenon2 = new FontFace(
+      "Xenon2",
+      "url(../../font-family/xenon2.ttf)"
+    );
   }
 
   initialize(options) {
-   
-    
     this.width = options.width;
     this.height = options.height;
     options.canvas.width = options.width;
@@ -28,8 +28,17 @@ class Display {
     game.display.clearDisplay();
 
     game.display.objectsToPaint.forEach(objecToShow => {
+      //   positionToReadX,
+      // positionToReadY,
+      // positionToReadSizeX,
+      // positionToReadSizeY,
       game.display.ctx.drawImage(
+       // positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,
         objecToShow.sprite,
+        objecToShow.positionToReadX,
+        objecToShow.positionToReadY,
+        objecToShow.positionToReadSizeX,
+        objecToShow.positionToReadSizeY,
         objecToShow.x,
         objecToShow.y,
         objecToShow.sizeX,
@@ -39,7 +48,8 @@ class Display {
   }
 
   addObjectsToPaint(aSprite) {
-    this.objectsToPaint.push(aSprite);
+    
+    this.objectsToPaint.push(aSprite); //==>> game
   }
   deletesAllObjectsPainted() {
     while (this.objectsToPaint.length > 0) {

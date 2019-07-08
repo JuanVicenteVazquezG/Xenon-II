@@ -11,13 +11,18 @@ class Enemy {
     sizeY,
     typeOfEnemy = 1
   ) {
-    this.sprite = new Sprite(x, y, url, sizeX, sizeY);
-    this.positionAtlasToRead = {
-      x: positionToReadX,
-      y: positionToReadY,
-      sizeX: positionToReadSizeX,
-      sizeY: positionToReadSizeY
-    };
+    this.sprite = new Sprite(
+      positionToReadX,
+      positionToReadY,
+      positionToReadSizeX,
+      positionToReadSizeY,
+      x,
+      y,
+      url,
+      sizeX,
+      sizeY
+    );
+    console.log(this.sprite);
     this.speed = 1;
     this.enemyExplosion = new Audio();
     this.enemyExplosion.src = "Sounds/small_explosion.wav";

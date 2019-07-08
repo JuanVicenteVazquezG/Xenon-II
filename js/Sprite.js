@@ -1,5 +1,9 @@
 class Sprite{
-constructor (x,y,url,sizeX,sizeY){
+constructor (positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x,y,url,sizeX,sizeY){
+        this.positionToReadX=positionToReadX;
+        this.positionToReadY=positionToReadY;
+        this.positionToReadSizeX=positionToReadSizeX;
+        this.positionToReadsizeY=positionToReadSizeY;
         this.x=x;
         this.y=y;
         this.sprite= new Image()
