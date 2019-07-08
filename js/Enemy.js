@@ -1,6 +1,23 @@
 class Enemy {
-  constructor(x, y, url, sizeX, sizeY, typeOfEnemy = 1) {
+  constructor(
+    positionToReadX,
+    positionToReadY,
+    positionToReadSizeX,
+    positionToReadSizeY,
+    x,
+    y,
+    url,
+    sizeX,
+    sizeY,
+    typeOfEnemy = 1
+  ) {
     this.sprite = new Sprite(x, y, url, sizeX, sizeY);
+    this.positionAtlasToRead = {
+      x: positionToReadX,
+      y: positionToReadY,
+      sizeX: positionToReadSizeX,
+      sizeY: positionToReadSizeY
+    };
     this.speed = 1;
     this.enemyExplosion = new Audio();
     this.enemyExplosion.src = "Sounds/small_explosion.wav";
@@ -26,9 +43,10 @@ class Enemy {
 
   deathEnemy(index) {
     clearInterval(this.movementId);
+    game.player.points += 10;
     this.enemyExplosion.play();
     this.EnemyExplosionId = setInterval(() => {
-      console.log("boom")
+      console.log("boom");
       // game.display.ctx.drawImage(
       //   this.enemyExplosionAtlas,
       //   64*this.indexCounterSprite,
@@ -43,7 +61,6 @@ class Enemy {
       this.indexCounterSprite++;
       if (this.indexCounterSprite === 6) {
         clearInterval(this.EnemyExplosionId);
-        
       }
     }, 100);
     game.enemyArray.splice(index, 1);

@@ -17,7 +17,6 @@ class Game {
     this.musicSplash = new Audio();
     this.musicSplash.src = "Musics/musicSplash.mp3"; //determinar is loaded?
     this.musicGame = new Audio();
-    
   }
 
   pause() {}
@@ -31,9 +30,6 @@ class Game {
       game.marker.updateMarkerEnergy();
       this.enemyGenerator();
       this.collidesShooting(game.enemyArray);
-
-      this.display.ctx.font = "100px font-family/xenon2.ttf";
-      this.display.ctx.fillText("Hello world", 10, 50);
 
       this.outOfScreen();
     }
@@ -92,8 +88,6 @@ class Game {
     game.player.shooting.forEach(shoot => {
       enemy.forEach((theEnemy, index) => {
         if (shoot.itHasCollided(theEnemy)) {
-          // theEnemy.enemyExplosion.play();
-          // enemy.splice(index, 1);
           theEnemy.deathEnemy(index);
         }
       });
@@ -107,30 +101,46 @@ class Game {
 
   enemyGenerator() {
     if (this.enemyArray.length < 10) {
-      let enemyKind = game.kindOfEnemy(1);
-      console.log(enemyKind);
+      let numberKind=1;
+      let enemyKind = game.kindOfEnemy(numberKind);
+
       let aNumber = Math.floor(Math.random() * 620) + 20;
       this.enemyArray.push(
         new Enemy(
+          enemyKind.positionToReadAtlasX,
+          enemyKind.positionToReadAtlasY,
+          enemyKind.positionToReadAtlasSizeX,
+          enemyKind.positionToReadAtlasSizeY,
           aNumber,
           0,
           enemyKind.nameSprite,
           enemyKind.sizeX,
-          enemyKind.sizeY
+          enemyKind.sizeY,
+          numberKind
         )
       );
     }
     console.log("tudoBem2");
   }
+
+  kindOfEnemy(enemyKind) {
+    if (enemyKind === 1) console.log("tudoBem");
+    return {
+      nameSprite: "Images/drone.png",
+      positionToReadAtlasX: 0,
+      positionToReadAtlasy: 0,
+      positionToReadAtlasSizeX: 32,
+      positionToReadAtlasSizeY: 32,
+      sizeX: 512,
+      sizeY: 32
+    };
+  }
+
   outOfScreen() {
     this.enemyArray.forEach((theEnemy, index) => {
       if (theEnemy.sprite.y > 480) {
         this.enemyArray.splice(index);
       }
     });
-  }
-  kindOfEnemy(enemyKind) {
-    if (enemyKind === 1) console.log("tudoBem");
-    return { nameSprite: "Images/drone.png", sizeX: 512, sizeY: 32 };
   }
 }
