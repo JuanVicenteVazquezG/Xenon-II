@@ -10,7 +10,7 @@ class Game {
       64,
       289,
       410,
-      "Images/ship4.png",
+      "Images/Ship.png",
       62,
       64
     );
@@ -19,6 +19,8 @@ class Game {
     this.enemyArray = [];
     this.marker = new Marker(0, 200);
     this.intervalGameId = undefined;
+
+    //fixing this
     this.initImage = new Sprite(
       0,
       0,
@@ -52,7 +54,7 @@ class Game {
       640,
       480
     );
-    this.name = this.initImage;
+    this.imageName = this.initImage;
     this.gameState = "splash"; //could be splash/playing/pause/gameOver
     this.musicSplash = new Audio();
     this.musicSplash.src = "Musics/musicSplash.mp3"; //determinar is loaded?
@@ -105,7 +107,8 @@ class Game {
 
   fillTheArrayOfObjectsToPaint() {
     if (this.gameState === "splash") {
-      game.display.addObjectsToPaint(game.initImage);
+     
+      game.display.addObjectsToPaint(game.imageName);
       // game.musicSplash.play();
     } else if (this.gameState === "playing") {
       game.display.addObjectsToPaint(game.player.sprite);
@@ -160,7 +163,7 @@ class Game {
         )
       );
     }
-    console.log("tudoBem2");
+   
   }
 
   kindOfEnemy(enemyKind) {

@@ -28,22 +28,29 @@ class Display {
     game.display.clearDisplay();
 
     game.display.objectsToPaint.forEach(objecToShow => {
-      //   positionToReadX,
-      // positionToReadY,
-      // positionToReadSizeX,
-      // positionToReadSizeY,
+      console.log(objecToShow);
       game.display.ctx.drawImage(
-       // positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,
-        objecToShow.sprite,
-        objecToShow.positionToReadX,
-        objecToShow.positionToReadY,
-        objecToShow.positionToReadSizeX,
-        objecToShow.positionToReadSizeY,
-        objecToShow.x,
-        objecToShow.y,
-        objecToShow.sizeX,
-        objecToShow.sizeY
-      );
+          objecToShow.sprite,
+          objecToShow.positionToReadX,
+          objecToShow.positionToReadY,
+          objecToShow.positionToReadSizeX,
+          objecToShow.positionToReadSizeY,
+          objecToShow.x,
+          objecToShow.y,
+          objecToShow.sizeX,
+          objecToShow.sizeY
+        );
+      // game.display.ctx.drawImage(
+      //   objecToShow.sprite,
+      //   objecToShow.positionToReadX,
+      //   objecToShow.positionToReadY,
+      //   objecToShow.positionToReadSizeX,
+      //   objecToShow.positionToReadSizeY,
+      //   objecToShow.x,
+      //   objecToShow.y,
+      //   objecToShow.sizeX,
+      //   objecToShow.sizeY
+      // );
     });
   }
 

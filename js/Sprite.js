@@ -3,7 +3,7 @@ constructor (positionToReadX,positionToReadY,positionToReadSizeX,positionToReadS
         this.positionToReadX=positionToReadX;
         this.positionToReadY=positionToReadY;
         this.positionToReadSizeX=positionToReadSizeX;
-        this.positionToReadsizeY=positionToReadSizeY;
+        this.positionToReadSizeY=positionToReadSizeY;
         this.x=x;
         this.y=y;
         this.sprite= new Image()
