@@ -8,7 +8,8 @@ class Game {
     this.enemyArray = [];
     this.marker = new Marker(0, 200);
     this.intervalGameId = undefined;
-
+    this.numberKind = 1;
+    this.maxEnemyOntheScreen = 10;
     //fixing this
     this.initImage = new Sprite(
       0,
@@ -59,7 +60,7 @@ class Game {
     game.input.readControlsToKeys();
     if (game.gameState === "playing") {
       game.marker.updateMarkerEnergy();
-      this.enemyGenerator();
+     
       this.collidesShooting(game.enemyArray);
 
       this.outOfScreen();
@@ -78,6 +79,8 @@ class Game {
       game.gameState = "playing";
       //Assign control keys or decide device control
       game.input.initializeKeyRead();
+      console.log ("Estoy en enemy")
+      game.enemyGenerator();
       document.removeEventListener("keydown", playing);
     };
     document.addEventListener("keydown", playing);
@@ -116,12 +119,11 @@ class Game {
   }
 
   collidesShooting(enemy) {
-    game.player.shooting.forEach((shoot,indexShoot )=> {
+    game.player.shooting.forEach((shoot, indexShoot) => {
       enemy.forEach((theEnemy, index) => {
         if (shoot.itHasCollided(theEnemy)) {
-          game.player.shooting.splice(1,1);
+          game.player.shooting.splice(1, 1);
           theEnemy.deathEnemy(index);
-          
         }
       });
     });
@@ -133,27 +135,30 @@ class Game {
   }
 
   enemyGenerator() {
-    if (this.enemyArray.length < 10) {
-      let numberKind = 1; //Generator depends of other function on stage of game
-      let enemyKind = game.kindOfEnemy(numberKind);
+    setInterval(() => {
+      if (this.enemyArray.length < this.maxEnemyOntheScreen) {
+        //let numberKind = 1; //Generator depends of other function on stage of game
+        //
+        let enemyKind = game.kindOfEnemy(this.numberKind);
 
-      let aNumber = Math.floor(Math.random() * 620) + 20;
+        let aNumber = Math.floor(Math.random() * 620) + 20;
 
-      this.enemyArray.push(
-        new Enemy(
-          enemyKind.positionToReadX,
-          enemyKind.positionToReadY,
-          enemyKind.positionToReadSizeX,
-          enemyKind.positionToReadSizeY,
-          aNumber,
-          0,
-          enemyKind.url,
-          enemyKind.sizeX,
-          enemyKind.sizeY,
-          numberKind
-        )
-      );
-    }
+        this.enemyArray.push(
+          new Enemy(
+            enemyKind.positionToReadX,
+            enemyKind.positionToReadY,
+            enemyKind.positionToReadSizeX,
+            enemyKind.positionToReadSizeY,
+            aNumber,
+            0,
+            enemyKind.url,
+            enemyKind.sizeX,
+            enemyKind.sizeY,
+            this.numberKind
+          )
+        );
+      }
+    }, 1000);
   }
 
   kindOfEnemy(enemyKind) {
@@ -172,7 +177,12 @@ class Game {
   outOfScreen() {
     this.enemyArray.forEach((theEnemy, index) => {
       if (theEnemy.sprite.y > 480) {
-        this.enemyArray.splice(index);
+        this.enemyArray.splice(index,1);
+      }
+    });
+    game.player.shooting.forEach((theShoot, indexOfShoot) => {
+      if (theShoot.sprite.y < -20) {
+        game.player.shooting.splice(indexOfShoot,1);
       }
     });
   }

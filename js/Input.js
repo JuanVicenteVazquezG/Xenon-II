@@ -4,6 +4,7 @@ class Input {
     this.eventKeyUpId = undefined;
     this.eventKeyDown = undefined;
     this.readkeyIntervalId = undefined;
+    this.busy = false;
   }
 
   readControlsToKeys() {
@@ -22,17 +23,26 @@ class Input {
     if (this.keys[32]) {
       if (this._canIReadOtherKeys()) {
         //Here we need a function to creates differents ammos
-        game.player.shooting.push(
-          new Shooting(0,0,4,10,
-            game.player.sprite.x + 28,
-            game.player.sprite.y - 5,
-            "Images/s1a.png",
-            4,
-            11,
-            3000,
-            7
-          )
-        );
+        if (this.busy === false) {
+          this.busy=true;
+          game.player.shooting.push(
+            new Shooting(
+              0,
+              0,
+              4,
+              10,
+              game.player.sprite.x + 28,
+              game.player.sprite.y - 5,
+              "Images/s1a.png",
+              4,
+              11,
+              3000,
+              7
+            )
+
+          );
+          setTimeout(()=>this.busy=false,100)
+        }
       }
     }
     if (this.keys[80]) {
