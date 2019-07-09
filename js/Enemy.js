@@ -37,7 +37,7 @@ class Enemy {
     this.speed = 1;
     this.enemyExplosion = new Audio();
     this.enemyExplosion.src = "Sounds/small_explosion.wav";
-   
+
     this.counterSpriteMovementRotationEnemy = 0;
     this.boundingBox = {};
 
@@ -61,30 +61,29 @@ class Enemy {
     ];
     this.indexCounterSprite = 0;
     this.EnemyExplosionId = undefined;
-    
   }
 
   deathEnemy(index) {
     game.player.points += 10;
     clearInterval(this.movementId);
-   let x=this.sprite.x;
-   let y=this.sprite.y;
-    this.sprite=this.explosionSprite;
-    
-    this.sprite.x=x;
-    this.sprite.y=y;
+    let x = this.sprite.x;
+    let y = this.sprite.y;
+    this.sprite = this.explosionSprite;
+
+    this.sprite.x = x;
+    this.sprite.y = y;
     this.enemyExplosion.play();
 
     this.EnemyExplosionId = setInterval(() => {
-      this.sprite.positionToReadX=this.sprite.positionToReadSizeX*this.indexCounterSprite;
-      console.log (this.sprite);
+      this.sprite.positionToReadX =
+        this.sprite.positionToReadSizeX * this.indexCounterSprite;
+      console.log(this.sprite);
       this.indexCounterSprite++;
       if (this.indexCounterSprite === 10) {
-        game.enemyArray.splice(index, 1);
+        game.enemyArray.splice(index , 1);
         clearInterval(this.EnemyExplosionId);
       }
-    }, 100);
-    
+    }, 41.66);
   }
 
   //Todo we need a Function thas changes de position of atlas to show.

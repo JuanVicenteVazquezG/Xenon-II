@@ -14,7 +14,7 @@ class Marker {
     game.display.ctx.font = "30px Arial";
     game.display.ctx.textAlign= ("right");
     game.display.ctx.fillStyle="white"
-    game.display.ctx.fillText(game.player.points.toString(), 600, 458);
+    game.display.ctx.fillText(`Score: ${game.player.points.toString()}`, 600, 458);
   }
 
   deleteMarker() {}

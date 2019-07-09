@@ -73,7 +73,16 @@ class Player {
         this.sprite.positionToReadX =
           this.sprite.positionToReadSizeX * this.syncMovWSpritesCounter;
           this.busySyncMov=false;
-      }, 100);
+      }, 150);
+    }
+  }
+//Comesback the ship to original position
+  normalizerShip(){
+    if (this.busySyncMov===false){
+      this.busySyncMov=true;
+      if (game.player.syncMovWSpritesCounter<3) game.player.syncMovWSpritesCounter++;
+      if (game.player.syncMovWSpritesCounter>3) game.player.syncMovWSpritesCounter--;
+      this.busySyncMov=false;
     }
   }
 }

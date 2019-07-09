@@ -1,5 +1,6 @@
 class Input {
   constructor() {
+    this.withOutkeypressID = undefined;
     this.keys = [];
     this.eventKeyUpId = undefined;
     this.eventKeyDown = undefined;
@@ -17,23 +18,26 @@ class Input {
     if (this.keys[37]) {
       if (this._canIReadOtherKeys()) {
         game.player.updatePosition("x", -1);
-        game.player.syncMovWSpritesCounter --;
-        if (game.player.syncMovWSpritesCounter<0) game.player.syncMovWSpritesCounter=0;
+        game.player.syncMovWSpritesCounter--;
+        if (game.player.syncMovWSpritesCounter < 0)
+          game.player.syncMovWSpritesCounter = 0;
         game.player.synchronizationMovementWSprites();
       }
     }
     if (this.keys[39]) {
-      if (this._canIReadOtherKeys()){ game.player.updatePosition("x", +1);
-      game.player.syncMovWSpritesCounter ++;
-      if (game.player.syncMovWSpritesCounter>7) game.player.syncMovWSpritesCounter=7;
-      game.player.synchronizationMovementWSprites();
-    }
+      if (this._canIReadOtherKeys()) {
+        game.player.updatePosition("x", +1);
+        game.player.syncMovWSpritesCounter++;
+        if (game.player.syncMovWSpritesCounter > 6)
+          game.player.syncMovWSpritesCounter = 6;
+        game.player.synchronizationMovementWSprites();
+      }
     }
     if (this.keys[32]) {
       if (this._canIReadOtherKeys()) {
         //Here we need a function to creates differents ammos
         if (this.busy === false) {
-          this.busy=true;
+          this.busy = true;
           game.player.shooting.push(
             new Shooting(
               0,
@@ -48,9 +52,8 @@ class Input {
               3000,
               7
             )
-
           );
-          setTimeout(()=>this.busy=false,100)
+          setTimeout(() => (this.busy = false), 100);
         }
       }
     }
@@ -75,10 +78,12 @@ class Input {
   initializeKeyRead() {
     this.eventKeyDownId = window.addEventListener("keydown", e => {
       this.keys[e.keyCode] = true;
+      clearInterval(this.withOutkeypressID);
     });
 
     this.eventKeyUpId = window.addEventListener("keyup", e => {
       this.keys[e.keyCode] = false;
+      this.withOutkeypressID = setInterval(()=>{game.player.normalizerShip();console.log ('Hello')}, 500);
     });
   }
 }
