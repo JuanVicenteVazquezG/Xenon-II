@@ -15,10 +15,19 @@ class Input {
       if (this._canIReadOtherKeys()) game.player.updatePosition("y", +1);
     }
     if (this.keys[37]) {
-      if (this._canIReadOtherKeys()) game.player.updatePosition("x", -1);
+      if (this._canIReadOtherKeys()) {
+        game.player.updatePosition("x", -1);
+        game.player.syncMovWSpritesCounter --;
+        if (game.player.syncMovWSpritesCounter<0) game.player.syncMovWSpritesCounter=0;
+        game.player.synchronizationMovementWSprites();
+      }
     }
     if (this.keys[39]) {
-      if (this._canIReadOtherKeys()) game.player.updatePosition("x", +1);
+      if (this._canIReadOtherKeys()){ game.player.updatePosition("x", +1);
+      game.player.syncMovWSpritesCounter ++;
+      if (game.player.syncMovWSpritesCounter>7) game.player.syncMovWSpritesCounter=7;
+      game.player.synchronizationMovementWSprites();
+    }
     }
     if (this.keys[32]) {
       if (this._canIReadOtherKeys()) {

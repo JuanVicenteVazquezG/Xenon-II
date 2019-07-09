@@ -29,6 +29,8 @@ class Player {
     this.points = 0;
     this.kindOfShoot = 1; //Could be 1 to other numbers
     this.shooting = [];
+    this.syncMovWSpritesCounter = 4;
+    this.busySyncMov = false;
   }
 
   itHasCollided(objectToCollide) {
@@ -63,5 +65,15 @@ class Player {
     this.boundingBox.y = this.sprite.y;
     this.boundingBox.x1 = this.sprite.x + this.sprite.sizeX;
     this.boundingBox.y1 = this.sprite.y + this.sprite.sizeY;
+  }
+  synchronizationMovementWSprites() {
+    if (this.busySyncMov === false) {
+      this.busySyncMov=true;
+      this.synMovWSpritesId = setTimeout(() => {
+        this.sprite.positionToReadX =
+          this.sprite.positionToReadSizeX * this.syncMovWSpritesCounter;
+          this.busySyncMov=false;
+      }, 100);
+    }
   }
 }

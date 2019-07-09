@@ -3,7 +3,7 @@ class Game {
     this.finishedundefined;
     this.input = new Input();
     this.display = new Display();
-    this.player = new Player(0, 0, 64, 64, 289, 410, "Images/Ship.png", 62, 64);
+    this.player = new Player(192, 0, 64, 64, 289, 410, "Images/Ship.png", 62, 64);
     this.enemy = undefined;
     this.enemyArray = [];
     this.marker = new Marker(0, 200);
