@@ -28,7 +28,7 @@ class Display {
     game.display.clearDisplay();
 
     game.display.objectsToPaint.forEach(objecToShow => {
-      console.log(objecToShow);
+     
       game.display.ctx.drawImage(
           objecToShow.sprite,
           objecToShow.positionToReadX,

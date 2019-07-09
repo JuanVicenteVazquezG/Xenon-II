@@ -22,7 +22,7 @@ class Enemy {
       sizeX,
       sizeY
     );
-    console.log(this.sprite);
+ 
     this.speed = 1;
     this.enemyExplosion = new Audio();
     this.enemyExplosion.src = "Sounds/small_explosion.wav";
@@ -51,7 +51,7 @@ class Enemy {
     game.player.points += 10;
     this.enemyExplosion.play();
     this.EnemyExplosionId = setInterval(() => {
-      console.log("boom");
+      
       // game.display.ctx.drawImage(
       //   this.enemyExplosionAtlas,
       //   64*this.indexCounterSprite,

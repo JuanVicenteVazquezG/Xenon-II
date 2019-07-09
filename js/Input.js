@@ -23,7 +23,7 @@ class Input {
       if (this._canIReadOtherKeys()) {
         //Here we need a function to creates differents ammos
         game.player.shooting.push(
-          new Shooting(
+          new Shooting(0,0,4,10,
             game.player.sprite.x + 28,
             game.player.sprite.y - 5,
             "Images/s1a.png",
@@ -36,16 +36,13 @@ class Input {
       }
     }
     if (this.keys[80]) {
-     console.log ("holaaaaaaaaaaaaa")
       if (game.gameState === "pause") {
-        console.log("jugamos");
         game.setAnimationLoop();
         game.gameState = "playing";
       } else if (game.gameState === "playing") {
         if (game.finished === true) {
           game.gameState = "pause";
           game.unSetAnimationloop();
-          console.log("Entro en modo pausa");
         }
       }
     }
@@ -64,8 +61,6 @@ class Input {
     this.eventKeyUpId = window.addEventListener("keyup", e => {
       this.keys[e.keyCode] = false;
     });
-
-    
   }
 }
 //   finishKeyRead() {

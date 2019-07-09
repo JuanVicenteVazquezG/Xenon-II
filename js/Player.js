@@ -24,7 +24,7 @@ class Player {
 
     this.boundingBox = {};
     this.speed = 3;
-    this.speedPrima = this.speed;
+
     this.energy = 1000;
     this.points = 0;
     this.kindOfShoot = 1; //Could be 1 to other numbers

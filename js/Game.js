@@ -3,19 +3,8 @@ class Game {
     this.finishedundefined;
     this.input = new Input();
     this.display = new Display();
-    this.player = new Player(
-      0,
-      0,
-      64,
-      64,
-      289,
-      410,
-      "Images/Ship.png",
-      62,
-      64
-    );
+    this.player = new Player(0, 0, 64, 64, 289, 410, "Images/Ship.png", 62, 64);
     this.enemy = undefined;
-
     this.enemyArray = [];
     this.marker = new Marker(0, 200);
     this.intervalGameId = undefined;
@@ -107,7 +96,6 @@ class Game {
 
   fillTheArrayOfObjectsToPaint() {
     if (this.gameState === "splash") {
-     
       game.display.addObjectsToPaint(game.imageName);
       // game.musicSplash.play();
     } else if (this.gameState === "playing") {
@@ -150,33 +138,32 @@ class Game {
       let aNumber = Math.floor(Math.random() * 620) + 20;
       this.enemyArray.push(
         new Enemy(
-          enemyKind.positionToReadAtlasX,
-          enemyKind.positionToReadAtlasY,
-          enemyKind.positionToReadAtlasSizeX,
-          enemyKind.positionToReadAtlasSizeY,
+          enemyKind.positionToReadX,
+          enemyKind.positionToReadY,
+          enemyKind.positionToReadSizeX,
+          enemyKind.positionToReadSizeY,
           aNumber,
           0,
-          enemyKind.nameSprite,
+          enemyKind.url,
           enemyKind.sizeX,
           enemyKind.sizeY,
           numberKind
         )
       );
     }
-   
   }
 
   kindOfEnemy(enemyKind) {
-    if (enemyKind === 1) console.log("tudoBem");
-    return {
-      nameSprite: "Images/drone.png",
-      positionToReadAtlasX: 0,
-      positionToReadAtlasy: 0,
-      positionToReadAtlasSizeX: 32,
-      positionToReadAtlasSizeY: 32,
-      sizeX: 512,
-      sizeY: 32
-    };
+    if (enemyKind === 1)
+      return {
+        url: "Images/drone.png",
+        positionToReadAtlasX: 0,
+        positionToReadAtlasy: 0,
+        positionToReadAtlasSizeX: 32,
+        positionToReadAtlasSizeY: 32,
+        sizeX: 512,
+        sizeY: 32
+      };
   }
 
   outOfScreen() {
