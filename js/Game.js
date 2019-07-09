@@ -53,7 +53,7 @@ class Game {
   pause() {}
 
   _update() {
-    this.finised = false;
+    this.finished = false;
     game.fillTheArrayOfObjectsToPaint();
     this.display.paintObject.bind(this)();
     game.input.readControlsToKeys();
@@ -116,10 +116,12 @@ class Game {
   }
 
   collidesShooting(enemy) {
-    game.player.shooting.forEach(shoot => {
+    game.player.shooting.forEach((shoot,indexShoot )=> {
       enemy.forEach((theEnemy, index) => {
         if (shoot.itHasCollided(theEnemy)) {
+          game.player.shooting.splice(1,1);
           theEnemy.deathEnemy(index);
+          
         }
       });
     });
@@ -132,10 +134,11 @@ class Game {
 
   enemyGenerator() {
     if (this.enemyArray.length < 10) {
-      let numberKind = 1;
+      let numberKind = 1; //Generator depends of other function on stage of game
       let enemyKind = game.kindOfEnemy(numberKind);
 
       let aNumber = Math.floor(Math.random() * 620) + 20;
+
       this.enemyArray.push(
         new Enemy(
           enemyKind.positionToReadX,
@@ -157,11 +160,11 @@ class Game {
     if (enemyKind === 1)
       return {
         url: "Images/drone.png",
-        positionToReadAtlasX: 0,
-        positionToReadAtlasy: 0,
-        positionToReadAtlasSizeX: 32,
-        positionToReadAtlasSizeY: 32,
-        sizeX: 512,
+        positionToReadX: 0,
+        positionToReadY: 0,
+        positionToReadSizeX: 32,
+        positionToReadSizeY: 32,
+        sizeX: 32,
         sizeY: 32
       };
   }
