@@ -1,9 +1,20 @@
 class Game {
   constructor(options) {
     this.finishedundefined;
+    this.enemyGeneratorId=0;
     this.input = new Input();
     this.display = new Display();
-    this.player = new Player(192, 0, 64, 64, 289, 410, "Images/Ship.png", 62, 64);
+    this.player = new Player(
+      192,
+      0,
+      64,
+      64,
+      289,
+      410,
+      "Images/Ship.png",
+      62,
+      64
+    );
     this.enemy = undefined;
     this.enemyArray = [];
     this.marker = new Marker(0, 200);
@@ -60,7 +71,7 @@ class Game {
     game.input.readControlsToKeys();
     if (game.gameState === "playing") {
       game.marker.updateMarkerEnergy();
-     
+
       this.collidesShooting(game.enemyArray);
 
       this.outOfScreen();
@@ -75,11 +86,15 @@ class Game {
       this.display.initialize(options);
     }
     game.gameState = "splash";
+    game.musicSplash.play();
     let playing = function() {
       game.gameState = "playing";
+
       //Assign control keys or decide device control
       game.input.initializeKeyRead();
-      console.log ("Estoy en enemy")
+      game.input.withOutkeypressID = setInterval(() => {
+        game.player.normalizerShip();
+      },80);
       game.enemyGenerator();
       document.removeEventListener("keydown", playing);
     };
@@ -100,7 +115,6 @@ class Game {
   fillTheArrayOfObjectsToPaint() {
     if (this.gameState === "splash") {
       game.display.addObjectsToPaint(game.imageName);
-      // game.musicSplash.play();
     } else if (this.gameState === "playing") {
       game.display.addObjectsToPaint(game.player.sprite);
       if (game.player.shooting.length >= 0) {
@@ -118,46 +132,32 @@ class Game {
     }
   }
 
-  collidesShooting(enemy) {
-    game.player.shooting.forEach((shoot, indexShoot) => {
-      enemy.forEach((theEnemy, index) => {
-        if (shoot.itHasCollided(theEnemy)) {
-          game.player.shooting.splice(1, 1);
-          theEnemy.deathEnemy(index);
-        }
-      });
-    });
-    enemy.forEach(theEnemy => {
-      if (game.player.itHasCollided(theEnemy)) {
-        game.player.energy -= 2;
-      }
-    });
-  }
-
   enemyGenerator() {
-    setInterval(() => {
-      if (this.enemyArray.length < this.maxEnemyOntheScreen) {
-        //let numberKind = 1; //Generator depends of other function on stage of game
-        //
-        let enemyKind = game.kindOfEnemy(this.numberKind);
+    this.enemyGeneratorId=setInterval(() => {
+      
+        if (this.enemyArray.length < this.maxEnemyOntheScreen) {
+          //let numberKind = 1; //Generator depends of other function on stage of game
+          //
+          let enemyKind = game.kindOfEnemy(this.numberKind);
 
-        let aNumber = Math.floor(Math.random() * 620) + 20;
+          let aNumber = Math.floor(Math.random() * 600) + 20;
 
-        this.enemyArray.push(
-          new Enemy(
-            enemyKind.positionToReadX,
-            enemyKind.positionToReadY,
-            enemyKind.positionToReadSizeX,
-            enemyKind.positionToReadSizeY,
-            aNumber,
-            0,
-            enemyKind.url,
-            enemyKind.sizeX,
-            enemyKind.sizeY,
-            this.numberKind
-          )
-        );
-      }
+          this.enemyArray.push(
+            new Enemy(
+              enemyKind.positionToReadX,
+              enemyKind.positionToReadY,
+              enemyKind.positionToReadSizeX,
+              enemyKind.positionToReadSizeY,
+              aNumber,
+              0,
+              enemyKind.url,
+              enemyKind.sizeX,
+              enemyKind.sizeY,
+              this.numberKind
+            )
+          );
+        }
+      
     }, 1000);
   }
 
@@ -174,16 +174,43 @@ class Game {
       };
   }
 
-  outOfScreen() {
-    this.enemyArray.forEach((theEnemy, index) => {
-      if (theEnemy.sprite.y > 480) {
-        this.enemyArray.splice(index,1);
-      }
-    });
-    game.player.shooting.forEach((theShoot, indexOfShoot) => {
-      if (theShoot.sprite.y < -20) {
-        game.player.shooting.splice(indexOfShoot,1);
-      }
-    });
+  collidesShooting(enemy) {
+    if (game.gameState === "playing") {
+      game.player.shooting.forEach((shoot, indexShoot) => {
+        enemy.forEach((theEnemy, index) => {
+          if (shoot.itHasCollided(theEnemy)) {
+            game.player.shooting.splice(indexShoot, 1);
+            theEnemy.deathEnemy(index);
+          }
+        });
+      });
+      enemy.forEach(theEnemy => {
+        if (game.player.itHasCollided(theEnemy)) {
+          game.player.energy -= 2;
+        }
+      });
+    }
   }
+
+  outOfScreen() {
+    if (game.gameState === "playing") {
+      console.log("llego al final y desaparezco");
+      game.enemyArray.forEach((theEnemy, index) => {
+        if (theEnemy.sprite.y > 500) {
+          this.enemyArray.splice(index, 1);
+        }
+        if (theEnemy.indexCounterSprite === 10) {
+          clearInterval(this.EnemyExplosionId);
+          this.enemyArray.splice(index, 1);
+        }
+      });
+      game.player.shooting.forEach((theShoot, indexOfShoot) => {
+        if (theShoot.sprite.y < -20) {
+          game.player.shooting.splice(indexOfShoot, 1);
+        }
+      });
+    }
+  }
+
+  
 }

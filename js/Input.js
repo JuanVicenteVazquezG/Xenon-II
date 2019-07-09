@@ -53,7 +53,7 @@ class Input {
               7
             )
           );
-          setTimeout(() => (this.busy = false), 100);
+          setTimeout(() => (this.busy = false), 10);
         }
       }
     }
@@ -83,11 +83,24 @@ class Input {
 
     this.eventKeyUpId = window.addEventListener("keyup", e => {
       this.keys[e.keyCode] = false;
-      this.withOutkeypressID = setInterval(()=>{game.player.normalizerShip();console.log ('Hello')}, 500);
+      this.withOutkeypressID = setInterval(() => {
+        game.player.normalizerShip();
+        
+      }, 80);
     });
   }
+
+
+generalPause(){
+ clearInterval(game.enemy.this.movementId);
+ clearInterval(game.enemy.movementRotationId);
+ clearInterval(game.enemy.EnemyExplosionId);
+ clearInterval(game.input.withOutkeypressID);
+ clearInterval(game.enemyGeneratorId);
+ 
 }
 //   finishKeyRead() {
 //     document.removeEventListener("onkeydown", this.keyArrowPressed);
 //   }
 // }
+}

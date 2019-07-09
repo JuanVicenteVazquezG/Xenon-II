@@ -83,6 +83,8 @@ class Player {
       if (game.player.syncMovWSpritesCounter<3) game.player.syncMovWSpritesCounter++;
       if (game.player.syncMovWSpritesCounter>3) game.player.syncMovWSpritesCounter--;
       this.busySyncMov=false;
+      this.synchronizationMovementWSprites()
+      this.busySyncMov=false;
     }
   }
 }
