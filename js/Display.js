@@ -40,18 +40,7 @@ class Display {
           objecToShow.sizeX,
           objecToShow.sizeY
         );
-      // game.display.ctx.drawImage(
-      //   objecToShow.sprite,
-      //   objecToShow.positionToReadX,
-      //   objecToShow.positionToReadY,
-      //   objecToShow.positionToReadSizeX,
-      //   objecToShow.positionToReadSizeY,
-      //   objecToShow.x,
-      //   objecToShow.y,
-      //   objecToShow.sizeX,
-      //   objecToShow.sizeY
-      // );
-    });
+       });
   }
 
   addObjectsToPaint(aSprite) {

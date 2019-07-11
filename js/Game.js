@@ -1,64 +1,19 @@
 class Game {
   constructor(options) {
-    this.finishedundefined;
-    this.enemyGeneratorId=0;
+    this.finished = undefined;
     this.input = new Input();
     this.display = new Display();
-    this.player = new Player(
-      192,
-      0,
-      64,
-      64,
-      289,
-      410,
-      "Images/Ship.png",
-      62,
-      64
-    );
+    this.loading();
+    this.marker = new Marker(0, 200);
+    this.enemyGeneratorId = undefined;
+    this.numberKind = 1;
+
+    this.intervalGameId = undefined;
     this.enemy = undefined;
     this.enemyArray = [];
-    this.marker = new Marker(0, 200);
-    this.intervalGameId = undefined;
-    this.numberKind = 1;
     this.maxEnemyOntheScreen = 10;
-    //fixing this
-    this.initImage = new Sprite(
-      0,
-      0,
-      640,
-      480,
-      0,
-      0,
-      "Images/splash.png",
-      640,
-      480
-    );
-    this.pauseImage = new Sprite(
-      0,
-      0,
-      640,
-      480,
-      0,
-      0,
-      "Images/pause.png",
-      640,
-      480
-    );
-    this.gameOverImage = new Sprite(
-      0,
-      0,
-      640,
-      480,
-      0,
-      0,
-      "Images/gameover.png",
-      640,
-      480
-    );
-    this.imageName = this.initImage;
-    this.gameState = "splash"; //could be splash/playing/pause/gameOver
-    this.musicSplash = new Audio();
-    this.musicSplash.src = "Musics/musicSplash.mp3"; //determinar is loaded?
+
+    this.gameState = undefined;
     this.musicGame = new Audio();
   }
 
@@ -71,9 +26,7 @@ class Game {
     game.input.readControlsToKeys();
     if (game.gameState === "playing") {
       game.marker.updateMarkerEnergy();
-
       this.collidesShooting(game.enemyArray);
-
       this.outOfScreen();
     }
     game.display.deletesAllObjectsPainted();
@@ -89,18 +42,14 @@ class Game {
     game.musicSplash.play();
     let playing = function() {
       game.gameState = "playing";
-
-      //Assign control keys or decide device control
       game.input.initializeKeyRead();
       game.input.withOutkeypressID = setInterval(() => {
         game.player.normalizerShip();
-      },80);
+      }, 80);
       game.enemyGenerator();
       document.removeEventListener("keydown", playing);
     };
     document.addEventListener("keydown", playing);
-
-    // starts infiniteLoop Game
     this.setAnimationLoop();
   }
 
@@ -133,31 +82,29 @@ class Game {
   }
 
   enemyGenerator() {
-    this.enemyGeneratorId=setInterval(() => {
-      
-        if (this.enemyArray.length < this.maxEnemyOntheScreen) {
-          //let numberKind = 1; //Generator depends of other function on stage of game
-          //
-          let enemyKind = game.kindOfEnemy(this.numberKind);
+    this.enemyGeneratorId = setInterval(() => {
+      if (this.enemyArray.length < this.maxEnemyOntheScreen) {
+        //let numberKind = 1; //Generator depends of other function on stage of game
+        //
+        let enemyKind = game.kindOfEnemy(this.numberKind);
 
-          let aNumber = Math.floor(Math.random() * 600) + 20;
+        let aNumber = Math.floor(Math.random() * 600) + 20;
 
-          this.enemyArray.push(
-            new Enemy(
-              enemyKind.positionToReadX,
-              enemyKind.positionToReadY,
-              enemyKind.positionToReadSizeX,
-              enemyKind.positionToReadSizeY,
-              aNumber,
-              0,
-              enemyKind.url,
-              enemyKind.sizeX,
-              enemyKind.sizeY,
-              this.numberKind
-            )
-          );
-        }
-      
+        this.enemyArray.push(
+          new Enemy(
+            enemyKind.positionToReadX,
+            enemyKind.positionToReadY,
+            enemyKind.positionToReadSizeX,
+            enemyKind.positionToReadSizeY,
+            aNumber,
+            0,
+            enemyKind.url,
+            enemyKind.sizeX,
+            enemyKind.sizeY,
+            this.numberKind
+          )
+        );
+      }
     }, 1000);
   }
 
@@ -212,5 +159,53 @@ class Game {
     }
   }
 
-  
+  loading() {
+    this.initImage = new Sprite(
+      0,
+      0,
+      640,
+      480,
+      0,
+      0,
+      "Images/splash.png",
+      640,
+      480
+    );
+    this.pauseImage = new Sprite(
+      0,
+      0,
+      640,
+      480,
+      0,
+      0,
+      "Images/pause.png",
+      640,
+      480
+    );
+    this.gameOverImage = new Sprite(
+      0,
+      0,
+      640,
+      480,
+      0,
+      0,
+      "Images/gameover.png",
+      640,
+      480
+    );
+    this.player = new Player(
+      192,
+      0,
+      64,
+      64,
+      289,
+      410,
+      "Images/Ship.png",
+      62,
+      64
+    );
+    this.imageName = this.initImage;
+    this.musicSplash = new Audio();
+    this.musicSplash.src = "Musics/musicSplash.mp3"; //determinar is loaded?
+  }
 }
