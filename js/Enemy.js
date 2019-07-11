@@ -84,11 +84,13 @@ class Enemy {
       this.enemyExplosion.play();
 
       this.EnemyExplosionId = setInterval(() => {
+        if (game.gameState==="playing"){
         this.sprite.positionToReadX =
           this.sprite.positionToReadSizeX * this.indexCounterSprite;
         this.indexCounterSprite++;
-        
+        }
       }, 41.66);
+
     }
   }
 

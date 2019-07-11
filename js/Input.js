@@ -58,14 +58,18 @@ class Input {
       }
     }
     if (this.keys[80]) {
+
       if (game.gameState === "pause") {
-        game.setAnimationLoop();
+      console.log("Salgo de Pausa")
         game.gameState = "playing";
+        game.setAnimationLoop();
+       
       } else if (game.gameState === "playing") {
-        if (game.finished === true) {
+      
+          console.log("Entro en pausa")
           game.gameState = "pause";
           game.unSetAnimationloop();
-        }
+        
       }
     }
   }

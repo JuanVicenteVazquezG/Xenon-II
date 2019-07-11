@@ -17,8 +17,6 @@ class Game {
     this.musicGame = new Audio();
   }
 
-  pause() {}
-
   _update() {
     this.finished = false;
     game.fillTheArrayOfObjectsToPaint();
@@ -44,7 +42,9 @@ class Game {
       game.gameState = "playing";
       game.input.initializeKeyRead();
       game.input.withOutkeypressID = setInterval(() => {
-        game.player.normalizerShip();
+        if (game.state === "playing") {
+          game.player.normalizerShip();
+        }
       }, 80);
       game.enemyGenerator();
       document.removeEventListener("keydown", playing);
@@ -83,27 +83,29 @@ class Game {
 
   enemyGenerator() {
     this.enemyGeneratorId = setInterval(() => {
-      if (this.enemyArray.length < this.maxEnemyOntheScreen) {
-        //let numberKind = 1; //Generator depends of other function on stage of game
-        //
-        let enemyKind = game.kindOfEnemy(this.numberKind);
+      if (game.gameState === "playing") {
+        if (this.enemyArray.length < this.maxEnemyOntheScreen) {
+          //let numberKind = 1; //Generator depends of other function on stage of game
+          //
+          let enemyKind = game.kindOfEnemy(this.numberKind);
 
-        let aNumber = Math.floor(Math.random() * 600) + 20;
+          let aNumber = Math.floor(Math.random() * 600) + 20;
 
-        this.enemyArray.push(
-          new Enemy(
-            enemyKind.positionToReadX,
-            enemyKind.positionToReadY,
-            enemyKind.positionToReadSizeX,
-            enemyKind.positionToReadSizeY,
-            aNumber,
-            0,
-            enemyKind.url,
-            enemyKind.sizeX,
-            enemyKind.sizeY,
-            this.numberKind
-          )
-        );
+          this.enemyArray.push(
+            new Enemy(
+              enemyKind.positionToReadX,
+              enemyKind.positionToReadY,
+              enemyKind.positionToReadSizeX,
+              enemyKind.positionToReadSizeY,
+              aNumber,
+              0,
+              enemyKind.url,
+              enemyKind.sizeX,
+              enemyKind.sizeY,
+              this.numberKind
+            )
+          );
+        }
       }
     }, 1000);
   }
