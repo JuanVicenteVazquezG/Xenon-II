@@ -31,6 +31,8 @@ class Player {
     this.shooting = [];
     this.syncMovWSpritesCounter = 4;
     this.busySyncMov = false;
+    this.shipExplosion = new Audio();
+    this.shipExplosion.src = "Sounds/small_explosion.wav";
   }
 
   itHasCollided(objectToCollide) {
@@ -85,6 +87,31 @@ class Player {
       this.busySyncMov=false;
       this.synchronizationMovementWSprites()
       this.busySyncMov=false;
+    }
+  }
+
+  deathShip(
+    index) {
+    if (game.gameState === "playing") {
+      
+      game.player.points += 10;
+      
+      let x = this.sprite.x;
+      let y = this.sprite.y;
+      this.sprite = this.explosionSprite;
+
+      this.sprite.x = x;
+      this.sprite.y = y;
+      this.enemyExplosion.play();
+
+      this.EnemyExplosionId = setInterval(() => {
+        if (game.gameState==="playing"){
+        this.sprite.positionToReadX =
+          this.sprite.positionToReadSizeX * this.indexCounterSprite;
+        this.indexCounterSprite++;
+        }
+      }, 41.66);
+
     }
   }
 }

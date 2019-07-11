@@ -15,6 +15,9 @@ class Game {
 
     this.gameState = undefined;
     this.musicGame = new Audio();
+
+  this.indexshooting=0;
+  this.indexEnemy=0;
   }
 
   _update() {
@@ -128,11 +131,19 @@ class Game {
       game.player.shooting.forEach((shoot, indexShoot) => {
         enemy.forEach((theEnemy, index) => {
           if (shoot.itHasCollided(theEnemy)) {
+
+            this.indexshooting.push (indexShoot);
+            this.indexEnemy.push(index);
+
             game.player.shooting.splice(indexShoot, 1);
             theEnemy.deathEnemy(index);
           }
         });
       });
+
+
+      
+
       enemy.forEach(theEnemy => {
         if (game.player.itHasCollided(theEnemy)) {
           game.player.energy -= 2;
@@ -143,7 +154,7 @@ class Game {
 
   outOfScreen() {
     if (game.gameState === "playing") {
-      console.log("llego al final y desaparezco");
+      
       game.enemyArray.forEach((theEnemy, index) => {
         if (theEnemy.sprite.y > 500) {
           this.enemyArray.splice(index, 1);

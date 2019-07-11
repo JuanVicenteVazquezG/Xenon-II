@@ -53,23 +53,17 @@ class Input {
               7
             )
           );
-          setTimeout(() => (this.busy = false), 10);
+          setTimeout(() => (this.busy = false), 100);
         }
       }
     }
     if (this.keys[80]) {
-
       if (game.gameState === "pause") {
-      console.log("Salgo de Pausa")
-        game.gameState = "playing";
         game.setAnimationLoop();
-       
+        game.gameState = "playing";
       } else if (game.gameState === "playing") {
-      
-          console.log("Entro en pausa")
-          game.gameState = "pause";
-          game.unSetAnimationloop();
-        
+        game.unSetAnimationloop();
+        game.gameState = "pause";
       }
     }
   }
@@ -80,6 +74,18 @@ class Input {
   }
 
   initializeKeyRead() {
+    this.keyPressedId = window.addEventListener("keypress", e => {
+      if ((e.keyCode = 80)) {
+        if (game.gameState === "pause") {
+          game.gameState = "playing";
+          game.setAnimationLoop();
+        } else if (game.gameState === "playing") {
+          game.gameState = "pause";
+          game.unSetAnimationloop();
+        }
+      }
+    });
+
     this.eventKeyDownId = window.addEventListener("keydown", e => {
       this.keys[e.keyCode] = true;
       clearInterval(this.withOutkeypressID);
@@ -88,23 +94,14 @@ class Input {
     this.eventKeyUpId = window.addEventListener("keyup", e => {
       this.keys[e.keyCode] = false;
       this.withOutkeypressID = setInterval(() => {
-        game.player.normalizerShip();
-        
+        if (game.gameState === "playing") {
+          game.player.normalizerShip();
+        }
       }, 80);
     });
   }
-
-
-generalPause(){
- clearInterval(game.enemy.this.movementId);
- clearInterval(game.enemy.movementRotationId);
- clearInterval(game.enemy.EnemyExplosionId);
- clearInterval(game.input.withOutkeypressID);
- clearInterval(game.enemyGeneratorId);
- 
-}
-//   finishKeyRead() {
-//     document.removeEventListener("onkeydown", this.keyArrowPressed);
-//   }
-// }
+  clearKeyRead() {
+    clearInterval(this.eventKeyDownId);
+    clearInterval(this.eventKeyUpId);
+  }
 }
