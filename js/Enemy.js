@@ -12,7 +12,7 @@ class Enemy {
     sizeY,
     typeOfEnemy = 1
   ) {
-    this.enemyId=enemyId;
+    this.enemyId = enemyId;
     this.sprite = new Sprite(
       positionToReadX,
       positionToReadY,
@@ -25,8 +25,8 @@ class Enemy {
       sizeY
     );
     this.explosionSprite = new Sprite(
-      positionToReadX,
-      positionToReadY,
+      0,
+      0,
       64,
       64,
       x,
@@ -72,8 +72,8 @@ class Enemy {
   }
 
   deathEnemy(index) {
-    if (game.gameState === "playing" ) {
-      game.deleting=true
+    if (game.gameState === "playing") {
+      game.deleting = true;
       clearInterval(this.movementId);
       clearInterval(this.movementRotationId);
       game.player.points += 10;
@@ -90,7 +90,7 @@ class Enemy {
         if (game.gameState === "playing") {
           this.sprite.positionToReadX =
             this.sprite.positionToReadSizeX * this.indexCounterSprite;
-          this.indexCounterSprite++;     
+          this.indexCounterSprite++;
         }
       }, 41.66);
     }

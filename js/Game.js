@@ -179,26 +179,39 @@ class Game {
 
     helper1 = this.enemyArray.length;
     for (helper3 = 0; helper3 < helper1; helper3++) {
-      if (this.enemyArray[helper3].indexCounterSprite > 10) {
+      if (this.enemyArray[helper3].indexCounterSprite > 12 ) {
         deathanimationfinishedId.push(this.enemyArray[helper3].enemyId);
       }
     }
-
-    helper1 = enemies.length;
-    helper2 = deathanimationfinishedId.length;
-    if (deathanimationfinishedId.length > 0) {
-      for (helper3 = 0; helper3 < helper1; helper3++) {
-        for (helper4 = 0; helper4 < helper2; helper4++) {
-          if (
-            enemies[helper3].enemyId === deathanimationfinishedId[helper4]
-          ) {
-            console.log (enemies[helper3].enemyId)
-            clearInterval(enemies[helper3].EnemyExplosionId);
-            enemies.splice(helper3, 1);
-          }
-        }
+if (deathanimationfinishedId.length>0){
+  enemies.forEach((aEnemy,index)=>{
+    deathanimationfinishedId.forEach((death)=>{
+      if (aEnemy.enemyId===death){
+        clearInterval(aEnemy.EnemyExplosionId);
+        enemies.splice(index,1);
       }
-    }
+
+    });
+  });
+}
+
+
+
+    // })
+
+    // helper1 = enemies.length;
+    // helper2 = deathanimationfinishedId.length;
+    // if (deathanimationfinishedId.length > 0) {
+    //   for (helper3 = 0; helper3 < helper1; helper3++) {
+    //     for (helper4 = 0; helper4 < helper2; helper4++) {
+    //       if (enemies[helper3].enemyId === deathanimationfinishedId[helper4]) {
+
+    //         clearInterval(enemies[helper3].EnemyExplosionId);
+    //         enemies.splice(helper3, 1);
+    //       }
+    //     }
+    //   }
+    // }
 
     this.deleting = false;
   }

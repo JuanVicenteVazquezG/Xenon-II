@@ -55,7 +55,7 @@ class Input {
               7
             )
           );
-          setTimeout(() => (this.busy = false), 100);
+          setTimeout(() => (this.busy = false),41.66);
         }
       }
     }
