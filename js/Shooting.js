@@ -1,5 +1,6 @@
 class Shooting {
-  constructor(positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x, y, url, sizeX, sizeY, timeLife, speed) {
+  constructor(shootId,positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x, y, url, sizeX, sizeY, timeLife, speed) {
+    this.shootId=shootId;
     this.sprite = new Sprite(positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x, y, url, sizeX, sizeY);
     this.sound = new Audio();
     this.sound.src = "Sounds/fire_missile.wav";

@@ -29,6 +29,7 @@ class Player {
     this.points = 0;
     this.kindOfShoot = 1; //Could be 1 to other numbers
     this.shooting = [];
+    this.shootId=0;
     this.syncMovWSpritesCounter = 4;
     this.busySyncMov = false;
     this.shipExplosion = new Audio();

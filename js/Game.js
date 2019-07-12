@@ -19,10 +19,12 @@ class Game {
     this.indexShooting = [];
     this.indexEnemy = [];
     this.deleting = false;
+    this.EnemyId = 0;
   }
 
   _update() {
     this.finished = false;
+    game.display.deletesAllObjectsPainted();
     game.fillTheArrayOfObjectsToPaint();
     this.display.paintObject.bind(this)();
     game.input.readControlsToKeys();
@@ -32,9 +34,11 @@ class Game {
       this.collidesShooting(game.enemyArray);
     }
     game.display.deletesAllObjectsPainted();
+    game.fillTheArrayOfObjectsToPaint();
     this.finished = true;
     this.setAnimationLoop();
-    console.log (this.enemyArray.length);
+    console.log(this.enemyArray);
+    console.log(game.player.shooting.length);
   }
 
   start(options) {
@@ -95,9 +99,10 @@ class Game {
         let enemyKind = game.kindOfEnemy(this.numberKind);
 
         let aNumber = Math.floor(Math.random() * 600) + 20;
-
+        this.EnemyId++;
         this.enemyArray.push(
           new Enemy(
+            this.EnemyId,
             enemyKind.positionToReadX,
             enemyKind.positionToReadY,
             enemyKind.positionToReadSizeX,
@@ -129,72 +134,111 @@ class Game {
   }
 
   collidesShooting(enemies) {
+    var enemyId = [];
+    var shootId = [];
+    var deathanimationfinishedId = [];
+
+    var helper1, helper2, helper3, helper4;
+    //here we will tray to delete de shoot and the enemy trough the id of every object. First of all the shoot is delete is collide and next the enemy
     if (game.gameState === "playing") {
       this.deleting = true;
-      game.player.shooting.forEach((shoot, indexShoot) => {
-        enemies.forEach((theEnemy, index) => {
-          if (shoot.itHasCollided(theEnemy)) {
-            this.indexShooting.push(indexShoot);
-            //this.indexEnemy.push(index);
-            // game.player.shooting.splice(indexShoot, 1);
-            theEnemy.deathEnemy(index);
+      helper1 = game.player.shooting.length;
+      helper2 = enemies.length; //helper 3 index for shooting  helper 4 index for enemies
+      for (helper3 = 0; helper3 < helper1; helper3++) {
+        for (helper4 = 0; helper4 < helper2; helper4++) {
+          if (game.player.shooting[helper3].itHasCollided(enemies[helper4])) {
+            enemyId.push(enemies[helper4].enemyId);
+            shootId.push(game.player.shooting[helper3].shootId);
           }
-        });
-      });
-      // if (this.indexShooting.length > 0) {
-      //   this.indexShooting.forEach(aShoot => {
-      //     game.player.shooting.splice(aShoot, 1);
-      //   });
-      // }
-
-      enemies.forEach(theEnemy => {
-        if (game.player.itHasCollided(theEnemy)) {
-          game.player.energy -= 2;
         }
-      });
+      }
+
+      helper1 = this.enemyArray.length;
+      helper2 = enemyId.length;
+      if (enemyId > 0) {
+        for (helper3 = 0; helper3 < helper1; helper3++) {
+          for (helper4 = 0; helper4 < helper2; helper4++) {
+            if (this.enemyArray[helper3].enemyId === enemyId[helper4]) {
+              this.enemyArray[helper3].deathEnemy(helper3);
+            }
+          }
+        }
+      }
+      enemyId = [];
+      if (shootId > 0) {
+        game.player.shooting.forEach((shoot, index) => {
+          shootId.forEach(theShootId => {
+            if (shoot.shootId === theShootId) {
+              game.player.shooting.splice(index, 1);
+            }
+          });
+        });
+      }
     }
+    shootId = [];
+
+    helper1 = this.enemyArray.length;
+    for (helper3 = 0; helper3 < helper1; helper3++) {
+      if (this.enemyArray[helper3].indexCounterSprite > 10) {
+        deathanimationfinishedId.push(this.enemyArray[helper3].enemyId);
+      }
+    }
+
+    helper1 = enemies.length;
+    helper2 = deathanimationfinishedId.length;
+    if (deathanimationfinishedId.length > 0) {
+      for (helper3 = 0; helper3 < helper1; helper3++) {
+        for (helper4 = 0; helper4 < helper2; helper4++) {
+          if (
+            enemies[helper3].enemyId === deathanimationfinishedId[helper4]
+          ) {
+            console.log (enemies[helper3].enemyId)
+            clearInterval(enemies[helper3].EnemyExplosionId);
+            enemies.splice(helper3, 1);
+          }
+        }
+      }
+    }
+
     this.deleting = false;
   }
 
   outOfScreen() {
     var indexEnemyToDelete = [];
     var indexEnemyToDeath = [];
-    var indexShootOutScreen=[];
+    var indexShootOutScreen = [];
     this.deleting = true;
-    var counterEnemyToDeath = [];
     if (game.gameState === "playing") {
-      game.enemyArray.forEach((theEnemy, index) => {
+      game.enemyArray.forEach(theEnemy => {
         if (theEnemy.sprite.y > 500) {
-          indexEnemyToDelete.push(index);
-          // this.enemyArray.splice(index, 1);
-        }
-        if (theEnemy.indexCounterSprite === 10) {
-          //Cuando ha llegado al ultomo sprite de explosion hay que parar y eliminarlo
-          indexEnemyToDeath.push(index);
-
-          clearInterval(this.EnemyExplosionId);
-          counterEnemyToDeath.push(index);
-          this.enemyArray.splice(index, 1);
+          indexEnemyToDelete.push(theEnemy.enemyId); //When the enemy abandon the screen will deleted with out explosion
         }
       });
+      if (indexEnemyToDelete > 0) {
+        this.enemyArray.forEach((enemy, index) => {
+          //Only is deleted when is out of screen
+          indexEnemyToDelete.forEach(idEnemyToDelete => {
+            if (enemy.enemyId == idEnemyToDelete) {
+              this.enemyArray.splice(index, 1);
+            }
+          });
+        });
+      }
+      indexEnemyToDelete = [];
 
-      indexEnemyToDelete.forEach(eTDelete => {
-        this.enemyArray.splice(eTDelete, 1);
-      });
-      indexEnemyToDeath.forEach(eTDeath => {
-        clearInterval(this.enemyArray[eTDeath].EnemyExplosionId);
-        this.enemyArray.splice(eTDeath, 1);
-      });
-
-      game.player.shooting.forEach((theShoot, indexOfShoot) => {
-        if (theShoot.sprite.y < -20) {
-          indexShootOutScreen.push(indexOfShoot);
-        
+      game.player.shooting.forEach(aShoot => {
+        if (aShoot.sprite.y < -20) {
+          indexShootOutScreen.push(aShoot.shootId);
         }
       });
-      if (indexShootOutScreen.length>0) {
-        indexShootOutScreen.forEach((sOutScreen)=>{
-          game.player.shooting.splice(sOutScreen,1);
+
+      if (indexShootOutScreen > 0) {
+        game.player.shooting.forEach((shoot, index) => {
+          indexShootOutScreen.forEach(shooOutOfScreeId => {
+            if (shoot.shootId === shooOutOfScreeId) {
+              game.player.shooting.splice(index, 1);
+            }
+          });
         });
       }
     }

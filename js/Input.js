@@ -38,8 +38,10 @@ class Input {
         //Here we need a function to creates differents ammos
         if (this.busy === false) {
           this.busy = true;
+          game.player.shootId++;
           game.player.shooting.push(
             new Shooting(
+              game.player.shootId,
               0,
               0,
               4,
@@ -74,8 +76,6 @@ class Input {
   }
 
   initializeKeyRead() {
-    
-
     this.eventKeyDownId = window.addEventListener("keydown", e => {
       this.keys[e.keyCode] = true;
       clearInterval(this.withOutkeypressID);
