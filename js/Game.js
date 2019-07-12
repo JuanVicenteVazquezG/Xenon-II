@@ -11,7 +11,7 @@ class Game {
     this.intervalGameId = undefined;
     this.enemy = undefined;
     this.enemyArray = [];
-    this.maxEnemyOntheScreen = 2;
+    this.maxEnemyOntheScreen = 8;
 
     this.gameState = undefined;
     this.musicGame = new Audio();
@@ -29,6 +29,7 @@ class Game {
     this.display.paintObject.bind(this)();
     game.input.readControlsToKeys();
     if (game.gameState === "playing") {
+     this.input.updateFire()
       game.marker.updateMarkerEnergy();
       this.outOfScreen();
       this.collidesShooting(game.enemyArray);
@@ -51,7 +52,7 @@ class Game {
       game.gameState = "playing";
       game.input.initializeKeyRead();
       game.input.withOutkeypressID = setInterval(() => {
-        if (game.state === "playing") {
+        if (game.gameState === "playing") {
           game.player.normalizerShip();
         }
       }, 80);
@@ -84,15 +85,17 @@ class Game {
         game.display.addObjectsToPaint(theEnemy.sprite);
       });
     } else if (this.gameState === "pause") {
+      console.log ("estoy en pausa")
       game.display.addObjectsToPaint(game.pauseImage);
     } else if (this.gameState === "gameOver") {
       game.display.addObjectsToPaint(game.gameOverImage);
+      console.log("Estoy en game Over")
     }
   }
 
   enemyGenerator() {
     this.enemyGeneratorId = setInterval(() => {
-      if (game.gameState === "playing" && this.deleting === false) {
+      if (game.gameState === "playing" && this.deleting === false && this.enemyArray.length<this.maxEnemyOntheScreen) {
         // if (this.enemyArray.length < this.maxEnemyOntheScreen) {
         //let numberKind = 1; //Generator depends of other function on stage of game
         //
@@ -194,24 +197,10 @@ if (deathanimationfinishedId.length>0){
     });
   });
 }
+enemies.forEach((enemy)=>{
+  if (game.player.itHasCollided(enemy)) game.player.energy-=10;
+})
 
-
-
-    // })
-
-    // helper1 = enemies.length;
-    // helper2 = deathanimationfinishedId.length;
-    // if (deathanimationfinishedId.length > 0) {
-    //   for (helper3 = 0; helper3 < helper1; helper3++) {
-    //     for (helper4 = 0; helper4 < helper2; helper4++) {
-    //       if (enemies[helper3].enemyId === deathanimationfinishedId[helper4]) {
-
-    //         clearInterval(enemies[helper3].EnemyExplosionId);
-    //         enemies.splice(helper3, 1);
-    //       }
-    //     }
-    //   }
-    // }
 
     this.deleting = false;
   }

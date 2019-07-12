@@ -5,7 +5,9 @@ class Input {
     this.eventKeyUpId = undefined;
     this.eventKeyDown = undefined;
     this.readkeyIntervalId = undefined;
-    this.busy = false;
+
+    this.fireCooldown = 0;
+    this.fireSpeed = 20;
   }
 
   readControlsToKeys() {
@@ -33,32 +35,52 @@ class Input {
         game.player.synchronizationMovementWSprites();
       }
     }
-    if (this.keys[32]) {
-      if (this._canIReadOtherKeys()) {
-        //Here we need a function to creates differents ammos
-        if (this.busy === false) {
-          this.busy = true;
-          game.player.shootId++;
-          game.player.shooting.push(
-            new Shooting(
-              game.player.shootId,
-              0,
-              0,
-              4,
-              10,
-              game.player.sprite.x + 28,
-              game.player.sprite.y - 5,
-              "Images/s1a.png",
-              4,
-              11,
-              3000,
-              7
-            )
-          );
-          setTimeout(() => (this.busy = false),41.66);
-        }
-      }
+    if (this.keys[32] && this.fireCooldown >= this.fireSpeed) {
+      game.player.shootId++;
+      game.player.shooting.push(
+        new Shooting(
+          game.player.shootId,
+          0,
+          0,
+          4,
+          10,
+          game.player.sprite.x + 28,
+          game.player.sprite.y - 5,
+          "Images/s1a.png",
+          4,
+          11,
+          3000,
+          8
+        )
+      );
+      this.fireCooldown = 0;
     }
+    // if (this.keys[32]) {
+    //   if (this._canIReadOtherKeys()) {
+    //     //Here we need a function to creates differents ammos
+    //     if (this.busy === false) {
+    //       this.busy = true;
+    //       game.player.shootId++;
+    //       game.player.shooting.push(
+    //         new Shooting(
+    //           game.player.shootId,
+    //           0,
+    //           0,
+    //           4,
+    //           10,
+    //           game.player.sprite.x + 28,
+    //           game.player.sprite.y - 5,
+    //           "Images/s1a.png",
+    //           4,
+    //           11,
+    //           3000,
+    //           5
+    //         )
+    //       );
+    //       setTimeout(() => (this.busy = false), 40);
+    //     }
+    //   }
+    // }
     if (this.keys[80]) {
       if (game.gameState === "pause") {
         game.setAnimationLoop();
@@ -93,5 +115,11 @@ class Input {
   clearKeyRead() {
     clearInterval(this.eventKeyDownId);
     clearInterval(this.eventKeyUpId);
+  }
+
+  updateFire() {
+    if (this.fireCooldown < this.fireSpeed) {
+      this.fireCooldown++;
+    }
   }
 }

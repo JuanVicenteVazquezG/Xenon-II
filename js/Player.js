@@ -1,5 +1,6 @@
 class Player {
   constructor(
+    
     positionToReadX,
     positionToReadY,
     positionToReadSizeX,
@@ -21,7 +22,7 @@ class Player {
       sizeX,
       sizeY
     );
-
+    this.life=2;
     this.boundingBox = {};
     this.speed = 3;
 
