@@ -11,14 +11,14 @@ class Game {
     this.intervalGameId = undefined;
     this.enemy = undefined;
     this.enemyArray = [];
-    this.maxEnemyOntheScreen = 10;
+    this.maxEnemyOntheScreen = 2;
 
     this.gameState = undefined;
     this.musicGame = new Audio();
 
     this.indexShooting = [];
     this.indexEnemy = [];
-    this.deleting=false;
+    this.deleting = false;
   }
 
   _update() {
@@ -30,11 +30,11 @@ class Game {
       game.marker.updateMarkerEnergy();
       this.outOfScreen();
       this.collidesShooting(game.enemyArray);
-      
     }
     game.display.deletesAllObjectsPainted();
     this.finished = true;
     this.setAnimationLoop();
+    console.log (this.enemyArray.length);
   }
 
   start(options) {
@@ -88,29 +88,29 @@ class Game {
 
   enemyGenerator() {
     this.enemyGeneratorId = setInterval(() => {
-      if (game.gameState === "playing" && this.deleting===false) {
-        if (this.enemyArray.length < this.maxEnemyOntheScreen) {
-          //let numberKind = 1; //Generator depends of other function on stage of game
-          //
-          let enemyKind = game.kindOfEnemy(this.numberKind);
+      if (game.gameState === "playing" && this.deleting === false) {
+        // if (this.enemyArray.length < this.maxEnemyOntheScreen) {
+        //let numberKind = 1; //Generator depends of other function on stage of game
+        //
+        let enemyKind = game.kindOfEnemy(this.numberKind);
 
-          let aNumber = Math.floor(Math.random() * 600) + 20;
+        let aNumber = Math.floor(Math.random() * 600) + 20;
 
-          this.enemyArray.push(
-            new Enemy(
-              enemyKind.positionToReadX,
-              enemyKind.positionToReadY,
-              enemyKind.positionToReadSizeX,
-              enemyKind.positionToReadSizeY,
-              aNumber,
-              0,
-              enemyKind.url,
-              enemyKind.sizeX,
-              enemyKind.sizeY,
-              this.numberKind
-            )
-          );
-        }
+        this.enemyArray.push(
+          new Enemy(
+            enemyKind.positionToReadX,
+            enemyKind.positionToReadY,
+            enemyKind.positionToReadSizeX,
+            enemyKind.positionToReadSizeY,
+            aNumber,
+            0,
+            enemyKind.url,
+            enemyKind.sizeX,
+            enemyKind.sizeY,
+            this.numberKind
+          )
+        );
+        // }
       }
     }, 1000);
   }
@@ -129,8 +129,8 @@ class Game {
   }
 
   collidesShooting(enemies) {
-    if (game.gameState === "playing") { 
-      this.deleting=true;
+    if (game.gameState === "playing") {
+      this.deleting = true;
       game.player.shooting.forEach((shoot, indexShoot) => {
         enemies.forEach((theEnemy, index) => {
           if (shoot.itHasCollided(theEnemy)) {
@@ -147,43 +147,58 @@ class Game {
       //   });
       // }
 
-  
       enemies.forEach(theEnemy => {
         if (game.player.itHasCollided(theEnemy)) {
           game.player.energy -= 2;
         }
       });
     }
-    this.deleting=false;
+    this.deleting = false;
   }
 
   outOfScreen() {
-    this.deleting=true;
+    var indexEnemyToDelete = [];
+    var indexEnemyToDeath = [];
+    var indexShootOutScreen=[];
+    this.deleting = true;
     var counterEnemyToDeath = [];
     if (game.gameState === "playing") {
       game.enemyArray.forEach((theEnemy, index) => {
         if (theEnemy.sprite.y > 500) {
-          this.enemyArray.splice(index, 1);
+          indexEnemyToDelete.push(index);
+          // this.enemyArray.splice(index, 1);
         }
         if (theEnemy.indexCounterSprite === 10) {
+          //Cuando ha llegado al ultomo sprite de explosion hay que parar y eliminarlo
+          indexEnemyToDeath.push(index);
+
           clearInterval(this.EnemyExplosionId);
           counterEnemyToDeath.push(index);
           this.enemyArray.splice(index, 1);
         }
       });
 
-      // if (counterEnemyToDeath.length > 0) {
-      //   counterEnemyToDeath.forEach(position => {
-      //     this.enemyArray.splice(position, 1);
-      //   });
-      // }
+      indexEnemyToDelete.forEach(eTDelete => {
+        this.enemyArray.splice(eTDelete, 1);
+      });
+      indexEnemyToDeath.forEach(eTDeath => {
+        clearInterval(this.enemyArray[eTDeath].EnemyExplosionId);
+        this.enemyArray.splice(eTDeath, 1);
+      });
+
       game.player.shooting.forEach((theShoot, indexOfShoot) => {
         if (theShoot.sprite.y < -20) {
-          game.player.shooting.splice(indexOfShoot, 1);
+          indexShootOutScreen.push(indexOfShoot);
+        
         }
       });
+      if (indexShootOutScreen.length>0) {
+        indexShootOutScreen.forEach((sOutScreen)=>{
+          game.player.shooting.splice(sOutScreen,1);
+        });
+      }
     }
-    this.deleting=false;
+    this.deleting = false;
   }
 
   loading() {

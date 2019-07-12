@@ -74,6 +74,8 @@ class Input {
   }
 
   initializeKeyRead() {
+    
+
     this.eventKeyDownId = window.addEventListener("keydown", e => {
       this.keys[e.keyCode] = true;
       clearInterval(this.withOutkeypressID);
