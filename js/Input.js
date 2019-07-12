@@ -74,18 +74,6 @@ class Input {
   }
 
   initializeKeyRead() {
-    this.keyPressedId = window.addEventListener("keypress", e => {
-      if ((e.keyCode = 80)) {
-        if (game.gameState === "pause") {
-          game.gameState = "playing";
-          game.setAnimationLoop();
-        } else if (game.gameState === "playing") {
-          game.gameState = "pause";
-          game.unSetAnimationloop();
-        }
-      }
-    });
-
     this.eventKeyDownId = window.addEventListener("keydown", e => {
       this.keys[e.keyCode] = true;
       clearInterval(this.withOutkeypressID);

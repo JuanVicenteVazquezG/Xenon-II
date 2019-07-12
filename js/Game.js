@@ -16,8 +16,9 @@ class Game {
     this.gameState = undefined;
     this.musicGame = new Audio();
 
-  this.indexshooting=0;
-  this.indexEnemy=0;
+    this.indexShooting = [];
+    this.indexEnemy = [];
+    this.deleting=false;
   }
 
   _update() {
@@ -27,8 +28,9 @@ class Game {
     game.input.readControlsToKeys();
     if (game.gameState === "playing") {
       game.marker.updateMarkerEnergy();
-      this.collidesShooting(game.enemyArray);
       this.outOfScreen();
+      this.collidesShooting(game.enemyArray);
+      
     }
     game.display.deletesAllObjectsPainted();
     this.finished = true;
@@ -86,7 +88,7 @@ class Game {
 
   enemyGenerator() {
     this.enemyGeneratorId = setInterval(() => {
-      if (game.gameState === "playing") {
+      if (game.gameState === "playing" && this.deleting===false) {
         if (this.enemyArray.length < this.maxEnemyOntheScreen) {
           //let numberKind = 1; //Generator depends of other function on stage of game
           //
@@ -126,50 +128,62 @@ class Game {
       };
   }
 
-  collidesShooting(enemy) {
-    if (game.gameState === "playing") {
+  collidesShooting(enemies) {
+    if (game.gameState === "playing") { 
+      this.deleting=true;
       game.player.shooting.forEach((shoot, indexShoot) => {
-        enemy.forEach((theEnemy, index) => {
+        enemies.forEach((theEnemy, index) => {
           if (shoot.itHasCollided(theEnemy)) {
-
-            this.indexshooting.push (indexShoot);
-            this.indexEnemy.push(index);
-
-            game.player.shooting.splice(indexShoot, 1);
+            this.indexShooting.push(indexShoot);
+            //this.indexEnemy.push(index);
+            // game.player.shooting.splice(indexShoot, 1);
             theEnemy.deathEnemy(index);
           }
         });
       });
+      // if (this.indexShooting.length > 0) {
+      //   this.indexShooting.forEach(aShoot => {
+      //     game.player.shooting.splice(aShoot, 1);
+      //   });
+      // }
 
-
-      
-
-      enemy.forEach(theEnemy => {
+  
+      enemies.forEach(theEnemy => {
         if (game.player.itHasCollided(theEnemy)) {
           game.player.energy -= 2;
         }
       });
     }
+    this.deleting=false;
   }
 
   outOfScreen() {
+    this.deleting=true;
+    var counterEnemyToDeath = [];
     if (game.gameState === "playing") {
-      
       game.enemyArray.forEach((theEnemy, index) => {
         if (theEnemy.sprite.y > 500) {
           this.enemyArray.splice(index, 1);
         }
         if (theEnemy.indexCounterSprite === 10) {
           clearInterval(this.EnemyExplosionId);
+          counterEnemyToDeath.push(index);
           this.enemyArray.splice(index, 1);
         }
       });
+
+      // if (counterEnemyToDeath.length > 0) {
+      //   counterEnemyToDeath.forEach(position => {
+      //     this.enemyArray.splice(position, 1);
+      //   });
+      // }
       game.player.shooting.forEach((theShoot, indexOfShoot) => {
         if (theShoot.sprite.y < -20) {
           game.player.shooting.splice(indexOfShoot, 1);
         }
       });
     }
+    this.deleting=false;
   }
 
   loading() {

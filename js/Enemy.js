@@ -74,7 +74,7 @@ class Enemy {
       clearInterval(this.movementId);
       clearInterval(this.movementRotationId);
       game.player.points += 10;
-      
+
       let x = this.sprite.x;
       let y = this.sprite.y;
       this.sprite = this.explosionSprite;
@@ -84,13 +84,13 @@ class Enemy {
       this.enemyExplosion.play();
 
       this.EnemyExplosionId = setInterval(() => {
-        if (game.gameState==="playing"){
-        this.sprite.positionToReadX =
-          this.sprite.positionToReadSizeX * this.indexCounterSprite;
-        this.indexCounterSprite++;
+        if (game.gameState === "playing") {
+          this.sprite.positionToReadX =
+            this.sprite.positionToReadSizeX * this.indexCounterSprite;
+          this.indexCounterSprite++;
+         
         }
       }, 41.66);
-
     }
   }
 
