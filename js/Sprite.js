@@ -1,3 +1,5 @@
+
+
 class Sprite{
 constructor (positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x,y,url,sizeX,sizeY){
         this.positionToReadX=positionToReadX;

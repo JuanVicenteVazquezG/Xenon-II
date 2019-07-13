@@ -34,7 +34,11 @@ class Player {
     this.syncMovWSpritesCounter = 4;
     this.busySyncMov = false;
     this.shipExplosion = new Audio();
-    this.shipExplosion.src = "Sounds/small_explosion.wav";
+    this.shipExplosion.src = "Sounds/big_explosion.wav";
+    this.shipCollide=new Audio();
+    this.shipCollide.src="Sounds/hit_background.wav";
+    this.playerCreated=new Audio();
+    this.playerCreated.src="Sounds/player_created.wav";
   }
 
   itHasCollided(objectToCollide) {

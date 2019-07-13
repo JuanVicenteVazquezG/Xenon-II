@@ -3,7 +3,7 @@ class Game {
     this.finished = undefined;
     this.input = new Input();
     this.display = new Display();
-    this.loading();
+
     this.marker = new Marker(0, 200);
     this.enemyGeneratorId = undefined;
     this.numberKind = 1;
@@ -14,42 +14,44 @@ class Game {
     this.maxEnemyOntheScreen = 8;
 
     this.gameState = undefined;
-    this.musicGame = new Audio();
-
+    this.musicGame = undefined;
     this.indexShooting = [];
     this.indexEnemy = [];
     this.deleting = false;
     this.EnemyId = 0;
+    this.backgroundOuterSpace = undefined;
   }
 
   _update() {
     this.finished = false;
-    game.display.deletesAllObjectsPainted();
     game.fillTheArrayOfObjectsToPaint();
     this.display.paintObject.bind(this)();
     game.input.readControlsToKeys();
     if (game.gameState === "playing") {
-     this.input.updateFire()
+      this.input.updateFire();
       game.marker.updateMarkerEnergy();
       this.outOfScreen();
       this.collidesShooting(game.enemyArray);
     }
     game.display.deletesAllObjectsPainted();
-    game.fillTheArrayOfObjectsToPaint();
+
     this.finished = true;
     this.setAnimationLoop();
-    console.log(this.enemyArray);
-    console.log(game.player.shooting.length);
   }
 
   start(options) {
     if (game.display.ctx === undefined) {
       this.display.initialize(options);
     }
+    this.loading();
     game.gameState = "splash";
     game.musicSplash.play();
+
     let playing = function() {
       game.gameState = "playing";
+      // game.musicSplash.stop();
+      // game.musicGame.play();
+
       game.input.initializeKeyRead();
       game.input.withOutkeypressID = setInterval(() => {
         if (game.gameState === "playing") {
@@ -75,6 +77,8 @@ class Game {
     if (this.gameState === "splash") {
       game.display.addObjectsToPaint(game.imageName);
     } else if (this.gameState === "playing") {
+      console.log(this.backgroundOuterSpace);
+      game.display.addObjectsToPaint(this.backgroundOuterSpace);
       game.display.addObjectsToPaint(game.player.sprite);
       if (game.player.shooting.length >= 0) {
         for (let i = 0; i < game.player.shooting.length; i++) {
@@ -85,17 +89,20 @@ class Game {
         game.display.addObjectsToPaint(theEnemy.sprite);
       });
     } else if (this.gameState === "pause") {
-      console.log ("estoy en pausa")
       game.display.addObjectsToPaint(game.pauseImage);
     } else if (this.gameState === "gameOver") {
+      console.log("entro en gameover");
       game.display.addObjectsToPaint(game.gameOverImage);
-      console.log("Estoy en game Over")
     }
   }
 
   enemyGenerator() {
     this.enemyGeneratorId = setInterval(() => {
-      if (game.gameState === "playing" && this.deleting === false && this.enemyArray.length<this.maxEnemyOntheScreen) {
+      if (
+        game.gameState === "playing" &&
+        this.deleting === false &&
+        this.enemyArray.length < this.maxEnemyOntheScreen
+      ) {
         // if (this.enemyArray.length < this.maxEnemyOntheScreen) {
         //let numberKind = 1; //Generator depends of other function on stage of game
         //
@@ -182,25 +189,26 @@ class Game {
 
     helper1 = this.enemyArray.length;
     for (helper3 = 0; helper3 < helper1; helper3++) {
-      if (this.enemyArray[helper3].indexCounterSprite > 12 ) {
+      if (this.enemyArray[helper3].indexCounterSprite > 12) {
         deathanimationfinishedId.push(this.enemyArray[helper3].enemyId);
       }
     }
-if (deathanimationfinishedId.length>0){
-  enemies.forEach((aEnemy,index)=>{
-    deathanimationfinishedId.forEach((death)=>{
-      if (aEnemy.enemyId===death){
-        clearInterval(aEnemy.EnemyExplosionId);
-        enemies.splice(index,1);
+    if (deathanimationfinishedId.length > 0) {
+      enemies.forEach((aEnemy, index) => {
+        deathanimationfinishedId.forEach(death => {
+          if (aEnemy.enemyId === death) {
+            clearInterval(aEnemy.EnemyExplosionId);
+            enemies.splice(index, 1);
+          }
+        });
+      });
+    }
+    enemies.forEach(enemy => {
+      if (game.player.itHasCollided(enemy)) {
+        game.player.energy -= 10;
+        game.player.shipCollide.play();
       }
-
     });
-  });
-}
-enemies.forEach((enemy)=>{
-  if (game.player.itHasCollided(enemy)) game.player.energy-=10;
-})
-
 
     this.deleting = false;
   }
@@ -281,6 +289,17 @@ enemies.forEach((enemy)=>{
       640,
       480
     );
+    this.backgroundOuterSpace = new Sprite(
+      0,
+      0,
+      640,
+      480,
+      0,
+      0,
+      "Images/space.png",
+      640,
+      480
+    );
     this.player = new Player(
       192,
       0,
@@ -295,5 +314,10 @@ enemies.forEach((enemy)=>{
     this.imageName = this.initImage;
     this.musicSplash = new Audio();
     this.musicSplash.src = "Musics/musicSplash.mp3"; //determinar is loaded?
+    this.musicSplash.setAttribute("preload","auto")
+    this.musicGame = new Audio();
+  
+    this.musicGame.src = "Musics/game.mp3";
+    this.musicGame.setAttribute("preload","auto");
   }
 }
