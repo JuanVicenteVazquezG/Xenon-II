@@ -7,17 +7,14 @@ class Marker {
   }
   updateMarkerEnergy() {
     if (game.gameState === "playing") {
-      
       if (game.player.energy <= 0) {
-        game.player.shipExplosion.play()
+        game.player.shipExplosion.play();
         game.player.playerCreated.play();
         game.player.energy = 1000;
         game.player.life--;
-       
-        }
-        if (game.player.life <1) {
-          console.log ("######################################3")
-          game.gameState === "gameOver";
+      }
+      if (game.player.life < 1) {
+        game.gameState === "gameOver";
       }
       game.display.ctx.fillStyle = "white";
       game.display.ctx.fillRect(19, 439, 102, 17);

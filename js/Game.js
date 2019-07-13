@@ -45,11 +45,13 @@ class Game {
     }
     this.loading();
     game.gameState = "splash";
-    game.musicSplash.play();
-
+    game.musicGame.play();
+    // game.musicSplash.play();
+    game.musicGame.stop;
     let playing = function() {
       game.gameState = "playing";
-      // game.musicSplash.stop();
+
+      game.musicSplash.play();
       // game.musicGame.play();
 
       game.input.initializeKeyRead();
@@ -314,10 +316,10 @@ class Game {
     this.imageName = this.initImage;
     this.musicSplash = new Audio();
     this.musicSplash.src = "Musics/musicSplash.mp3"; //determinar is loaded?
-    this.musicSplash.setAttribute("preload","auto")
+    this.musicSplash.setAttribute("preload", "none");
+
     this.musicGame = new Audio();
-  
     this.musicGame.src = "Musics/game.mp3";
-    this.musicGame.setAttribute("preload","auto");
+    this.musicGame.setAttribute("preload", "none");
   }
 }
