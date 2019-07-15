@@ -7,7 +7,6 @@ class Marker {
   }
   updateMarkerEnergy() {
     if (game.gameState === "playing") {
-      
       game.display.ctx.fillStyle = "white";
       game.display.ctx.fillRect(19, 439, 102, 17);
       game.display.ctx.fillStyle = "#3FFF33";
@@ -41,5 +40,4 @@ class Marker {
       }
     }
   }
-
 }

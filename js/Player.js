@@ -97,38 +97,28 @@ class Player {
     }
   }
 
-  isAlife() {
-    if (game.player.life < 0 && game.player.energy <= 0) {
-      return false;
-    } else if (game.player.life >= 0 && game.player.energy <= 0) {
-      game.player.shipExplosion.play();
-      game.player.playerCreated.play();
-      game.player.energy = 1000;
-      game.player.life--;
+  deathShip() {
+    if (game.gameState === "playing") {
+      console.log("muetto");
     }
-
-    return true;
   }
 
-  deathShip(index) {
+  isAlife() {
     if (game.gameState === "playing") {
-      game.player.points += 10;
-
-      let x = this.sprite.x;
-      let y = this.sprite.y;
-      this.sprite = this.explosionSprite;
-
-      this.sprite.x = x;
-      this.sprite.y = y;
-      this.enemyExplosion.play();
-
-      this.EnemyExplosionId = setInterval(() => {
-        if (game.gameState === "playing") {
-          this.sprite.positionToReadX =
-            this.sprite.positionToReadSizeX * this.indexCounterSprite;
-          this.indexCounterSprite++;
-        }
-      }, 41.66);
+      if (game.player.life === 0 && game.player.energy <= 0) {
+        console.log("muero por ultima vez");
+        game.player.shipExplosion.play();
+        game.player.deathShip();
+        return false;
+      } else if (game.player.life >= 1 && game.player.energy <= 0) {
+        console.log("muero 1 vez");
+        game.player.shipExplosion.play();
+        game.player.energy = 1000;
+        game.player.life-=1
+                this.deathShip();
+        this.playerCreated.play();
+        return true;
+      }
     }
   }
 }

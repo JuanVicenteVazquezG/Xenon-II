@@ -24,7 +24,6 @@ class Game {
 
   _update() {
     this.finished = false;
-   
     game.fillTheArrayOfObjectsToPaint();
     this.display.paintObject.bind(this)();
     game.input.readControlsToKeys();
@@ -33,9 +32,10 @@ class Game {
       game.marker.updateMarkerEnergy();
       this.outOfScreen();
       this.collidesShooting(game.enemyArray);
-      if( !game.player.isAlife()) {game.gameState==="gameOver"
-    console.log("Entro en gameOver")
-    }
+      if (game.player.isAlife() === false) {
+        game.gameState = "gameOver";
+        console.log("Estoy en gameOver 1");
+      }
     }
     game.display.deletesAllObjectsPainted();
 
@@ -80,10 +80,11 @@ class Game {
   }
 
   fillTheArrayOfObjectsToPaint() {
-    if (this.gameState === "splash") {
+    
+    if (game.gameState === "splash") {
       game.display.addObjectsToPaint(game.imageName);
-    } else if (this.gameState === "playing") {
-      console.log(this.backgroundOuterSpace);
+    } else if (game.gameState === "playing") {
+      
       game.display.addObjectsToPaint(this.backgroundOuterSpace);
       game.display.addObjectsToPaint(game.player.sprite);
       if (game.player.shooting.length >= 0) {
@@ -93,18 +94,48 @@ class Game {
       }
       game.enemyArray.forEach(theEnemy => {
         game.display.addObjectsToPaint(theEnemy.sprite);
-      })
-    } else if (this.gameState === "pause") {
-      console.log ("entro en pause")
+      });
+    } else if (game.gameState === "pause") {
       game.display.addObjectsToPaint(game.pauseImage);
-    } else if (this.gameState === "gameOver") {
-      console.log("entro en gameover");
+    } else if (game.gameState === "gameOver") {
+      game.setAnimationLoop()
       game.display.addObjectsToPaint(game.gameOverImage);
+      setTimeout(() => {
+        window.cancelAnimationFrame(this.intervalGameId);
+        game.intervalGameId = undefined;
+
+        clearInterval(this.enemyGeneratorId);
+        this.enemyGeneratorId = undefined;
+        clearInterval(game.input.withOutkeypressID);
+        game.input.withOutkeypressID = undefined;
+        this.enemyArray.forEach(enemy => {
+          clearInterval(enemy.movementId);
+          enemy.movementId = undefined;
+          clearInterval(enemy.movementRotationId);
+          enemy.movementRotationId = undefined;
+        });
+        if (typeof this.arrayEnemy != "undefined") {
+          console.log(
+            "####################################" + this.arrayEnemy.length
+          );
+          while (this.arrayEnemy.length > 0) {
+            this.arrayEnemy.pop();
+          }
+        }
+
+        this.arrayEnemy = [];
+        game.input.clearKeyRead();
+        console.log ("Que esta pasando")
+        game.player=[];
+        game.start(options);
+        unSetAnimationloop()
+      }, 3000);
+      
     }
   }
 
   enemyGenerator() {
-    this.enemyGeneratorId = setInterval(() => {
+    game.enemyGeneratorId = setInterval(() => {
       if (
         game.gameState === "playing" &&
         this.deleting === false &&

@@ -5,7 +5,7 @@ class Input {
     this.eventKeyUpId = undefined;
     this.eventKeyDown = undefined;
     this.readkeyIntervalId = undefined;
-    this.a=true;
+
     this.fireCooldown = 0;
     this.fireSpeed = 20;
   }
@@ -57,8 +57,14 @@ class Input {
     }
 
     if (this.keys[80]) {
-      
-      this.changeState();
+      game.input.keys[80] = false;
+      if (game.gameState === "pause") {
+        game.setAnimationLoop();
+        game.gameState = "playing";
+      } else if (game.gameState === "playing") {
+        game.gameState = "pause";
+        game.unSetAnimationloop();
+      }
     }
   }
 
@@ -93,19 +99,5 @@ class Input {
     }
   }
 
-  changeState() {
-    this.keys[80]=false; 
-    
-    if (game.gameState === "pause" ) {
-      
-      game.setAnimationLoop();
-      game.gameState = "playing";
-      
-    } else if (game.gameState === "playing") {
-      game.gameState = "pause";
-      game.unSetAnimationloop();
-      
-    }
-    
-  }
+
 }
