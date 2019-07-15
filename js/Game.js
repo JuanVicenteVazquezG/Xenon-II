@@ -15,6 +15,8 @@ class Game {
 
     this.gameState = undefined;
     this.musicGame = undefined;
+    this.musicGameOver=undefined;
+    this.musicSplash =undefined;
     this.indexShooting = [];
     this.indexEnemy = [];
     this.deleting = false;
@@ -41,7 +43,7 @@ class Game {
 
     this.finished = true;
     this.setAnimationLoop();
-  }
+  }qqqqqqqqqqqqq
 
   start(options) {
     if (game.display.ctx === undefined) {
@@ -49,15 +51,16 @@ class Game {
     }
     this.loading();
     game.gameState = "splash";
-    game.musicGame.play();
-    // game.musicSplash.play();
-    game.musicGame.stop;
+    game.musicSplash.setAttribute("autoplay","none")
+    game.musicSplash.play();
+    
     let playing = function() {
       game.gameState = "playing";
 
-      game.musicSplash.play();
-      // game.musicGame.play();
-
+       game.musicSplash.pause();
+       game.musicSplash.currentTime(0);
+        myAudio.currentTime
+     
       game.input.initializeKeyRead();
       game.input.withOutkeypressID = setInterval(() => {
         if (game.gameState === "playing") {
@@ -100,6 +103,7 @@ class Game {
     } else if (game.gameState === "gameOver") {
       game.setAnimationLoop()
       game.display.addObjectsToPaint(game.gameOverImage);
+      this.musicGameOver.play();
       setTimeout(() => {
         window.cancelAnimationFrame(this.intervalGameId);
         game.intervalGameId = undefined;
@@ -357,5 +361,7 @@ class Game {
     this.musicGame = new Audio();
     this.musicGame.src = "Musics/game.mp3";
     this.musicGame.setAttribute("preload", "none");
+    this.musicGameOver= new Audio();
+    this.musicGame.src="Musics/gameOver.mp3"
   }
 }
