@@ -302,7 +302,7 @@ class Game {
       640,
       480
     );
-    this.player = new Player(
+    this.player = new Player(  
       192,
       0,
       64,
