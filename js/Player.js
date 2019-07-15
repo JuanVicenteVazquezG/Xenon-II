@@ -1,6 +1,5 @@
 class Player {
   constructor(
-    
     positionToReadX,
     positionToReadY,
     positionToReadSizeX,
@@ -22,7 +21,7 @@ class Player {
       sizeX,
       sizeY
     );
-    this.life=2;
+    this.life = 2;
     this.boundingBox = {};
     this.speed = 3;
 
@@ -30,15 +29,15 @@ class Player {
     this.points = 0;
     this.kindOfShoot = 1; //Could be 1 to other numbers
     this.shooting = [];
-    this.shootId=0;
+    this.shootId = 0;
     this.syncMovWSpritesCounter = 4;
     this.busySyncMov = false;
     this.shipExplosion = new Audio();
     this.shipExplosion.src = "Sounds/big_explosion.wav";
-    this.shipCollide=new Audio();
-    this.shipCollide.src="Sounds/hit_background.wav";
-    this.playerCreated=new Audio();
-    this.playerCreated.src="Sounds/player_created.wav";
+    this.shipCollide = new Audio();
+    this.shipCollide.src = "Sounds/hit_background.wav";
+    this.playerCreated = new Audio();
+    this.playerCreated.src = "Sounds/player_created.wav";
   }
 
   itHasCollided(objectToCollide) {
@@ -76,32 +75,45 @@ class Player {
   }
   synchronizationMovementWSprites() {
     if (this.busySyncMov === false) {
-      this.busySyncMov=true;
+      this.busySyncMov = true;
       this.synMovWSpritesId = setTimeout(() => {
         this.sprite.positionToReadX =
           this.sprite.positionToReadSizeX * this.syncMovWSpritesCounter;
-          this.busySyncMov=false;
+        this.busySyncMov = false;
       }, 150);
     }
   }
-//Comesback the ship to original position
-  normalizerShip(){
-    if (this.busySyncMov===false){
-      this.busySyncMov=true;
-      if (game.player.syncMovWSpritesCounter<3) game.player.syncMovWSpritesCounter++;
-      if (game.player.syncMovWSpritesCounter>3) game.player.syncMovWSpritesCounter--;
-      this.busySyncMov=false;
-      this.synchronizationMovementWSprites()
-      this.busySyncMov=false;
+  //Comesback the ship to original position
+  normalizerShip() {
+    if (this.busySyncMov === false) {
+      this.busySyncMov = true;
+      if (game.player.syncMovWSpritesCounter < 3)
+        game.player.syncMovWSpritesCounter++;
+      if (game.player.syncMovWSpritesCounter > 3)
+        game.player.syncMovWSpritesCounter--;
+      this.busySyncMov = false;
+      this.synchronizationMovementWSprites();
+      this.busySyncMov = false;
     }
   }
 
-  deathShip(
-    index) {
+  isAlife() {
+    if (game.player.life < 0 && game.player.energy <= 0) {
+      return false;
+    } else if (game.player.life >= 0 && game.player.energy <= 0) {
+      game.player.shipExplosion.play();
+      game.player.playerCreated.play();
+      game.player.energy = 1000;
+      game.player.life--;
+    }
+
+    return true;
+  }
+
+  deathShip(index) {
     if (game.gameState === "playing") {
-      
       game.player.points += 10;
-      
+
       let x = this.sprite.x;
       let y = this.sprite.y;
       this.sprite = this.explosionSprite;
@@ -111,13 +123,12 @@ class Player {
       this.enemyExplosion.play();
 
       this.EnemyExplosionId = setInterval(() => {
-        if (game.gameState==="playing"){
-        this.sprite.positionToReadX =
-          this.sprite.positionToReadSizeX * this.indexCounterSprite;
-        this.indexCounterSprite++;
+        if (game.gameState === "playing") {
+          this.sprite.positionToReadX =
+            this.sprite.positionToReadSizeX * this.indexCounterSprite;
+          this.indexCounterSprite++;
         }
       }, 41.66);
-
     }
   }
 }

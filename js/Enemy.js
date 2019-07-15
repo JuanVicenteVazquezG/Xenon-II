@@ -27,13 +27,13 @@ class Enemy {
     this.explosionSprite = new Sprite(
       0,
       0,
-      64,
-      64,
+      32,
+      23,
       x,
       y,
-      "Images/explodeEnemy/explode64.png",
-      64,
-      64
+      "Images/explodeEnemy/explosionenemy.png",
+      32,
+      32
     );
 
     this.speed = 1;

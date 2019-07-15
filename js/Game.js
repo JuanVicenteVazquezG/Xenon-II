@@ -24,6 +24,7 @@ class Game {
 
   _update() {
     this.finished = false;
+   
     game.fillTheArrayOfObjectsToPaint();
     this.display.paintObject.bind(this)();
     game.input.readControlsToKeys();
@@ -32,6 +33,9 @@ class Game {
       game.marker.updateMarkerEnergy();
       this.outOfScreen();
       this.collidesShooting(game.enemyArray);
+      if( !game.player.isAlife()) {game.gameState==="gameOver"
+    console.log("Entro en gameOver")
+    }
     }
     game.display.deletesAllObjectsPainted();
 
@@ -89,8 +93,9 @@ class Game {
       }
       game.enemyArray.forEach(theEnemy => {
         game.display.addObjectsToPaint(theEnemy.sprite);
-      });
+      })
     } else if (this.gameState === "pause") {
+      console.log ("entro en pause")
       game.display.addObjectsToPaint(game.pauseImage);
     } else if (this.gameState === "gameOver") {
       console.log("entro en gameover");
