@@ -25,11 +25,11 @@ class Display {
   }
 
   paintObject() {
-    game.display.clearDisplay();
+    this.clearDisplay();
 
-    game.display.objectsToPaint.forEach(objecToShow => {
+    this.objectsToPaint.forEach(objecToShow => {
      
-      game.display.ctx.drawImage(
+      this.ctx.drawImage(
           objecToShow.sprite,
           objecToShow.positionToReadX,
           objecToShow.positionToReadY,

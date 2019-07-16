@@ -9,7 +9,8 @@ const options = {
   canvas: document.getElementById("myCanvas"),
   
 };
-
+(function (){
 game = new Game();
 game.start(options);
 console.log ("hello");
+})();

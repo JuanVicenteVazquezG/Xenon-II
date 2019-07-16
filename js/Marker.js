@@ -9,7 +9,19 @@ class Marker {
     if (game.gameState === "playing") {
       game.display.ctx.fillStyle = "white";
       game.display.ctx.fillRect(19, 439, 102, 17);
-      game.display.ctx.fillStyle = "#3FFF33";
+      if (game.player.energy >= 900) {
+        game.display.ctx.fillStyle = "navy";
+      }
+      if (game.player.energy <= 899 && game.player.energy >= 500) {
+        game.display.ctx.fillStyle = "#3FFF33";
+      }
+      if (game.player.energy <= 499 && game.player.energy >= 300) {
+        game.display.ctx.fillStyle = "yellow";
+      }
+      if (game.player.energy < 299) {
+        game.display.ctx.fillStyle = "red";
+      }
+
       game.display.ctx.fillRect(
         20,
         440,
