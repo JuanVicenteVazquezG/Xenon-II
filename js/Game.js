@@ -1,6 +1,6 @@
 class Game {
   constructor(options) {
-    var self = this;
+    var that = this;
     this.finished = undefined;
     this.input = new Input();
     this.display = new Display();
@@ -35,8 +35,8 @@ class Game {
       this.input.updateFire();
       game.marker.updateMarkerEnergy();
       this.outOfScreen();
-      game.collidesShooting(this.arrayEnemy)
-      
+      game.collidesShooting(game.enemyArray);
+
       if (game.player.isAlife() === false) {
         game.gameState = "gameOver";
       }
@@ -114,9 +114,9 @@ class Game {
 
   enemyGenerator() {
     clearInterval(this.enemyGeneratorId);
-    if (typeof this.arrayEnemy != "undefined") {
-      while (this.arrayEnemy.length > 0) {
-        this.arrayEnemy.pop();
+    if (typeof this.enemyArray != "undefined") {
+      while (this.enemyArray.length > 0) {
+        this.enemyArray.pop();
       }
     }
 
@@ -164,27 +164,27 @@ class Game {
       };
   }
 
-  collidesShooting(enemies) {
+  collidesShooting() {
+    console.log (this.enemyArray)
     var enemyId = [];
     var shootId = [];
     var deathanimationfinishedId = [];
-console.log ('eoe'+self)
+    console.log("eoe" + self);
     var helper1, helper2, helper3, helper4;
     //here we will tray to delete de shoot and the enemy trough the id of every object. First of all the shoot is delete is collide and next the enemy
-    if (game.gameState === "playing" && this.deleting===false) {
+    if (game.gameState === "playing" && this.deleting === false) {
       this.deleting = true;
       helper1 = game.player.shooting.length;
-      helper2 = this.arrayEnemy.length; //helper 3 index for shooting  helper 4 index for enemies
+      helper2 = this.enemyArray.length; //helper 3 index for shooting  helper 4 index for enemies
       for (helper3 = 0; helper3 < helper1; helper3++) {
         for (helper4 = 0; helper4 < helper2; helper4++) {
           if (
             game.player.shooting[helper3].itHasCollided(
-              this.arrayEnemy[helper4]
-              
+              this.enemyArray[helper4]
             )
-
-          ) {console.log ("colision")
-            enemyId.push(this.arrayEnemy[helper4].enemyId);
+          ) {
+            console.log("colision");
+            enemyId.push(this.enemyArray[helper4].enemyId);
             shootId.push(game.player.shooting[helper3].shootId);
           }
         }
@@ -202,7 +202,9 @@ console.log ('eoe'+self)
         }
       }
       enemyId = [];
-      if (shootId > 0) {
+
+
+      if (shootId.length > 0) {
         game.player.shooting.forEach((shoot, index) => {
           shootId.forEach(theShootId => {
             if (shoot.shootId === theShootId) {
@@ -221,16 +223,16 @@ console.log ('eoe'+self)
       }
     }
     if (deathanimationfinishedId.length > 0) {
-      this.arrayEnemy.forEach((aEnemy, index) => {
+      this.enemyArray.forEach((aEnemy, index) => {
         deathanimationfinishedId.forEach(death => {
           if (aEnemy.enemyId === death) {
             clearInterval(aEnemy.EnemyExplosionId);
-            this.arrayEnemy.splice(index, 1);
+            this.enemyArray.splice(index, 1);
           }
         });
       });
     }
-    this.arrayEnemy.forEach(enemy => {
+    this.enemyArray.forEach(enemy => {
       if (game.player.itHasCollided(enemy)) {
         game.player.energy -= 10;
         game.player.shipCollide.play();
@@ -247,7 +249,7 @@ console.log ('eoe'+self)
     this.deleting = true;
     if (game.gameState === "playing") {
       game.enemyArray.forEach(theEnemy => {
-        if (theEnemy.sprite.y > 500) {
+        if (theEnemy.sprite.y > 500 || theEnemy.boundingBox.y >500 ) {
           indexEnemyToDelete.push(theEnemy.enemyId); //When the enemy abandon the screen will deleted with out explosion
         }
       });
@@ -256,9 +258,7 @@ console.log ('eoe'+self)
           //Only is deleted when is out of screen
           indexEnemyToDelete.forEach(idEnemyToDelete => {
             if (enemy.enemyId == idEnemyToDelete) {
-       
               this.enemyArray.splice(index, 1);
-        
             }
           });
         });
@@ -353,6 +353,8 @@ console.log ('eoe'+self)
   }
 
   resetAll() {
+
+    setTimeout(()=>{
     this.unSetAnimationloop();
     game.display.clearDisplay.bind(this);
 
@@ -370,13 +372,13 @@ console.log ('eoe'+self)
       clearInterval(enemy.movementRotationId);
       enemy.movementRotationId = undefined;
     });
-    if (typeof this.arrayEnemy != "undefined") {
-      while (this.arrayEnemy.length > 0) {
-        this.arrayEnemy.pop();
+    if (typeof this.enemyArray != "undefined") {
+      while (this.enemyArray.length > 0) {
+        this.enemyArray.pop();
       }
     }
 
-    this.arrayEnemy = [];
+    this.enemyArray = [];
     game.input.clearKeyRead();
 
     game.player.energy = 1000;
@@ -418,6 +420,6 @@ console.log ('eoe'+self)
 
     //  this.musicGameOver.play();
     this.onlyOneTime = 0;
-    game.start(options);
+    game.start(options);},3000);
   }
 }

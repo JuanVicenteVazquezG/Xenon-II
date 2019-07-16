@@ -12,6 +12,7 @@ class Enemy {
     sizeY,
     typeOfEnemy = 1
   ) {
+    this.maxOfSprites=16;
     this.enemyId = enemyId;
     this.sprite = new Sprite(
       positionToReadX,
@@ -58,7 +59,7 @@ class Enemy {
         this.sprite.positionToReadX =
           positionToReadSizeX * this.counterSpriteMovementRotationEnemy;
         this.counterSpriteMovementRotationEnemy++;
-        if (this.counterSpriteMovementRotationEnemy === 16)
+        if (this.counterSpriteMovementRotationEnemy === this.maxOfSprites)
           this.counterSpriteMovementRotationEnemy = 0;
       }
     }, 50);
