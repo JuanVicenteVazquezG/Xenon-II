@@ -80,7 +80,7 @@ class Player {
         this.sprite.positionToReadX =
           this.sprite.positionToReadSizeX * this.syncMovWSpritesCounter;
         this.busySyncMov = false;
-      }, 150);
+      },30);
     }
   }
   //Comesback the ship to original position

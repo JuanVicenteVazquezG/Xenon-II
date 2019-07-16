@@ -15,8 +15,8 @@ class Game {
 
     this.gameState = undefined;
     this.musicGame = undefined;
-    this.musicGameOver=undefined;
-    this.musicSplash =undefined;
+    this.musicGameOver = undefined;
+    this.musicSplash = undefined;
     this.indexShooting = [];
     this.indexEnemy = [];
     this.deleting = false;
@@ -27,7 +27,7 @@ class Game {
   _update() {
     this.finished = false;
     game.fillTheArrayOfObjectsToPaint();
-    this.display.paintObject.bind(this)();
+    game.display.paintObject.bind(game.display)();
     game.input.readControlsToKeys();
     if (game.gameState === "playing") {
       this.input.updateFire();
@@ -43,7 +43,7 @@ class Game {
 
     this.finished = true;
     this.setAnimationLoop();
-  }qqqqqqqqqqqqq
+  }
 
   start(options) {
     if (game.display.ctx === undefined) {
@@ -51,16 +51,16 @@ class Game {
     }
     this.loading();
     game.gameState = "splash";
-    game.musicSplash.setAttribute("autoplay","none")
-    game.musicSplash.play();
-    
+    // game.musicSplash.setAttribute("autoplay","none")
+    // game.musicSplash.play();
+
     let playing = function() {
       game.gameState = "playing";
 
-       game.musicSplash.pause();
-       game.musicSplash.currentTime(0);
-        myAudio.currentTime
-     
+      //  game.musicSplash.pause();
+      //  game.musicSplash.currentTime(0);
+      // myAudio.currentTime
+
       game.input.initializeKeyRead();
       game.input.withOutkeypressID = setInterval(() => {
         if (game.gameState === "playing") {
@@ -83,11 +83,9 @@ class Game {
   }
 
   fillTheArrayOfObjectsToPaint() {
-    
     if (game.gameState === "splash") {
       game.display.addObjectsToPaint(game.imageName);
     } else if (game.gameState === "playing") {
-      
       game.display.addObjectsToPaint(this.backgroundOuterSpace);
       game.display.addObjectsToPaint(game.player.sprite);
       if (game.player.shooting.length >= 0) {
@@ -101,40 +99,8 @@ class Game {
     } else if (game.gameState === "pause") {
       game.display.addObjectsToPaint(game.pauseImage);
     } else if (game.gameState === "gameOver") {
-      game.setAnimationLoop()
       game.display.addObjectsToPaint(game.gameOverImage);
-      this.musicGameOver.play();
-      setTimeout(() => {
-        window.cancelAnimationFrame(this.intervalGameId);
-        game.intervalGameId = undefined;
-
-        clearInterval(this.enemyGeneratorId);
-        this.enemyGeneratorId = undefined;
-        clearInterval(game.input.withOutkeypressID);
-        game.input.withOutkeypressID = undefined;
-        this.enemyArray.forEach(enemy => {
-          clearInterval(enemy.movementId);
-          enemy.movementId = undefined;
-          clearInterval(enemy.movementRotationId);
-          enemy.movementRotationId = undefined;
-        });
-        if (typeof this.arrayEnemy != "undefined") {
-          console.log(
-            "####################################" + this.arrayEnemy.length
-          );
-          while (this.arrayEnemy.length > 0) {
-            this.arrayEnemy.pop();
-          }
-        }
-
-        this.arrayEnemy = [];
-        game.input.clearKeyRead();
-        console.log ("Que esta pasando")
-        game.player=[];
-        game.start(options);
-        unSetAnimationloop()
-      }, 3000);
-      
+      this.resetAll();
     }
   }
 
@@ -361,7 +327,66 @@ class Game {
     this.musicGame = new Audio();
     this.musicGame.src = "Musics/game.mp3";
     this.musicGame.setAttribute("preload", "none");
-    this.musicGameOver= new Audio();
-    this.musicGame.src="Musics/gameOver.mp3"
+    this.musicGameOver = new Audio();
+    this.musicGame.src = "Musics/gameOver.mp3";
+  }
+
+  resetAll() {
+    setTimeout(() => {
+      this.unSetAnimationloop();
+      game.display.clearDisplay.bind(this);
+
+      game.intervalGameId = undefined;
+
+      clearInterval(this.enemyGeneratorId);
+      this.enemyGeneratorId = undefined;
+      clearInterval(game.input.withOutkeypressID);
+      game.input.withOutkeypressID = undefined;
+      this.enemyArray.forEach(enemy => {
+        clearInterval(enemy.movementId);
+        enemy.movementId = undefined;
+        clearInterval(enemy.movementRotationId);
+        enemy.movementRotationId = undefined;
+      });
+
+      if (typeof this.arrayEnemy != "undefined") {
+        while (this.arrayEnemy.length > 0) {
+          this.arrayEnemy.pop();
+        }
+      }
+
+      this.arrayEnemy = [];
+      game.input.clearKeyRead();
+      // this.display = undefined;
+      // this.display = new Display();
+      game.player.energy = 1000;
+      game.player.life = 2;
+      // game.player = [];
+      // game.player = new Player();
+      this.finished = undefined;
+      // this.input = new Input();
+      // this.display = new Display();
+
+      // this.marker = new Marker(0, 200);
+      // this.enemyGeneratorId = undefined;
+      // this.numberKind = 1;
+
+      // this.intervalGameId = undefined;
+      // this.enemy = undefined;
+      // this.enemyArray = [];
+      // this.maxEnemyOntheScreen = 8;
+
+      // this.gameState = undefined;
+      // this.musicGame = undefined;
+      // this.musicGameOver = undefined;
+      // this.musicSplash = undefined;
+      // this.indexShooting = [];
+      // this.indexEnemy = [];
+      // this.deleting = false;
+      // this.EnemyId = 0;
+      // this.backgroundOuterSpace = undefined;
+    }, 3000);
+    //  this.musicGameOver.play();
+    //game.start(options);
   }
 }

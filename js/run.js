@@ -12,3 +12,4 @@ const options = {
 
 game = new Game();
 game.start(options);
+console.log ("hello");
