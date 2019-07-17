@@ -491,8 +491,8 @@ class Game {
   outerFilterSpaceFilterPut() {
     // positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x,y,url,sizeX,sizeY
 
-    this.backgroundOuterSpaceFilter1.y++;
-    this.backgroundOuterSpaceFilter2.y++;
+    this.backgroundOuterSpaceFilter1.y+=2;
+    this.backgroundOuterSpaceFilter2.y+=2;
     this.Decoration.y++;
     if (this.backgroundOuterSpaceFilter1.y === 481)
       this.backgroundOuterSpaceFilter1.y = 5520;
