@@ -21,6 +21,8 @@ class Player {
       sizeX,
       sizeY
     );
+    this.invencible="Images/invencible.png"
+    this.normalShip="Images/Ship.png"
     this.life = 2;
     this.boundingBox = {};
     this.speed = 3;

@@ -8,11 +8,11 @@ class Game {
     this.marker = new Marker(0, 200);
     this.enemyGeneratorId = undefined;
     this.numberKind = 1;
-
+    this.canInvencible === false;
     this.intervalGameId = undefined;
 
     this.maxEnemyOntheScreen = 8;
-
+    this.invencible = undefined;
     this.gameState = undefined;
     this.musicGame = undefined;
     this.musicGameOver = undefined;
@@ -195,7 +195,7 @@ class Game {
       this.deleting = true;
       helper1 = game.player.shooting.length;
       helper2 = this.enemyArray.length; //helper 3 index for shooting  helper 4 index for enemies
-      
+
       for (helper3 = 0; helper3 < helper1; helper3++) {
         for (helper4 = 0; helper4 < helper2; helper4++) {
           if (
@@ -203,7 +203,6 @@ class Game {
               this.enemyArray[helper4]
             )
           ) {
-            
             enemyId.push(this.enemyArray[helper4].enemyId);
             shootId.push(game.player.shooting[helper3].shootId);
           }
@@ -232,8 +231,6 @@ class Game {
           });
         });
       }
-
-      
     }
     shootId = [];
 
@@ -260,26 +257,79 @@ class Game {
         });
       });
     }
+    if (this.canInvencible === false) {
+      this.enemyArray.forEach(enemy => {
+        if (game.player.itHasCollided(enemy)) {
+          game.player.energy -= 10;
+          game.player.shipCollide.play();
+        }
+      });
+    }
 
-
-    this.enemyArray.forEach(enemy => {
-      if (game.player.itHasCollided(enemy)) {
-        game.player.energy -= 10;
-        game.player.shipCollide.play();
+    this.awards.forEach((award, index) => {
+      if (game.player.itHasCollided(award)) {
+        //here we tray to read the kind of award that the ship obtain
+        console.log("premio par el caballero");
+        this.pickUpSound.play();
+        console.log(
+          "el tipo de de premio es: " + this.awards[index].kindOfAwards
+        );
+        switch (this.awards[index].kindOfAwards) {
+          case 1:
+            {
+              if (game.player.speed <= 3) game.player.speed = 1;
+              if (game.player.speed === 6) game.player.speed = 3;
+            }
+            break;
+          case 2:
+            {
+            }
+            break;
+          case 3:
+            {
+            }
+            break;
+          case 4:
+            {
+            }
+            break;
+          case 5: //One life more
+            {
+              if (game.player.life < 3) {
+                game.player.life++;
+              }
+            }
+            break;
+          case 6:
+            {
+              //Invencible
+              this.canInvencible = true;
+              console.log("superEscudo");
+              game.player.sprite.sprite.src = game.player.invencible;
+              this.normalShip = setTimeout(() => {
+                game.player.sprite.sprite.src = game.player.normalShip;
+                this.canInvencible = false;
+                clearTimeout(this.normalShip);
+              }, 15000);
+            }
+            break;
+          case 7: //Speed up
+            {
+              if (game.player.speed === 6) game.player.speed = 6;
+              if (game.player.speed === 3) game.player.speed += 3;
+              if (game.player.speed === 1) game.player.speed = 3;
+            }
+            break;
+          case 8:
+            {
+            }
+            break;
+        }
+        clearInterval(this.awards[index].movementId);
+        clearInterval(this.awards[index].movementRotationId);
+        this.awards.splice(index, 1);
       }
     });
-    
-    this.awards.forEach((award,index)=>{
-      if (game.player.itHasCollided(award)){
-        //here we tray to read the kind of award that the ship obtain
-        console.log ("premio par el caballero")
-        clearInterval( this.awards[index].movementId);
-        clearInterval( this.awards[index].movementRotationId);
-        this.awards.splice(index,1);
-      }
-    }
-    )
-    
 
     this.deleting = false;
   }
@@ -302,10 +352,9 @@ class Game {
           //Only is deleted when is out of screen
           indexEnemyToDelete.forEach(idEnemyToDelete => {
             if (enemy.enemyId === idEnemyToDelete) {
-
-              console.log ("Los Id");
-              console.log(this.enemyArray[index].enemyId)
-              console.log (idEnemyToDelete);
+              console.log("Los Id");
+              console.log(this.enemyArray[index].enemyId);
+              console.log(idEnemyToDelete);
               this.enemyArray.splice(index, 1);
             }
           });
@@ -318,7 +367,7 @@ class Game {
           indexShootOutScreen.push(aShoot.shootId);
         }
       });
- if (indexShootOutScreen > 0) {
+      if (indexShootOutScreen > 0) {
         game.player.shooting.forEach((shoot, index) => {
           indexShootOutScreen.forEach(shooOutOfScreeId => {
             if (shoot.shootId === shooOutOfScreeId) {
@@ -328,34 +377,35 @@ class Game {
         });
       }
     }
-   
+
     //when de awards gets out the screen
     if (this.awards.length > 0) {
       this.awards.forEach(award => {
-        if (award.sprite.y > 500  ||  award.boundingBox.y>500 ) {
+        if (award.sprite.y > 500 || award.boundingBox.y > 500) {
           indexAwardsToDelete.push(award.AwardsId);
         }
       });
     }
-      if (indexAwardsToDelete.length>0){
-        this.awards.forEach((awardsId,index)=>{
-          indexAwardsToDelete.forEach(idAwardsId=>{
-            if (awardsId.AwardsId===idAwardsId){
-              clearInterval(this.awards[index].movementId);
-              clearInterval(this.awards[index].movementRotationId);
-              this.awards.splice (index,1);
-            }
-          });
+    if (indexAwardsToDelete.length > 0) {
+      console.log("Estoy aqui premios");
+      this.awards.forEach((awardsId, index) => {
+        indexAwardsToDelete.forEach(idAwardsId => {
+          if (awardsId.AwardsId === idAwardsId) {
+            clearInterval(this.awards[index].movementId);
+            clearInterval(this.awards[index].movementRotationId);
+            this.awards.splice(index, 1);
+          }
         });
-      }
-      if (indexAwardsToDelete.length>0){
-        while (indexAwardsToDelete.length>0){
-          indexAwardsToDelete.pop();
-        }
-      }
-      console.log (this.awards);
-      this.deleting = false;
+      });
     }
+    if (indexAwardsToDelete.length > 0) {
+      while (indexAwardsToDelete.length > 0) {
+        indexAwardsToDelete.pop();
+      }
+    }
+    console.log(this.awards);
+    this.deleting = false;
+  }
 
   loading() {
     this.initImage = new Sprite(
@@ -426,6 +476,9 @@ class Game {
       62,
       64
     );
+
+    this.pickUpSound = new Audio();
+    this.pickUpSound.src = "Sounds/pickup.wav";
     this.imageName = this.initImage;
     this.musicSplash = new Audio();
     this.musicSplash.src = "Musics/musicSplash.mp3"; //determinar is loaded?
@@ -460,7 +513,6 @@ class Game {
       3000
     );
     //Outer Space filter Parallax
-
   }
 
   resetAll() {
@@ -517,6 +569,7 @@ class Game {
     this.musicGame = undefined;
     this.musicGameOver = undefined;
     this.musicSplash = undefined;
+    this.pickUpSound = undefined;
     this.indexShooting = [];
 
     this.deleting = false;
@@ -541,7 +594,6 @@ class Game {
       this.backgroundOuterSpaceFilter1.y = -2520;
     if (this.backgroundOuterSpaceFilter2.y === 225)
       this.backgroundOuterSpaceFilter2.y = -2520;
-
   }
 
   createAwards(x, y, kindOfAward) {
@@ -595,6 +647,4 @@ class Game {
     );
     this.awards[this.awards.length - 1].AwardsId = this.AwardsId;
   }
-
-
 }
