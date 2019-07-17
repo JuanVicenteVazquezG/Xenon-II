@@ -1,9 +1,7 @@
 @font-face {
-  font-family: "Xenon-2";
-  src: url "../font-family/xenon2.ttf" format("truetype");
-  font-style: normal;
-  font-weight: normal;
-}
+  font-family: "Xenon2";
+  src: url ("font-family/cw_alien.ttf");
+  }
 
 html {
   background-color: black;

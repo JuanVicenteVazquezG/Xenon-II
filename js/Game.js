@@ -23,11 +23,17 @@ class Game {
     this.deleting = false;
     this.EnemyId = 0;
     this.backgroundOuterSpace = undefined;
+    this.backgroundOuterSpaceFilter1 = undefined;
+    this.backgroundOuterSpaceFilter2 = undefined;
     this.onlyOneTime = 0;
+    this.resetAllInterval = 0;
   }
 
   _update() {
     this.finished = false;
+    if (game.gameState === "playing") {
+      this.outerFilterSpaceFilterPut();
+    }
     game.fillTheArrayOfObjectsToPaint();
     game.display.paintObject.bind(game.display)();
     game.input.readControlsToKeys();
@@ -48,21 +54,15 @@ class Game {
   }
 
   start(options) {
-    if (game.display.ctx === undefined) {
-      this.display.initialize(options);
-    }
     this.loading();
-    this.setAnimationLoop();
+    this.display.initialize(options);
+
     game.gameState = "splash";
     // game.musicSplash.setAttribute("autoplay","none")
     // game.musicSplash.play();
 
     let playing = function() {
       game.gameState = "playing";
-
-      //  game.musicSplash.pause();
-      //  game.musicSplash.currentTime(0);
-      // myAudio.currentTime
 
       game.input.initializeKeyRead();
       game.input.withOutkeypressID = setInterval(() => {
@@ -74,7 +74,7 @@ class Game {
       document.removeEventListener("keydown", playing);
     };
     document.addEventListener("keydown", playing);
-    // this.setAnimationLoop();
+    this.setAnimationLoop();
   }
 
   setAnimationLoop() {
@@ -90,6 +90,8 @@ class Game {
       game.display.addObjectsToPaint(game.imageName);
     } else if (game.gameState === "playing") {
       game.display.addObjectsToPaint(this.backgroundOuterSpace);
+      game.display.addObjectsToPaint(this.backgroundOuterSpaceFilter1);
+      game.display.addObjectsToPaint(this.backgroundOuterSpaceFilter2);
       game.display.addObjectsToPaint(game.player.sprite);
       if (game.player.shooting.length >= 0) {
         for (let i = 0; i < game.player.shooting.length; i++) {
@@ -105,10 +107,10 @@ class Game {
     } else if (game.gameState === "gameOver") {
       game.display.addObjectsToPaint(game.gameOverImage);
 
-      if ((this.onlyOneTime = 0)) {
+      if (this.onlyOneTime === 0) {
+        this.onlyOneTime = 1;
+        this.resetAllInterval = setTimeout(this.resetAll, 3000);
       }
-      this.onlyOneTime = 1;
-      setTimeout(this.resetAll(), 3000);
     }
   }
 
@@ -165,7 +167,7 @@ class Game {
   }
 
   collidesShooting() {
-    console.log (this.enemyArray)
+    console.log(this.enemyArray);
     var enemyId = [];
     var shootId = [];
     var deathanimationfinishedId = [];
@@ -202,7 +204,6 @@ class Game {
         }
       }
       enemyId = [];
-
 
       if (shootId.length > 0) {
         game.player.shooting.forEach((shoot, index) => {
@@ -249,7 +250,7 @@ class Game {
     this.deleting = true;
     if (game.gameState === "playing") {
       game.enemyArray.forEach(theEnemy => {
-        if (theEnemy.sprite.y > 500 || theEnemy.boundingBox.y >500 ) {
+        if (theEnemy.sprite.y > 500 || theEnemy.boundingBox.y > 500) {
           indexEnemyToDelete.push(theEnemy.enemyId); //When the enemy abandon the screen will deleted with out explosion
         }
       });
@@ -350,28 +351,50 @@ class Game {
     this.musicGame.setAttribute("preload", "none");
     this.musicGameOver = new Audio();
     this.musicGame.src = "Musics/gameOver.mp3";
+
+    this.backgroundOuterSpaceFilter1 = new Sprite(
+      0,
+      0,
+      640,
+      3000,
+      0,
+     -2520,
+      "Images/outerSpace.png",
+      640,
+      3000
+    );
+    this.backgroundOuterSpaceFilter2 = new Sprite(
+      0,
+      0,
+      640,
+      5520,
+      0,
+      -5520,
+      "Images/outerSpace.png",
+      640,
+      3000
+    );
+    //Outer Space filter Parallax
   }
 
   resetAll() {
-
-    setTimeout(()=>{
-    this.unSetAnimationloop();
-    game.display.clearDisplay.bind(this);
-
     game.intervalGameId = undefined;
 
     clearInterval(this.enemyGeneratorId);
     this.enemyGeneratorId = 0;
 
     clearInterval(game.input.withOutkeypressID);
-
     game.input.withOutkeypressID = undefined;
-    this.enemyArray.forEach(enemy => {
-      clearInterval(enemy.movementId);
-      enemy.movementId = undefined;
-      clearInterval(enemy.movementRotationId);
-      enemy.movementRotationId = undefined;
-    });
+
+    if (typeof this.enemyArray != "undefined") {
+      for (var i = 0; i < game.enemyArray.length; i++) {
+        clearInterval(this.enemyArray[i].movementId);
+        this.enemyArray[i].movementId = undefined;
+        clearInterval(this.enemyArray[i].movementRotationId);
+        this.enemyArray[i].movementRotationId = undefined;
+      }
+    }
+
     if (typeof this.enemyArray != "undefined") {
       while (this.enemyArray.length > 0) {
         this.enemyArray.pop();
@@ -384,8 +407,6 @@ class Game {
     game.player.energy = 1000;
     game.player.life = 2;
 
-    // game.player = [];
-    // game.player = new Player();
     this.finished = undefined;
     this.gameState = "splash";
     this.marker = undefined;
@@ -414,12 +435,25 @@ class Game {
     this.musicSplash = undefined;
     this.indexShooting = [];
 
-    // this.backgroundOuterSpace = undefined;
     this.deleting = false;
     this.EnemyId = 0;
-
+    clearTimeout(this.resetAllInterval);
+    this.resetAllInterval = 0;
     //  this.musicGameOver.play();
     this.onlyOneTime = 0;
-    game.start(options);},3000);
+    game.unSetAnimationloop();
+    clearTimeout(this.resetAllInterval);
+    game.start(options);
+  }
+  outerFilterSpaceFilterPut() {
+    // positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x,y,url,sizeX,sizeY
+
+    this.backgroundOuterSpaceFilter1.y++;
+    this.backgroundOuterSpaceFilter2.y++;
+   if (this.backgroundOuterSpaceFilter1.y===481)this.backgroundOuterSpaceFilter1.y=5520
+   if (this.backgroundOuterSpaceFilter2.y===481)this.backgroundOuterSpaceFilter2.y=5520
+    // this.backgroundOuterSpaceFilter2
+    // this.backgroundOuterSpaceFilter1 = undefined;
+    // this.backgroundOuterSpaceFilter2 = undefined;
   }
 }

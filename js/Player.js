@@ -80,7 +80,7 @@ class Player {
         this.sprite.positionToReadX =
           this.sprite.positionToReadSizeX * this.syncMovWSpritesCounter;
         this.busySyncMov = false;
-      },30);
+      }, 30);
     }
   }
   //Comesback the ship to original position
@@ -114,8 +114,8 @@ class Player {
         console.log("muero 1 vez");
         game.player.shipExplosion.play();
         game.player.energy = 1000;
-        game.player.life-=1
-                this.deathShip();
+        game.player.life -= 1;
+        this.deathShip();
         this.playerCreated.play();
         return true;
       }

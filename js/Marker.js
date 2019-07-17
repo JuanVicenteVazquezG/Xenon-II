@@ -4,6 +4,7 @@ class Marker {
     this.y = y;
     this.point = 0;
     this.spriteLife = new Sprite(0, 0, 32, 32, 0, 0, "Images/life.png", 32, 32);
+    this.fontFamily = "Xenon2";
   }
   updateMarkerEnergy() {
     if (game.gameState === "playing") {
@@ -29,7 +30,7 @@ class Marker {
         15
       );
 
-      game.display.ctx.font = "30px Arial";
+      game.display.ctx.font = `20px ${this.fontFamily}`;
       game.display.ctx.textAlign = "right";
       game.display.ctx.fillStyle = "white";
       game.display.ctx.fillText(
