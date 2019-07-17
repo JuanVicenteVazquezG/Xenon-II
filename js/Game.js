@@ -25,11 +25,11 @@ class Game {
     this.backgroundOuterSpace = undefined;
     this.backgroundOuterSpaceFilter1 = undefined;
     this.backgroundOuterSpaceFilter2 = undefined;
-    this.Decoration=undefined;
+    this.Decoration = undefined;
     this.onlyOneTime = 0;
     this.resetAllInterval = 0;
     this.awards = [];
-    this.AwardsId=0;
+    this.AwardsId = 0;
   }
 
   _update() {
@@ -96,7 +96,7 @@ class Game {
       game.display.addObjectsToPaint(this.backgroundOuterSpaceFilter1);
       game.display.addObjectsToPaint(this.backgroundOuterSpaceFilter2);
       game.display.addObjectsToPaint(this.Decoration);
-     
+
       game.display.addObjectsToPaint(game.player.sprite);
       if (game.player.shooting.length >= 0) {
         for (let i = 0; i < game.player.shooting.length; i++) {
@@ -195,6 +195,7 @@ class Game {
       this.deleting = true;
       helper1 = game.player.shooting.length;
       helper2 = this.enemyArray.length; //helper 3 index for shooting  helper 4 index for enemies
+      
       for (helper3 = 0; helper3 < helper1; helper3++) {
         for (helper4 = 0; helper4 < helper2; helper4++) {
           if (
@@ -202,7 +203,7 @@ class Game {
               this.enemyArray[helper4]
             )
           ) {
-            console.log("colision");
+            
             enemyId.push(this.enemyArray[helper4].enemyId);
             shootId.push(game.player.shooting[helper3].shootId);
           }
@@ -231,6 +232,8 @@ class Game {
           });
         });
       }
+
+      
     }
     shootId = [];
 
@@ -257,12 +260,26 @@ class Game {
         });
       });
     }
+
+
     this.enemyArray.forEach(enemy => {
       if (game.player.itHasCollided(enemy)) {
         game.player.energy -= 10;
         game.player.shipCollide.play();
       }
     });
+    
+    this.awards.forEach((award,index)=>{
+      if (game.player.itHasCollided(award)){
+        //here we tray to read the kind of award that the ship obtain
+        console.log ("premio par el caballero")
+        clearInterval( this.awards[index].movementId);
+        clearInterval( this.awards[index].movementRotationId);
+        this.awards.splice(index,1);
+      }
+    }
+    )
+    
 
     this.deleting = false;
   }
@@ -271,8 +288,9 @@ class Game {
     var indexEnemyToDelete = [];
     var indexEnemyToDeath = [];
     var indexShootOutScreen = [];
-    var indexAwardsToDelete
+    var indexAwardsToDelete = [];
     this.deleting = true;
+
     if (game.gameState === "playing") {
       game.enemyArray.forEach(theEnemy => {
         if (theEnemy.sprite.y > 500 || theEnemy.boundingBox.y > 500) {
@@ -283,7 +301,11 @@ class Game {
         this.enemyArray.forEach((enemy, index) => {
           //Only is deleted when is out of screen
           indexEnemyToDelete.forEach(idEnemyToDelete => {
-            if (enemy.enemyId == idEnemyToDelete) {
+            if (enemy.enemyId === idEnemyToDelete) {
+
+              console.log ("Los Id");
+              console.log(this.enemyArray[index].enemyId)
+              console.log (idEnemyToDelete);
               this.enemyArray.splice(index, 1);
             }
           });
@@ -296,8 +318,7 @@ class Game {
           indexShootOutScreen.push(aShoot.shootId);
         }
       });
-
-      if (indexShootOutScreen > 0) {
+ if (indexShootOutScreen > 0) {
         game.player.shooting.forEach((shoot, index) => {
           indexShootOutScreen.forEach(shooOutOfScreeId => {
             if (shoot.shootId === shooOutOfScreeId) {
@@ -307,12 +328,34 @@ class Game {
         });
       }
     }
-    this.deleting = false;
-
-    if (this.awards>0){
-
+   
+    //when de awards gets out the screen
+    if (this.awards.length > 0) {
+      this.awards.forEach(award => {
+        if (award.sprite.y > 500  ||  award.boundingBox.y>500 ) {
+          indexAwardsToDelete.push(award.AwardsId);
+        }
+      });
     }
-  }
+      if (indexAwardsToDelete.length>0){
+        this.awards.forEach((awardsId,index)=>{
+          indexAwardsToDelete.forEach(idAwardsId=>{
+            if (awardsId.AwardsId===idAwardsId){
+              clearInterval(this.awards[index].movementId);
+              clearInterval(this.awards[index].movementRotationId);
+              this.awards.splice (index,1);
+            }
+          });
+        });
+      }
+      if (indexAwardsToDelete.length>0){
+        while (indexAwardsToDelete.length>0){
+          indexAwardsToDelete.pop();
+        }
+      }
+      console.log (this.awards);
+      this.deleting = false;
+    }
 
   loading() {
     this.initImage = new Sprite(
@@ -360,8 +403,7 @@ class Game {
       480
     );
 
-    this.Decoration= new Sprite(
-   
+    this.Decoration = new Sprite(
       0,
       0,
       640,
@@ -418,14 +460,13 @@ class Game {
       3000
     );
     //Outer Space filter Parallax
+
   }
 
   resetAll() {
     game.intervalGameId = undefined;
-
     clearInterval(this.enemyGeneratorId);
     this.enemyGeneratorId = 0;
-
     clearInterval(game.input.withOutkeypressID);
     game.input.withOutkeypressID = undefined;
 
@@ -488,22 +529,23 @@ class Game {
     clearTimeout(this.resetAllInterval);
     game.start(options);
   }
+
   outerFilterSpaceFilterPut() {
     // positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x,y,url,sizeX,sizeY
 
-    this.backgroundOuterSpaceFilter1.y+=2;
-    this.backgroundOuterSpaceFilter2.y+=2;
+    this.backgroundOuterSpaceFilter1.y += 5;
+    this.backgroundOuterSpaceFilter2.y += 5;
+
     this.Decoration.y++;
-    if (this.backgroundOuterSpaceFilter1.y === 481)
-      this.backgroundOuterSpaceFilter1.y = 5520;
-    if (this.backgroundOuterSpaceFilter2.y === 481)
-      this.backgroundOuterSpaceFilter2.y = 5520;
-    // this.backgroundOuterSpaceFilter2
-    // this.backgroundOuterSpaceFilter1 = undefined;
-    // this.backgroundOuterSpaceFilter2 = undefined;
+    if (this.backgroundOuterSpaceFilter1.y === 225)
+      this.backgroundOuterSpaceFilter1.y = -2520;
+    if (this.backgroundOuterSpaceFilter2.y === 225)
+      this.backgroundOuterSpaceFilter2.y = -2520;
+
   }
+
   createAwards(x, y, kindOfAward) {
-    this.AwardsId+=1;
+    this.AwardsId += 1;
     var name = undefined;
     switch (kindOfAward) {
       case 1:
@@ -551,6 +593,8 @@ class Game {
     this.awards.push(
       new Awards(0, 0, 32, 32, x, y, name, 32, 32, 8, kindOfAward)
     );
-   this.awards[ this.awards.length-1].AwardsId=this.AwardsId;
+    this.awards[this.awards.length - 1].AwardsId = this.AwardsId;
   }
+
+
 }
