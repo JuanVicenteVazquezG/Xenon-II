@@ -25,8 +25,11 @@ class Game {
     this.backgroundOuterSpace = undefined;
     this.backgroundOuterSpaceFilter1 = undefined;
     this.backgroundOuterSpaceFilter2 = undefined;
+    this.Decoration=undefined;
     this.onlyOneTime = 0;
     this.resetAllInterval = 0;
+    this.awards = [];
+    this.AwardsId=0;
   }
 
   _update() {
@@ -92,6 +95,8 @@ class Game {
       game.display.addObjectsToPaint(this.backgroundOuterSpace);
       game.display.addObjectsToPaint(this.backgroundOuterSpaceFilter1);
       game.display.addObjectsToPaint(this.backgroundOuterSpaceFilter2);
+      game.display.addObjectsToPaint(this.Decoration);
+     
       game.display.addObjectsToPaint(game.player.sprite);
       if (game.player.shooting.length >= 0) {
         for (let i = 0; i < game.player.shooting.length; i++) {
@@ -102,6 +107,11 @@ class Game {
       this.enemyArray.forEach(theEnemy => {
         game.display.addObjectsToPaint(theEnemy.sprite);
       });
+      if (this.awards.length > 0) {
+        this.awards.forEach(award => {
+          game.display.addObjectsToPaint(award.sprite);
+        });
+      }
     } else if (game.gameState === "pause") {
       game.display.addObjectsToPaint(game.pauseImage);
     } else if (game.gameState === "gameOver") {
@@ -123,6 +133,8 @@ class Game {
     }
 
     this.enemyGeneratorId = setInterval(() => {
+      var generateAward = Math.floor(Math.random() * 2);
+      var kindOfAward = Math.floor(Math.random() * 8) + 1;
       if (
         game.gameState === "playing" &&
         this.deleting === false &&
@@ -149,6 +161,11 @@ class Game {
             this.numberKind
           )
         );
+        if (generateAward === 1) {
+          this.enemyArray[this.enemyArray.length - 1].kindOfAward = kindOfAward;
+        } else {
+          this.enemyArray[this.enemyArray.length - 1].kindOfAward = 0;
+        }
       }
     }, 500);
   }
@@ -228,6 +245,13 @@ class Game {
         deathanimationfinishedId.forEach(death => {
           if (aEnemy.enemyId === death) {
             clearInterval(aEnemy.EnemyExplosionId);
+            if (aEnemy.kindOfAward > 0) {
+              this.createAwards(
+                this.enemyArray[index].sprite.x,
+                this.enemyArray[index].sprite.y,
+                this.enemyArray[index].kindOfAward
+              );
+            }
             this.enemyArray.splice(index, 1);
           }
         });
@@ -247,6 +271,7 @@ class Game {
     var indexEnemyToDelete = [];
     var indexEnemyToDeath = [];
     var indexShootOutScreen = [];
+    var indexAwardsToDelete
     this.deleting = true;
     if (game.gameState === "playing") {
       game.enemyArray.forEach(theEnemy => {
@@ -283,6 +308,10 @@ class Game {
       }
     }
     this.deleting = false;
+
+    if (this.awards>0){
+
+    }
   }
 
   loading() {
@@ -330,6 +359,20 @@ class Game {
       640,
       480
     );
+
+    this.Decoration= new Sprite(
+   
+      0,
+      0,
+      640,
+      3000,
+      0,
+      -2520,
+      "Images/Stage1.png",
+      640,
+      3000
+    );
+
     this.player = new Player(
       192,
       0,
@@ -358,7 +401,7 @@ class Game {
       640,
       3000,
       0,
-     -2520,
+      -2520,
       "Images/outerSpace.png",
       640,
       3000
@@ -450,10 +493,64 @@ class Game {
 
     this.backgroundOuterSpaceFilter1.y++;
     this.backgroundOuterSpaceFilter2.y++;
-   if (this.backgroundOuterSpaceFilter1.y===481)this.backgroundOuterSpaceFilter1.y=5520
-   if (this.backgroundOuterSpaceFilter2.y===481)this.backgroundOuterSpaceFilter2.y=5520
+    this.Decoration.y++;
+    if (this.backgroundOuterSpaceFilter1.y === 481)
+      this.backgroundOuterSpaceFilter1.y = 5520;
+    if (this.backgroundOuterSpaceFilter2.y === 481)
+      this.backgroundOuterSpaceFilter2.y = 5520;
     // this.backgroundOuterSpaceFilter2
     // this.backgroundOuterSpaceFilter1 = undefined;
     // this.backgroundOuterSpaceFilter2 = undefined;
+  }
+  createAwards(x, y, kindOfAward) {
+    this.AwardsId+=1;
+    var name = undefined;
+    switch (kindOfAward) {
+      case 1:
+        {
+          name = "Images/Awards/PUDive.png";
+        }
+        break;
+      case 2:
+        {
+          name = "Images/Awards/PUInvuln.png";
+        }
+        break;
+      case 3:
+        {
+          name = "Images/Awards/PULaser.png";
+        }
+        break;
+      case 4:
+        {
+          name = "Images/Awards/PUMissil.png";
+        }
+        break;
+      case 5:
+        {
+          name = "Images/Awards/PUScore.png";
+        }
+        break;
+      case 6:
+        {
+          name = "Images/Awards/PUShield.png";
+        }
+        break;
+      case 7:
+        {
+          name = "Images/Awards/PUSpeed.png";
+        }
+        break;
+      case 8:
+        {
+          name = "Images/Awards/PUWeapon.png";
+        }
+        break;
+    }
+    //(positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x,y,url,sizeX,sizeY,maxOfSprites,kind
+    this.awards.push(
+      new Awards(0, 0, 32, 32, x, y, name, 32, 32, 8, kindOfAward)
+    );
+   this.awards[ this.awards.length-1].AwardsId=this.AwardsId;
   }
 }

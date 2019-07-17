@@ -12,7 +12,13 @@ class Enemy {
     sizeY,
     typeOfEnemy = 1
   ) {
-    this.maxOfSprites=16;
+    this.boundingBox={
+    x : 0,
+    y : 0,
+    x1: 0,
+    y1 : 0
+  }
+    this.maxOfSprites = 16;
     this.enemyId = enemyId;
     this.sprite = new Sprite(
       positionToReadX,
@@ -37,12 +43,13 @@ class Enemy {
       64
     );
 
+    this.kindOfAward = 0; //0 no award, more than 0 are differents awards or upgrades. only show when enemy dies.
     this.speed = 1;
     this.enemyExplosion = new Audio();
     this.enemyExplosion.src = "Sounds/small_explosion.wav";
 
     this.counterSpriteMovementRotationEnemy = 0;
-    this.boundingBox = {};
+    
 
     this.movementId = setInterval(() => {
       if (game.gameState === "playing") {
