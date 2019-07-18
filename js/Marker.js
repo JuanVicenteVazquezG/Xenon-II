@@ -1,5 +1,8 @@
 class Marker {
-  constructor(x, y) {
+  constructor(game,display,player,x, y) {
+    this.game=game;
+    this.display=display;
+    this.player=player;
     this.x = x;
     this.y = y;
     this.point = 0;
@@ -7,39 +10,39 @@ class Marker {
     this.fontFamily = "Xenon2";
   }
   updateMarkerEnergy() {
-    if (game.gameState === "playing") {
-      game.display.ctx.fillStyle = "white";
-      game.display.ctx.fillRect(19, 439, 102, 17);
-      if (game.player.energy >= 900) {
-        game.display.ctx.fillStyle = "navy";
+    if (this.game.gameState === "playing") {
+      this.display.ctx.fillStyle = "white";
+      this.display.ctx.fillRect(19, 439, 102, 17);
+      if (this.player.energy >= 900) {
+        this.display.ctx.fillStyle = "navy";
       }
-      if (game.player.energy <= 899 && game.player.energy >= 500) {
-        game.display.ctx.fillStyle = "#3FFF33";
+      if (this.player.energy <= 899 && this.player.energy >= 500) {
+        this.display.ctx.fillStyle = "#3FFF33";
       }
-      if (game.player.energy <= 499 && game.player.energy >= 300) {
-        game.display.ctx.fillStyle = "yellow";
+      if (this.player.energy <= 499 && this.player.energy >= 300) {
+        this.display.ctx.fillStyle = "yellow";
       }
-      if (game.player.energy < 299) {
-        game.display.ctx.fillStyle = "red";
+      if (this.player.energy < 299) {
+        this.display.ctx.fillStyle = "red";
       }
 
-      game.display.ctx.fillRect(
+      this.display.ctx.fillRect(
         20,
         440,
-        Math.floor(game.player.energy / 10),
+        Math.floor(this.player.energy / 10),
         15
       );
 
-      game.display.ctx.font = `20px ${this.fontFamily}`;
-      game.display.ctx.textAlign = "right";
-      game.display.ctx.fillStyle = "white";
-      game.display.ctx.fillText(
-        `Score: ${game.player.points.toString()}`,
+     this.display.ctx.font = `20px ${this.fontFamily}`;
+      this.display.ctx.textAlign = "right";
+      this.display.ctx.fillStyle = "white";
+      this.display.ctx.fillText(
+        `Score: ${this.player.points.toString()}`,
         600,
         458
       );
-      for (var i = 0; i < game.player.life; i++) {
-        game.display.ctx.drawImage(
+      for (var i = 0; i < this.player.life; i++) {
+        this.display.ctx.drawImage(
           this.spriteLife.sprite,
           0,
           0,

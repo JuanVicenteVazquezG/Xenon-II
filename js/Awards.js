@@ -1,5 +1,5 @@
 class Awards {
-  constructor(
+  constructor(game,
     positionToReadX,
     positionToReadY,
     positionToReadSizeX,
@@ -12,6 +12,7 @@ class Awards {
     maxOfSprites,
     kind
   ) {
+    this.game=game;
     this.AwardsId=0;
     this.sprite = new Sprite(
       positionToReadX,
@@ -35,7 +36,7 @@ class Awards {
     };
 
     this.movementId = setInterval(() => {
-      if (game.gameState === "playing") {
+      if (this.game.gameState === "playing") {
         this.sprite.y += this.speed;
         this.boundingBox.x = this.sprite.x;
         this.boundingBox.y = this.sprite.y;
@@ -45,9 +46,9 @@ class Awards {
     }, 10);
 
     this.movementRotationId = setInterval(() => {
-      if (game.gameState === "playing") {
+      if (this.game.gameState === "playing") {
         this.sprite.positionToReadX =
-          positionToReadSizeX * this.counterSpriteMovementRotationEnemy;
+         positionToReadSizeX * this.counterSpriteMovementRotationEnemy;
         this.counterSpriteMovementRotationEnemy++;
         if (this.counterSpriteMovementRotationEnemy === this.maxOfSprites)
           this.counterSpriteMovementRotationEnemy = 0;

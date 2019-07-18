@@ -1,5 +1,6 @@
 class Shooting {
-  constructor(shootId,positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x, y, url, sizeX, sizeY, timeLife, speed) {
+  constructor(game,shootId,positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x, y, url, sizeX, sizeY, timeLife, speed) {
+    this.game=game;
     this.shootId=shootId;
     this.sprite = new Sprite(positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x, y, url, sizeX, sizeY);
     this.sound = new Audio();
@@ -9,7 +10,7 @@ class Shooting {
     this.speed = speed;
     this.boundingBox = {};
     this.movementId = setInterval(() => {
-      if (game.gameState==="playing") {
+      if (this.game.gameState==="playing") {
       this.sprite.y -= speed;
       this.boundingBox.x = this.sprite.x;
       this.boundingBox.y = this.sprite.y;
@@ -17,9 +18,10 @@ class Shooting {
       this.boundingBox.y1 = this.sprite.y + this.sprite.sizeY;
     }
     }, 10);
+
     this.timeId = setTimeout(() => {
       clearInterval(this.movementId);
-      game.player.shooting.shift();
+      this.player.shooting.shift(); //ojo
     }, this.timeLife);
   }
 

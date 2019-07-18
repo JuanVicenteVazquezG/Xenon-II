@@ -16,7 +16,7 @@ class Display {
     options.canvas.width = options.width;
     options.canvas.height = options.height;
     this.ctx = options.canvas.getContext("2d");
-    game.display.clearDisplay();
+    this.clearDisplay();
   }
 
   clearDisplay() {
