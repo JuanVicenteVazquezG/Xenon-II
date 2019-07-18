@@ -1,12 +1,13 @@
 class Game {
   constructor(options) {
     this.finished = undefined;
-    this.input = new Input();
-    this.display = new Display();
-    this.marker = new Marker(0, 200);
+    this.input = undefined;
+    this.display = undefined;
+    this.marker = undefined;
     this.enemyGeneratorId = undefined;
+
     this.numberKind = 1;
-    this.canInvencible === false;
+    this.canInvencible = false;
     this.intervalGameId = undefined;
 
     this.maxEnemyOntheScreen = 8;
@@ -35,13 +36,13 @@ class Game {
       this.outerFilterSpaceFilterPut();
     }
     game.fillTheArrayOfObjectsToPaint();
-    game.display.paintObject.bind(game.display)();
+    game.display.paintObject();
     game.input.readControlsToKeys();
     if (game.gameState === "playing") {
       this.input.updateFire();
       game.marker.updateMarkerEnergy();
       this.outOfScreen();
-      game.collidesShooting(game.enemyArray);
+      game.collidesShooting(this.enemyArray);
 
       if (game.player.isAlife() === false) {
         game.gameState = "gameOver";
@@ -50,31 +51,6 @@ class Game {
     game.display.deletesAllObjectsPainted();
 
     this.finished = true;
-    this.setAnimationLoop();
-  }
-
-  start(options) {
-    this.loading();
-    this.display.initialize(options);
-
-    game.gameState = "splash";
-    // game.musicSplash.setAttribute("autoplay","none")
-    // game.musicSplash.play();
-
-    musicSplash2.play();
-    let playing = function() {
-      game.gameState = "playing";
-
-      game.input.initializeKeyRead();
-      game.input.withOutkeypressID = setInterval(() => {
-        if (game.gameState === "playing") {
-          game.player.normalizerShip();
-        }
-      }, 80);
-      game.enemyGenerator();
-      document.removeEventListener("keydown", playing);
-    };
-    document.addEventListener("keydown", playing);
     this.setAnimationLoop();
   }
 
@@ -114,9 +90,10 @@ class Game {
       game.display.addObjectsToPaint(game.pauseImage);
     } else if (game.gameState === "gameOver") {
       game.display.addObjectsToPaint(game.gameOverImage);
-
+      console.log("Lo hace una vez" + game.gameState);
       if (this.onlyOneTime === 0) {
         this.onlyOneTime = 1;
+
         this.resetAllInterval = setTimeout(this.resetAll, 3000);
       }
     }
@@ -350,9 +327,8 @@ class Game {
           //Only is deleted when is out of screen
           indexEnemyToDelete.forEach(idEnemyToDelete => {
             if (enemy.enemyId === idEnemyToDelete) {
-              console.log("Los Id");
-              console.log(this.enemyArray[index].enemyId);
-              console.log(idEnemyToDelete);
+              clearInterval(this.enemyArray[index].movementId);
+              clearInterval(this.enemyArray[index].EnemyExplosionId);
               this.enemyArray.splice(index, 1);
             }
           });
@@ -404,8 +380,42 @@ class Game {
     console.log(this.awards);
     this.deleting = false;
   }
+  start(options) {
+    this.loading();
+
+if (typeof this.display==="undefined") {
+  game.display = new Display();
+  game.display.initialize(options);
+  console.log("aupa")}
+
+    game.gameState = "splash";
+
+
+    let playing = function() {
+      game.gameState = "playing";
+
+     if (typeof this.input==="undefined"){
+      this.input = new Input();
+      this.input.initializeKeyRead();}
+
+      game.input.withOutkeypressID = setInterval(() => {
+        if (game.gameState === "playing") {
+          game.player.normalizerShip();
+        }
+      }, 100);
+      game.enemyGenerator();
+      document.removeEventListener("keydown", playing);
+    };
+    document.addEventListener("keydown", playing);
+    this.setAnimationLoop();
+  }
 
   loading() {
+  
+    this.marker = new Marker(0, 200);
+    this.enemyGeneratorId = 0;
+    this.onlyOneTime = 0;
+
     this.initImage = new Sprite(
       0,
       0,
@@ -514,20 +524,28 @@ class Game {
   }
 
   resetAll() {
-    game.intervalGameId = undefined;
+    console.log("lo hace 1 vez");
+    this.finished = undefined;
+    this.input = undefined;
+    this.display = undefined;
+    this.marker = undefined;
     clearInterval(this.enemyGeneratorId);
-    this.enemyGeneratorId = 0;
+    this.numberKind = 1;
+    game.intervalGameId = undefined;
+
     clearInterval(game.input.withOutkeypressID);
     game.input.withOutkeypressID = undefined;
 
     if (typeof this.enemyArray != "undefined") {
-      for (var i = 0; i < game.enemyArray.length; i++) {
+      for (var i = 0; i < this.enemyArray.length; i++) {
         clearInterval(this.enemyArray[i].movementId);
         this.enemyArray[i].movementId = undefined;
         clearInterval(this.enemyArray[i].movementRotationId);
         this.enemyArray[i].movementRotationId = undefined;
       }
     }
+
+    console.log("lo hace 2 vez");
 
     if (typeof this.enemyArray != "undefined") {
       while (this.enemyArray.length > 0) {
@@ -546,18 +564,7 @@ class Game {
     this.marker = undefined;
     this.marker = new Marker(0, 200);
 
-    this.display = undefined;
-    this.display = new Display();
-    this.display = new Display();
-
-    this.input = undefined;
-    this.input = new Input();
-    this.display = undefined;
-    this.display = new Display();
-
     this.marker = new Marker(0, 200);
-    this.enemyGeneratorId = 0;
-    this.numberKind = 1;
 
     this.intervalGameId = undefined;
     this.enemy = undefined;
@@ -569,16 +576,16 @@ class Game {
     this.musicSplash = undefined;
     this.pickUpSound = undefined;
     this.indexShooting = [];
-
     this.deleting = false;
     this.EnemyId = 0;
-    clearTimeout(this.resetAllInterval);
-    this.resetAllInterval = 0;
-    //  this.musicGameOver.play();
-    this.onlyOneTime = 0;
+
+    console.log("lo hace 4 vez");
     game.unSetAnimationloop();
-    clearTimeout(this.resetAllInterval);
     game.start(options);
+    console.log("lo hace 5 vez");
+    clearTimeout(this.resetAllInterval);
+    console.log("lo hace 6 vez");
+    this.resetAllInterval = 0;
   }
 
   outerFilterSpaceFilterPut() {

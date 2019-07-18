@@ -12,13 +12,16 @@ class Input {
 
   readControlsToKeys() {
     if (this.keys[38]) {
+  
       if (this._canIReadOtherKeys()) game.player.updatePosition("y", -1);
     }
     if (this.keys[40]) {
+      
       if (this._canIReadOtherKeys()) game.player.updatePosition("y", +1);
     }
     if (this.keys[37]) {
       if (this._canIReadOtherKeys()) {
+   
         game.player.updatePosition("x", -1);
         game.player.syncMovWSpritesCounter--;
         if (game.player.syncMovWSpritesCounter < 0)
@@ -28,6 +31,7 @@ class Input {
     }
     if (this.keys[39]) {
       if (this._canIReadOtherKeys()) {
+       
         game.player.updatePosition("x", +1);
         game.player.syncMovWSpritesCounter++;
         if (game.player.syncMovWSpritesCounter > 6)
@@ -36,6 +40,7 @@ class Input {
       }
     }
     if (this.keys[32] && this.fireCooldown >= this.fireSpeed) {
+      
       game.player.shootId++;
       game.player.shooting.push(
         new Shooting(
@@ -74,9 +79,10 @@ class Input {
   }
 
   initializeKeyRead() {
+
     this.eventKeyDownId = window.addEventListener("keydown", e => {
       this.keys[e.keyCode] = true;
-      clearInterval(this.withOutkeypressID);
+      clearInterval(game.input.withOutkeypressID);
     });
 
     this.eventKeyUpId = window.addEventListener("keyup", e => {
@@ -85,7 +91,7 @@ class Input {
         if (game.gameState === "playing") {
           game.player.normalizerShip();
         }
-      }, 80);
+      }, 100);
     });
   }
   clearKeyRead() {

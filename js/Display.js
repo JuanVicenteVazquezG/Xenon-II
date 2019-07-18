@@ -16,35 +16,36 @@ class Display {
     options.canvas.width = options.width;
     options.canvas.height = options.height;
     this.ctx = options.canvas.getContext("2d");
+    console.log ("llego hasta aqui1")
     game.display.clearDisplay();
+    console.log ("llego hasta aqui2")
   }
 
   clearDisplay() {
-    this.ctx.fillStyle= "black";
-    this.ctx.clearRect(0, 0, this.width, this.height);
+
+    game.display.ctx.fillStyle = "black";
+    game.display.ctx.clearRect(0, 0, this.width, this.height);
   }
 
   paintObject() {
-    this.clearDisplay();
+    this.clearDisplay(this);
 
     this.objectsToPaint.forEach(objecToShow => {
-     
       this.ctx.drawImage(
-          objecToShow.sprite,
-          objecToShow.positionToReadX,
-          objecToShow.positionToReadY,
-          objecToShow.positionToReadSizeX,
-          objecToShow.positionToReadSizeY,
-          objecToShow.x,
-          objecToShow.y,
-          objecToShow.sizeX,
-          objecToShow.sizeY
-        );
-       });
+        objecToShow.sprite,
+        objecToShow.positionToReadX,
+        objecToShow.positionToReadY,
+        objecToShow.positionToReadSizeX,
+        objecToShow.positionToReadSizeY,
+        objecToShow.x,
+        objecToShow.y,
+        objecToShow.sizeX,
+        objecToShow.sizeY
+      );
+    });
   }
 
-  addObjectsToPaint(aSprite) {
-    
+  addObjectsToPaint(aSprite, self) {
     this.objectsToPaint.push(aSprite); //==>> game
   }
   deletesAllObjectsPainted() {

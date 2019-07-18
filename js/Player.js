@@ -69,7 +69,7 @@ class Player {
     }
 
     this.sprite[position] += this.speed * signal;
-
+    console.log ( this.speed) 
     this.boundingBox.x = this.sprite.x;
     this.boundingBox.y = this.sprite.y;
     this.boundingBox.x1 = this.sprite.x + this.sprite.sizeX;
