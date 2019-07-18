@@ -37,7 +37,7 @@ class Game {
     }
     game.fillTheArrayOfObjectsToPaint();
     game.display.paintObject();
-    game.input.readControlsToKeys();
+    game.input.readControlsToKeys.bind(this);
     if (game.gameState === "playing") {
       this.input.updateFire();
       game.marker.updateMarkerEnergy();
@@ -383,20 +383,21 @@ class Game {
   start(options) {
     this.loading();
 
-if (typeof this.display==="undefined") {
-  game.display = new Display();
-  game.display.initialize(options);
-  console.log("aupa")}
+    if (typeof this.display === "undefined") {
+      game.display = new Display();
+      game.display.initialize(options);
+      console.log("aupa");
+    }
 
     game.gameState = "splash";
-
 
     let playing = function() {
       game.gameState = "playing";
 
-     if (typeof this.input==="undefined"){
-      this.input = new Input();
-      this.input.initializeKeyRead();}
+      if (typeof this.input === "undefined") {
+        this.input = new Input();
+        this.input.initializeKeyRead();
+      }
 
       game.input.withOutkeypressID = setInterval(() => {
         if (game.gameState === "playing") {
@@ -411,7 +412,6 @@ if (typeof this.display==="undefined") {
   }
 
   loading() {
-  
     this.marker = new Marker(0, 200);
     this.enemyGeneratorId = 0;
     this.onlyOneTime = 0;
