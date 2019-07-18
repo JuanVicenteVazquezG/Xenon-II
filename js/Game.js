@@ -1,10 +1,8 @@
 class Game {
   constructor(options) {
-    var that = this;
     this.finished = undefined;
     this.input = new Input();
     this.display = new Display();
-
     this.marker = new Marker(0, 200);
     this.enemyGeneratorId = undefined;
     this.numberKind = 1;
@@ -19,7 +17,6 @@ class Game {
     this.musicSplash = undefined;
     this.enemyArray = [];
     this.indexShooting = [];
-
     this.deleting = false;
     this.EnemyId = 0;
     this.backgroundOuterSpace = undefined;
@@ -64,6 +61,7 @@ class Game {
     // game.musicSplash.setAttribute("autoplay","none")
     // game.musicSplash.play();
 
+    musicSplash2.play();
     let playing = function() {
       game.gameState = "playing";
 

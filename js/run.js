@@ -1,5 +1,7 @@
 "uses strict";
 
+var musicSplash2=document.getElementById("splash");
+
 //display = new Display(width, height, document.getElementById("myCanvas"));
 //input = new Input();  //here need to put de type of device to read keyboard or joystick
 //display.paintObject();
@@ -11,8 +13,9 @@ const options = {
 };
 
 var game;
-(function (){
+
+window.addEventListener("load",function (){
 game = new Game();
 game.start(options);
-console.log ("hello");
-})();
+
+});
