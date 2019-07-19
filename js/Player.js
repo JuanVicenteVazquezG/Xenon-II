@@ -26,7 +26,7 @@ class Player {
     this.normalShip="Images/Ship.png"
     this.life = 2;
     this.boundingBox = {};
-    this.speed = 3;
+    this.speed = 5;
 
     this.energy = 1000;
     this.points = 0;
@@ -102,14 +102,14 @@ class Player {
 
   deathShip() {
     if (this.game.gameState === "playing") {
-      console.log("muetto");
+     
     }
   }
 
   isAlife() {
     if (this.game.gameState === "playing") {
       if (this.life === 0 && this.energy <= 0) {
-        console.log("muero por ultima vez");
+ 
         this.shipExplosion.play();
         this.deathShip();
         return false;

@@ -39,7 +39,7 @@ class Input {
     if (this.keys[32] && this.fireCooldown >= this.fireSpeed) {
       this.player.shootId++;
       this.player.shooting.push(
-        new Shooting(this.player,
+        new Shooting(this.player,this.game,
           this.player.shootId,
           0,
           0,
@@ -58,7 +58,7 @@ class Input {
     }
 
     if (this.keys[80]) {
-      this.input.keys[80] = false;
+      // this.input.keys[80] = false;
       if (this.game.gameState === "pause") {
         this.game.setAnimationLoop();
        this.game.gameState = "playing";

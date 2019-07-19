@@ -47,36 +47,32 @@ class Game {
 
   _update() {
     if (this.gameState === "splash") {
-      console.log(this.initImage);
       this.display.paintObject(this.initImage);
     } else if (this.gameState === "playing") {
+      this.input.readControlsToKeys();
       this.outerFilterSpaceFilterPut();
       this.display.paintObject(this.backgroundOuterSpace);
-
       this.display.paintObject(this.backgroundOuterSpaceFilter1);
       this.display.paintObject(this.backgroundOuterSpaceFilter2);
       this.display.paintObject(this.Decoration);
+
+      if (this.enemyArray.length > 0) {
+        this.enemyArray.forEach(theEnemy => {
+          this.display.paintObject(theEnemy.sprite);
+        });
+      }
+
       this.display.paintObject(this.player.sprite);
       if (this.player.shooting.length > 0) {
         this.player.shooting.forEach(shoot => {
-          console.log (shoot)
-          this.display.paintObject(shoot);
+          this.display.paintObject(shoot.sprite);
         });
       }
-      this.enemyArray.forEach(theEnemy => {
-        this.display.paintObject(theEnemy.sprite);
-      });
       if (this.awards.length > 0) {
         this.awards.forEach(award => {
           this.display.paintObject(award.sprite);
         });
       }
-    } else if (this.gameState === "pause") {
-      this.display.paintObject(this.pauseImage);
-    }
-
-    this.input.readControlsToKeys();
-    if (this.gameState === "playing") {
       this.input.updateFire();
       this.marker.updateMarkerEnergy();
       this.outOfScreen();
@@ -84,6 +80,8 @@ class Game {
       if (this.player.isAlife() === false) {
         this.gameState = "gameOver";
       }
+    } else if (this.gameState === "pause") {
+      this.display.paintObject(this.pauseImage);
     } else if (this.gameState === "gameOver") {
       this.display.addObjectsToPaint(this.gameOverImage);
 
@@ -92,9 +90,7 @@ class Game {
         this.resetAllInterval = setTimeout(this.resetAll, 3000);
       }
     }
-    //this.display.clearDisplay();
-
-    this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
+this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
   }
 
   start(options) {
@@ -117,18 +113,15 @@ class Game {
     this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
   }
 
-  unSetAnimationloop() {
-    window.cancelAnimationFrame(this.intervalGameId);
-    this.intervalGameId = undefined;
-  }
-
+ 
   enemyGenerator() {
-    clearInterval(this.enemyGeneratorId);
-    if (typeof this.enemyArray != "undefined") {
-      while (this.enemyArray.length > 0) {
-        this.enemyArray.pop();
-      }
-    }
+
+    // clearInterval(this.enemyGeneratorId);
+    // if (typeof this.enemyArray != "undefined") {
+    //   while (this.enemyArray.length > 0) {
+    //     this.enemyArray.pop();
+    //   }
+    // }
 
     this.enemyGeneratorId = setInterval(() => {
       var generateAward = Math.floor(Math.random() * 2);
@@ -183,11 +176,10 @@ class Game {
   }
 
   collidesShooting() {
-    console.log(this.enemyArray);
     var enemyId = [];
     var shootId = [];
     var deathanimationfinishedId = [];
-    console.log("eoe" + self);
+
     var helper1, helper2, helper3, helper4;
     //here we will tray to delete de shoot and the enemy trough the id of every object. First of all the shoot is delete is collide and next the enemy
     if (this.gameState === "playing" && this.deleting === false) {
@@ -268,11 +260,9 @@ class Game {
     this.awards.forEach((award, index) => {
       if (this.player.itHasCollided(award)) {
         //here we tray to read the kind of award that the ship obtain
-        console.log("premio par el caballero");
+
         this.pickUpSound.play();
-        console.log(
-          "el tipo de de premio es: " + this.awards[index].kindOfAwards
-        );
+
         switch (this.awards[index].kindOfAwards) {
           case 1:
             {
@@ -303,7 +293,7 @@ class Game {
             {
               //Invencible
               this.canInvencible = true;
-              console.log("superEscudo");
+
               this.player.sprite.sprite.src = this.player.invencible;
               this.normalShip = setTimeout(() => {
                 this.player.sprite.sprite.src = this.player.normalShip;
@@ -383,7 +373,6 @@ class Game {
       });
     }
     if (indexAwardsToDelete.length > 0) {
-      console.log("Estoy aqui premios");
       this.awards.forEach((awardsId, index) => {
         indexAwardsToDelete.forEach(idAwardsId => {
           if (awardsId.AwardsId === idAwardsId) {
@@ -399,7 +388,7 @@ class Game {
         indexAwardsToDelete.pop();
       }
     }
-    console.log(this.awards);
+
     this.deleting = false;
   }
 
@@ -562,7 +551,8 @@ class Game {
     this.resetAllInterval = 0;
     //  this.musicGameOver.play();
     this.onlyOneTime = 0;
-    this.unSetAnimationloop();
+    window.cancelAnimationFrame(this.intervalGameId);
+    this.intervalGameId = undefined;
     clearTimeout(this.resetAllInterval);
     this.start(options);
   }
