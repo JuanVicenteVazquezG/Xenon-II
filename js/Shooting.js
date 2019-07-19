@@ -1,5 +1,6 @@
 class Shooting {
-  constructor(game,shootId,positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x, y, url, sizeX, sizeY, timeLife, speed) {
+  constructor(player,game,shootId,positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x, y, url, sizeX, sizeY, timeLife, speed) {
+    this.player=player;
     this.game=game;
     this.shootId=shootId;
     this.sprite = new Sprite(positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x, y, url, sizeX, sizeY);
@@ -21,7 +22,7 @@ class Shooting {
 
     this.timeId = setTimeout(() => {
       clearInterval(this.movementId);
-      this.player.shooting.shift(); //ojo
+     // this.player.shooting.shift(); //ojo
     }, this.timeLife);
   }
 

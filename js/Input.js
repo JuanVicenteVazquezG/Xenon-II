@@ -39,7 +39,7 @@ class Input {
     if (this.keys[32] && this.fireCooldown >= this.fireSpeed) {
       this.player.shootId++;
       this.player.shooting.push(
-        new Shooting(
+        new Shooting(this.player,
           this.player.shootId,
           0,
           0,

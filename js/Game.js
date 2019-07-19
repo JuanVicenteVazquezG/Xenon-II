@@ -3,6 +3,7 @@ class Game {
     var that = this;
 
     this.player = new Player(
+      this,
       192,
       0,
       64,
@@ -14,10 +15,10 @@ class Game {
       64
     );
     this.finished = undefined;
-    this.input = new Input(this.player,this);
+    this.input = new Input(this.player, this);
     this.display = new Display();
 
-    this.marker = new Marker(this,this.display,this.player,0, 200);
+    this.marker = new Marker(this, this.display, this.player, 0, 200);
     this.enemyGeneratorId = undefined;
     this.numberKind = 1;
     this.canInvencible === false;
@@ -45,72 +46,44 @@ class Game {
   }
 
   _update() {
-    this.finished = false;
-    if (this.gameState === "playing") {
+    if (this.gameState === "splash") {
+      console.log(this.initImage);
+      this.display.paintObject(this.initImage);
+    } else if (this.gameState === "playing") {
       this.outerFilterSpaceFilterPut();
+      this.display.paintObject(this.backgroundOuterSpace);
+
+      this.display.paintObject(this.backgroundOuterSpaceFilter1);
+      this.display.paintObject(this.backgroundOuterSpaceFilter2);
+      this.display.paintObject(this.Decoration);
+      this.display.paintObject(this.player.sprite);
+      if (this.player.shooting.length > 0) {
+        this.player.shooting.forEach(shoot => {
+          console.log (shoot)
+          this.display.paintObject(shoot);
+        });
+      }
+      this.enemyArray.forEach(theEnemy => {
+        this.display.paintObject(theEnemy.sprite);
+      });
+      if (this.awards.length > 0) {
+        this.awards.forEach(award => {
+          this.display.paintObject(award.sprite);
+        });
+      }
+    } else if (this.gameState === "pause") {
+      this.display.paintObject(this.pauseImage);
     }
-    this.fillTheArrayOfObjectsToPaint();
-    this.display.paintObject();
+
     this.input.readControlsToKeys();
     if (this.gameState === "playing") {
       this.input.updateFire();
       this.marker.updateMarkerEnergy();
       this.outOfScreen();
       this.collidesShooting(this.enemyArray);
-
       if (this.player.isAlife() === false) {
         this.gameState = "gameOver";
       }
-    }
-    this.display.deletesAllObjectsPainted();
-
-    this.finished = true;
-    this.setAnimationLoop();
-  }
-
-  start(options) {
-    this.loading();
-    this.display.initialize(options);
-    this.gameState = "splash";
-
-    document.addEventListener("keydown", this.playing);
-    this.setAnimationLoop();
-  }
-
-  setAnimationLoop() {
-    this.intervalGameId = window.requestAnimationFrame(this._update());
-  }
-  unSetAnimationloop() {
-    window.cancelAnimationFrame(this.intervalGameId);
-    this.intervalGameId = undefined;
-  }
-
-  fillTheArrayOfObjectsToPaint() {
-    if (this.gameState === "splash") {
-      this.display.addObjectsToPaint(this.imageName);
-    } else if (this.gameState === "playing") {
-      this.display.addObjectsToPaint(this.backgroundOuterSpace);
-      this.display.addObjectsToPaint(this.backgroundOuterSpaceFilter1);
-      this.display.addObjectsToPaint(this.backgroundOuterSpaceFilter2);
-      this.display.addObjectsToPaint(this.Decoration);
-
-      this.display.addObjectsToPaint(this.player.sprite);
-      if (this.player.shooting.length >= 0) {
-        for (let i = 0; i < this.player.shooting.length; i++) {
-          this.display.addObjectsToPaint(this.player.shooting[i].sprite);
-        }
-      }
-
-      this.enemyArray.forEach(theEnemy => {
-        this.display.addObjectsToPaint(theEnemy.sprite);
-      });
-      if (this.awards.length > 0) {
-        this.awards.forEach(award => {
-          this.display.addObjectsToPaint(award.sprite);
-        });
-      }
-    } else if (this.gameState === "pause") {
-      this.display.addObjectsToPaint(this.pauseImage);
     } else if (this.gameState === "gameOver") {
       this.display.addObjectsToPaint(this.gameOverImage);
 
@@ -119,6 +92,34 @@ class Game {
         this.resetAllInterval = setTimeout(this.resetAll, 3000);
       }
     }
+    //this.display.clearDisplay();
+
+    this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
+  }
+
+  start(options) {
+    var playing = undefined;
+    this.loading();
+    this.display.initialize(options);
+    this.gameState = "splash";
+
+    playing = document.addEventListener("keydown", () => {
+      this.gameState = "playing";
+      this.input.initializeKeyRead();
+      this.input.withOutkeypressID = setInterval(() => {
+        if (this.gameState === "playing") {
+          this.player.normalizerShip();
+        }
+      }, 80);
+      this.enemyGenerator();
+      document.removeEventListener("keydown", playing);
+    });
+    this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
+  }
+
+  unSetAnimationloop() {
+    window.cancelAnimationFrame(this.intervalGameId);
+    this.intervalGameId = undefined;
   }
 
   enemyGenerator() {
@@ -144,7 +145,8 @@ class Game {
 
         this.EnemyId++;
         this.enemyArray.push(
-          new Enemy(this,
+          new Enemy(
+            this,
             this.EnemyId,
             enemyKind.positionToReadX,
             enemyKind.positionToReadY,
@@ -566,8 +568,6 @@ class Game {
   }
 
   outerFilterSpaceFilterPut() {
-    // positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x,y,url,sizeX,sizeY
-
     this.backgroundOuterSpaceFilter1.y += 5;
     this.backgroundOuterSpaceFilter2.y += 5;
 
@@ -625,20 +625,8 @@ class Game {
     }
     //(positionToReadX,positionToReadY,positionToReadSizeX,positionToReadSizeY,x,y,url,sizeX,sizeY,maxOfSprites,kind
     this.awards.push(
-      new Awards(this,0, 0, 32, 32, x, y, name, 32, 32, 8, kindOfAward)
+      new Awards(this, 0, 0, 32, 32, x, y, name, 32, 32, 8, kindOfAward)
     );
     this.awards[this.awards.length - 1].AwardsId = this.AwardsId;
-  }
-
-  playing() {
-    this.gameState = "playing";
-    this.input.initializeKeyRead.bind(this);
-    this.input.withOutkeypressID = setInterval(() => {
-      if (this.gameState === "playing") {
-        this.player.normalizerShip();
-      }
-    }, 80);
-    this.enemyGenerator();
-    document.removeEventListener("keydown", playing);
   }
 }
