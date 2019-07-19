@@ -1,5 +1,5 @@
 class Player {
-  constructor(
+  constructor(game,
     positionToReadX,
     positionToReadY,
     positionToReadSizeX,
@@ -10,6 +10,7 @@ class Player {
     sizeX,
     sizeY
   ) {
+    this.game=game;
     this.sprite = new Sprite(
       positionToReadX,
       positionToReadY,
@@ -25,7 +26,7 @@ class Player {
     this.normalShip="Images/Ship.png"
     this.life = 2;
     this.boundingBox = {};
-    this.speed = 3;
+    this.speed = 5;
 
     this.energy = 1000;
     this.points = 0;
@@ -89,10 +90,10 @@ class Player {
   normalizerShip() {
     if (this.busySyncMov === false) {
       this.busySyncMov = true;
-      if (game.player.syncMovWSpritesCounter < 3)
-        game.player.syncMovWSpritesCounter++;
-      if (game.player.syncMovWSpritesCounter > 3)
-        game.player.syncMovWSpritesCounter--;
+      if (this.syncMovWSpritesCounter < 3)
+        this.syncMovWSpritesCounter++;
+      if (this.syncMovWSpritesCounter > 3)
+        this.syncMovWSpritesCounter--;
       this.busySyncMov = false;
       this.synchronizationMovementWSprites();
       this.busySyncMov = false;
@@ -100,23 +101,23 @@ class Player {
   }
 
   deathShip() {
-    if (game.gameState === "playing") {
-      console.log("muetto");
+    if (this.game.gameState === "playing") {
+     
     }
   }
 
   isAlife() {
-    if (game.gameState === "playing") {
-      if (game.player.life === 0 && game.player.energy <= 0) {
-        console.log("muero por ultima vez");
-        game.player.shipExplosion.play();
-        game.player.deathShip();
+    if (this.game.gameState === "playing") {
+      if (this.life === 0 && this.energy <= 0) {
+ 
+        this.shipExplosion.play();
+        this.deathShip();
         return false;
-      } else if (game.player.life >= 1 && game.player.energy <= 0) {
-        console.log("muero 1 vez");
-        game.player.shipExplosion.play();
-        game.player.energy = 1000;
-        game.player.life -= 1;
+      } else if (this.life >= 1 && this.energy <= 0) {
+        
+      this.shipExplosion.play();
+        this.energy = 1000;
+        this.life -= 1;
         this.deathShip();
         this.playerCreated.play();
         return true;

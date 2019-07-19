@@ -1,5 +1,5 @@
 class Enemy {
-  constructor(
+  constructor(game,
     enemyId,
     positionToReadX,
     positionToReadY,
@@ -12,12 +12,13 @@ class Enemy {
     sizeY,
     typeOfEnemy = 1
   ) {
-    this.boundingBox={
-    x : 0,
-    y : 0,
-    x1: 0,
-    y1 : 0
-  }
+    this.game=game;
+    this.boundingBox = {
+      x: 0,
+      y: 0,
+      x1: 0,
+      y1: 0
+    };
     this.maxOfSprites = 16;
     this.enemyId = enemyId;
     this.sprite = new Sprite(
@@ -49,10 +50,9 @@ class Enemy {
     this.enemyExplosion.src = "Sounds/small_explosion.wav";
 
     this.counterSpriteMovementRotationEnemy = 0;
-    
 
     this.movementId = setInterval(() => {
-      if (game.gameState === "playing") {
+      if (this.game.gameState === "playing") {
         this.sprite.y += this.speed;
         this.boundingBox.x = this.sprite.x;
         this.boundingBox.y = this.sprite.y;
@@ -62,7 +62,7 @@ class Enemy {
     }, 10);
 
     this.movementRotationId = setInterval(() => {
-      if (game.gameState === "playing") {
+      if (this.game.gameState === "playing") {
         this.sprite.positionToReadX =
           positionToReadSizeX * this.counterSpriteMovementRotationEnemy;
         this.counterSpriteMovementRotationEnemy++;
@@ -80,11 +80,12 @@ class Enemy {
   }
 
   deathEnemy(index) {
-    if (game.gameState === "playing") {
-      game.deleting = true;
+    if (this.game.gameState === "playing") {
+      this.game.deleting = true;
       clearInterval(this.movementId);
       clearInterval(this.movementRotationId);
-      game.player.points += 10;
+     //Ojo 
+      this.game.player.points += 10;
 
       let x = this.sprite.x;
       let y = this.sprite.y;
@@ -95,7 +96,7 @@ class Enemy {
       this.enemyExplosion.play();
 
       this.EnemyExplosionId = setInterval(() => {
-        if (game.gameState === "playing") {
+        if (this.game.gameState === "playing") {
           this.sprite.positionToReadX =
             this.sprite.positionToReadSizeX * this.indexCounterSprite;
           this.indexCounterSprite++;

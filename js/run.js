@@ -1,21 +1,23 @@
 "uses strict";
 
-var musicSplash2=document.getElementById("splash");
-
-//display = new Display(width, height, document.getElementById("myCanvas"));
-//input = new Input();  //here need to put de type of device to read keyboard or joystick
-//display.paintObject();
 const options = {
   width: "640",
   height: "480",
-  canvas: document.getElementById("myCanvas"),
-  
+  canvas: document.getElementById("myCanvas")
 };
-
 var game;
+var splashMusic=document.getElementById("splashmusic");
 
-window.addEventListener("load",function (){
-game = new Game();
-game.start(options);
-
+splashMusic.addEventListener("ended", function(){
+  splashMusic.currentTime = 0;
+ 
+});
+var myText=document.getElementById("myText");
+var myImage = document.getElementById("myImage");
+myImage.addEventListener("click" || "keypress", () => {
+  options.canvas.style.display="block";
+  myImage.style.display="none"
+  myText.style.display="none";
+  game = new Game();
+  game.start(options);
 });
