@@ -6,6 +6,12 @@ const options = {
   canvas: document.getElementById("myCanvas")
 };
 var game;
+var splashMusic=document.getElementById("splashmusic");
+
+splashMusic.addEventListener("ended", function(){
+  splashMusic.currentTime = 0;
+ 
+});
 var myText=document.getElementById("myText");
 var myImage = document.getElementById("myImage");
 myImage.addEventListener("click" || "keypress", () => {

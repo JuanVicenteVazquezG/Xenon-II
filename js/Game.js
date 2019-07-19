@@ -49,9 +49,9 @@ class Game {
   _update() {
     this.display.clearDisplay();
     if (this.player.isAlife() === false) {
+      
       this.gameState = "gameOver";
-    }
-  else if (this.gameState === "playing") {
+    } else if (this.gameState === "playing") {
       this.input.readControlsToKeys();
       this.outerFilterSpaceFilterPut();
       this.display.paintObject(this.backgroundOuterSpace);
@@ -81,13 +81,15 @@ class Game {
       this.collidesShooting();
       this.outOfScreen();
     } else if (this.gameState === "pause") {
+      this.input.readControlsToKeys();
       this.display.paintObject(this.pauseImage);
     } else if (this.gameState === "gameOver") {
       this.display.paintObject(this.gameOverImage);
-      if (this.onlyOneTime === 0) {
-        this.onlyOneTime = 1;
-        this.resetAllInterval = setTimeout(this.resetAll, 3000);
-      }
+
+      this.resetAllInterval = setTimeout(() => {
+        location.reload();
+        clearTimeout(this.resetAllInterval);
+      }, 3000);
     }
 
     this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
@@ -501,7 +503,7 @@ class Game {
     }
 
     this.enemyArray = [];
-    this.input.clearKeyRead.bind (this);
+    this.input.clearKeyRead.bind(this);
 
     this.player.energy = 1000;
     this.player.life = 2;

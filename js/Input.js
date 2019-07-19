@@ -60,22 +60,33 @@ class Input {
     }
 
     if (this.keys[80]) {
-      if (this.game.gameState === "pause") {
-        console.log ("Estoy en pausa y paso a player")
+      if (this.game.gameState === "playing") {
+        this.keys[80]=false;
+        // window.cancelAnimationFrame(this.game.intervalGameId);
         this.game.gameState = "pause";
+      } else {
         // this.game.intervalGameId = window.requestAnimationFrame(
         //   this.game._update()
         // );
-      
+        this.keys[80]=false;
         this.game.gameState = "playing";
-      } else if (this.game.gameState === "playing") {
-        console.log ("Estoy en playing y paso a pausa")
-        this.game.gameState = "pause";
-        // window.cancelAnimationFrame(this.game.intervalGameId);
       }
+      //   if (this.game.gameState === "pause") {
+
+      //     this.game.gameState = "pause";
+      //     // this.game.intervalGameId = window.requestAnimationFrame(
+      //     //   this.game._update()
+      //     // );
+
+      //     this.game.gameState = "playing";
+      //   } else if (this.game.gameState === "playing") {
+      //     console.log ("Estoy en playing y paso a pausa")
+      //     this.game.gameState = "pause";
+      //     // window.cancelAnimationFrame(this.game.intervalGameId);
+      //   }
+      // }
     }
   }
-
   _canIReadOtherKeys() {
     if (this.game.gameState === "pause") return false;
     else return true;
