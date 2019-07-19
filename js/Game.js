@@ -20,7 +20,6 @@ class Game {
 
     this.marker = new Marker(this, this.display, this.player, 0, 200);
     this.enemyGeneratorId = undefined;
-
     this.numberKind = 1;
     this.canInvencible = false;
     this.intervalGameId = undefined;
@@ -33,6 +32,7 @@ class Game {
     this.musicSplash = undefined;
     this.enemyArray = [];
     this.indexShooting = [];
+
     this.deleting = false;
     this.EnemyId = 0;
     this.backgroundOuterSpace = undefined;
@@ -383,42 +383,8 @@ class Game {
 
     this.deleting = false;
   }
-  start(options) {
-    this.loading();
-
-    if (typeof this.display === "undefined") {
-      game.display = new Display();
-      game.display.initialize(options);
-      console.log("aupa");
-    }
-
-    game.gameState = "splash";
-
-    let playing = function() {
-      game.gameState = "playing";
-
-      if (typeof this.input === "undefined") {
-        this.input = new Input();
-        this.input.initializeKeyRead();
-      }
-
-      game.input.withOutkeypressID = setInterval(() => {
-        if (game.gameState === "playing") {
-          game.player.normalizerShip();
-        }
-      }, 100);
-      game.enemyGenerator();
-      document.removeEventListener("keydown", playing);
-    };
-    document.addEventListener("keydown", playing);
-    this.setAnimationLoop();
-  }
 
   loading() {
-    this.marker = new Marker(0, 200);
-    this.enemyGeneratorId = 0;
-    this.onlyOneTime = 0;
-
     this.initImage = new Sprite(
       0,
       0,
@@ -530,8 +496,6 @@ class Game {
       }
     }
 
-    console.log("lo hace 2 vez");
-
     if (typeof this.enemyArray != "undefined") {
       while (this.enemyArray.length > 0) {
         this.enemyArray.pop();
@@ -572,6 +536,7 @@ class Game {
 
     this.pickUpSound = undefined;
     this.indexShooting = [];
+
     this.deleting = false;
     this.EnemyId = 0;
 

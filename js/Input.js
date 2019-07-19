@@ -93,10 +93,9 @@ class Input {
   }
 
   initializeKeyRead() {
-
     this.eventKeyDownId = window.addEventListener("keydown", e => {
       this.keys[e.keyCode] = true;
-      clearInterval(game.input.withOutkeypressID);
+      clearInterval(this.withOutkeypressID);
     });
 
     this.eventKeyUpId = window.addEventListener("keyup", e => {
@@ -105,7 +104,7 @@ class Input {
         if (this.game.gameState === "playing") {
           this.player.normalizerShip();
         }
-      }, 100);
+      }, 80);
     });
   }
   clearKeyRead() {
