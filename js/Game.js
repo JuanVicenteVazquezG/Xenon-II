@@ -21,7 +21,7 @@ class Game {
     this.marker = new Marker(this, this.display, this.player, 0, 200);
     this.enemyGeneratorId = undefined;
     this.numberKind = 1;
-    this.canInvencible === false;
+    this.canInvencible = false;
     this.intervalGameId = undefined;
 
     this.maxEnemyOntheScreen = 8;
@@ -43,12 +43,15 @@ class Game {
     this.resetAllInterval = 0;
     this.awards = [];
     this.AwardsId = 0;
+    this.playing = undefined;
   }
 
   _update() {
-    if (this.gameState === "splash") {
-      this.display.paintObject(this.initImage);
-    } else if (this.gameState === "playing") {
+    this.display.clearDisplay();
+    if (this.player.isAlife() === false) {
+      this.gameState = "gameOver";
+    }
+  else if (this.gameState === "playing") {
       this.input.readControlsToKeys();
       this.outerFilterSpaceFilterPut();
       this.display.paintObject(this.backgroundOuterSpace);
@@ -75,54 +78,38 @@ class Game {
       }
       this.input.updateFire();
       this.marker.updateMarkerEnergy();
+      this.collidesShooting();
       this.outOfScreen();
-      this.collidesShooting(this.enemyArray);
-      if (this.player.isAlife() === false) {
-        this.gameState = "gameOver";
-      }
     } else if (this.gameState === "pause") {
       this.display.paintObject(this.pauseImage);
     } else if (this.gameState === "gameOver") {
-      this.display.addObjectsToPaint(this.gameOverImage);
-
+      this.display.paintObject(this.gameOverImage);
       if (this.onlyOneTime === 0) {
         this.onlyOneTime = 1;
         this.resetAllInterval = setTimeout(this.resetAll, 3000);
       }
     }
-this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
-  }
 
-  start(options) {
-    var playing = undefined;
-    this.loading();
-    this.display.initialize(options);
-    this.gameState = "splash";
-
-    playing = document.addEventListener("keydown", () => {
-      this.gameState = "playing";
-      this.input.initializeKeyRead();
-      this.input.withOutkeypressID = setInterval(() => {
-        if (this.gameState === "playing") {
-          this.player.normalizerShip();
-        }
-      }, 80);
-      this.enemyGenerator();
-      document.removeEventListener("keydown", playing);
-    });
     this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
   }
 
- 
+  start(options) {
+    this.loading();
+    this.display.initialize(options);
+    this.gameState = "playing";
+    this.input.initializeKeyRead();
+    this.withOutkeypressID = setInterval(() => {
+      if (this.gameState === "playing") {
+        this.player.normalizerShip.bind(this);
+      }
+    }, 80);
+
+    this.enemyGenerator();
+
+    this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
+  }
+
   enemyGenerator() {
-
-    // clearInterval(this.enemyGeneratorId);
-    // if (typeof this.enemyArray != "undefined") {
-    //   while (this.enemyArray.length > 0) {
-    //     this.enemyArray.pop();
-    //   }
-    // }
-
     this.enemyGeneratorId = setInterval(() => {
       var generateAward = Math.floor(Math.random() * 2);
       var kindOfAward = Math.floor(Math.random() * 8) + 1;
@@ -248,6 +235,7 @@ this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
         });
       });
     }
+
     if (this.canInvencible === false) {
       this.enemyArray.forEach(enemy => {
         if (this.player.itHasCollided(enemy)) {
@@ -292,14 +280,16 @@ this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
           case 6:
             {
               //Invencible
-              this.canInvencible = true;
+              if (this.canInvencible === false) {
+                this.canInvencible = true;
 
-              this.player.sprite.sprite.src = this.player.invencible;
-              this.normalShip = setTimeout(() => {
-                this.player.sprite.sprite.src = this.player.normalShip;
-                this.canInvencible = false;
-                clearTimeout(this.normalShip);
-              }, 15000);
+                this.player.sprite.sprite.src = this.player.invencible;
+                this.normalShip = setTimeout(() => {
+                  this.player.sprite.sprite.src = this.player.normalShip;
+                  this.canInvencible = false;
+                  clearTimeout(this.normalShip);
+                }, 15000);
+              }
             }
             break;
           case 7: //Speed up
@@ -453,9 +443,6 @@ this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
     this.pickUpSound = new Audio();
     this.pickUpSound.src = "Sounds/pickup.wav";
     this.imageName = this.initImage;
-    this.musicSplash = new Audio();
-    this.musicSplash.src = "Musics/musicSplash.mp3"; //determinar is loaded?
-    this.musicSplash.setAttribute("preload", "none");
 
     this.musicGame = new Audio();
     this.musicGame.src = "Musics/game.mp3";
@@ -491,9 +478,12 @@ this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
   resetAll() {
     this.intervalGameId = undefined;
     clearInterval(this.enemyGeneratorId);
+    if (typeof this.enemyArray != "undefined") {
+      while (this.enemyArray.length > 0) {
+        this.enemyArray.pop();
+      }
+    }
     this.enemyGeneratorId = 0;
-    clearInterval(this.input.withOutkeypressID);
-    this.input.withOutkeypressID = undefined;
 
     if (typeof this.enemyArray != "undefined") {
       for (var i = 0; i < this.enemyArray.length; i++) {
@@ -511,7 +501,7 @@ this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
     }
 
     this.enemyArray = [];
-    this.input.clearKeyRead();
+    this.input.clearKeyRead.bind (this);
 
     this.player.energy = 1000;
     this.player.life = 2;
@@ -527,11 +517,11 @@ this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
 
     this.input = undefined;
     this.input = new Input();
-    this.display = undefined;
-    this.display = new Display();
+    // this.display = undefined;
+    // this.display = new Display();
 
     this.marker = new Marker(0, 200);
-    this.enemyGeneratorId = 0;
+
     this.numberKind = 1;
 
     this.intervalGameId = undefined;
@@ -541,12 +531,13 @@ this.intervalGameId = window.requestAnimationFrame(this._update.bind(this));
 
     this.musicGame = undefined;
     this.musicGameOver = undefined;
-    this.musicSplash = undefined;
+
     this.pickUpSound = undefined;
     this.indexShooting = [];
 
     this.deleting = false;
     this.EnemyId = 0;
+
     clearTimeout(this.resetAllInterval);
     this.resetAllInterval = 0;
     //  this.musicGameOver.play();

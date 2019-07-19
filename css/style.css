@@ -1,7 +1,7 @@
 @font-face {
   font-family: "Xenon2";
   src: url ("font-family/cw_alien.ttf");
-  }
+}
 
 html {
   background-color: black;
@@ -13,8 +13,27 @@ html {
   height: auto;
 }
 #myCanvas {
+  display: none;
+  border: 5px solid #ffffff;
+  margin: 2% auto;
+  padding: 0 auto;
+}
+
+#myImage {
+  width: 640px;
+  height: 480px;
   display: block;
   border: 5px solid #ffffff;
   margin: 2% auto;
+
+  background-image: url("../Images/splash.png");
+  background-repeat: no-repeat;
+}
+
+p {
+  color: white;
+  font-size: 32;
+  margin: 2% auto;
+  text-align: center;
   padding: 0 auto;
 }

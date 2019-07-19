@@ -51,16 +51,19 @@ class Shooting {
     }, this.timeLife);
   }
 
-  itHasCollided(ObjectToCollide) {
+  itHasCollided(objectToCollide) {
     //top
     if (
-      this.boundingBox.y < ObjectToCollide.boundingBox.y1 &&
-      this.boundingBox.x > ObjectToCollide.boundingBox.x &&
-      this.boundingBox.x1 < ObjectToCollide.boundingBox.x1
-    ) {
-      return true;
+
+      objectToCollide.sprite.x > this.sprite.x + this.sprite.sizeX ||
+      objectToCollide.sprite.x < this.sprite.x - objectToCollide.sprite.sizeX ||
+      objectToCollide.sprite.y > this.sprite.y + this.sprite.sizeY ||
+      objectToCollide.sprite.y < this.sprite.y - objectToCollide.sprite.sizeY)
+     
+     {
+      return false;
     }
 
-    return false;
+    return true;
   }
 }

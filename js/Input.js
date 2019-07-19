@@ -1,14 +1,14 @@
 class Input {
-  constructor(player,game) {
+  constructor(player, game) {
     this.withOutkeypressID = undefined;
     this.keys = [];
     this.eventKeyUpId = undefined;
     this.eventKeyDown = undefined;
     this.readkeyIntervalId = undefined;
-    this.player=player;
+    this.player = player;
     this.fireCooldown = 0;
     this.fireSpeed = 20;
-    this.game=game;
+    this.game = game;
   }
 
   readControlsToKeys() {
@@ -39,7 +39,9 @@ class Input {
     if (this.keys[32] && this.fireCooldown >= this.fireSpeed) {
       this.player.shootId++;
       this.player.shooting.push(
-        new Shooting(this.player,this.game,
+        new Shooting(
+          this.player,
+          this.game,
           this.player.shootId,
           0,
           0,
@@ -58,13 +60,18 @@ class Input {
     }
 
     if (this.keys[80]) {
-      // this.input.keys[80] = false;
       if (this.game.gameState === "pause") {
-        this.game.setAnimationLoop();
-       this.game.gameState = "playing";
-      } else if (this.game.gameState === "playing") {
+        console.log ("Estoy en pausa y paso a player")
         this.game.gameState = "pause";
-        this.game.unSetAnimationloop();
+        // this.game.intervalGameId = window.requestAnimationFrame(
+        //   this.game._update()
+        // );
+      
+        this.game.gameState = "playing";
+      } else if (this.game.gameState === "playing") {
+        console.log ("Estoy en playing y paso a pausa")
+        this.game.gameState = "pause";
+        // window.cancelAnimationFrame(this.game.intervalGameId);
       }
     }
   }
@@ -99,6 +106,4 @@ class Input {
       this.fireCooldown++;
     }
   }
-
-
 }
